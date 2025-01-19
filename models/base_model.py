@@ -26,15 +26,19 @@ class Base_Model:
         return dxdt
 
     def calculate_steady_state(self):
+        print('Calculating steady state ...', end='')
         steady_state = root(self.bone_cell_population_model, self.initial_guess_root, tol=1e-30, method="lm", options={'xtol': 1e-30}) #tol=1e-5)
         self.steady_state.OBp = steady_state.x[0]
         self.steady_state.OBa = steady_state.x[1]
         self.steady_state.OCa = steady_state.x[2]
+        print(f'done \n Steady state: {steady_state.x}')
         return steady_state.x
 
     def solve_bone_cell_population_model(self, tspan):
         x0 = self.calculate_steady_state()
-        solution = solve_ivp(lambda t, x: self.bone_cell_population_model(x, t), tspan, x0, rtol=1e-8, atol=1e-8)# rtol=1e-5, atol=1e-5)
+        print('Solving bone cell population model ...', end='')
+        solution = solve_ivp(lambda t, x: self.bone_cell_population_model(x, t), tspan, x0, rtol=1e-8, atol=1e-8)
+        print('done')
         return solution
 
     def calculate_TGFb_activation_OBu(self, OCa):
