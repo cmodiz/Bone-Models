@@ -43,7 +43,7 @@ class Lemaire_Model(Base_Model):
     def calculate_PTH_activation_OB(self, t):
         PTH = self.calculate_PTH_concentration(t)
         PTH_kinetic = self.parameters.unbinding_constant.PTH_OB / self.parameters.binding_constant.PTH_OB
-        PTH_activation_OB = PTH / (PTH + PTH_kinetic)
+        PTH_activation_OB = PTH / (self.calculate_external_injection_PTH(t) / self.parameters.degradation_rate.PTH + PTH_kinetic)
         return PTH_activation_OB
 
     def calculate_PTH_concentration(self, t):
@@ -53,9 +53,8 @@ class Lemaire_Model(Base_Model):
 
     def calculate_OPG_concentration(self, OBp, t):
         OPG = (1 / self.parameters.degradation_rate.OPG) * (self.parameters.production_rate.min_OPG_per_cell * OBp /
-                                                            (self.parameters.degradation_rate.OPG *
-                                                             self.calculate_PTH_activation_OB(t))
-                                                            + self.calculate_external_injection_OPG(t))
+                                                    self.calculate_PTH_activation_OB(t)
+                                                    + self.calculate_external_injection_OPG(t))
         return OPG
 
     def calculate_external_injection_OBp(self, t):
