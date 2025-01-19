@@ -1,0 +1,153 @@
+class differentiation_rate:
+    """ This class defines the differentiation rates of the different cell types """
+    def __init__(self):
+        # -> D_R
+        self.OBu = 7.00e-4  # corrected differentiation rate of osteoblast progenitors [pM/day]
+        # -> d_B
+        self.OBp = 7.00e-1  # differentiation rate of preosteoblasts [pM/day]
+        self.OCu = None  # differentiation rate of uncommitted osteoclast [pM/day]
+        # -> D_C
+        self.OCp = 2.10e-3  # differentiation rate of preosteoclasts [pM/day]
+
+
+class apoptosis_rate:
+    """ This class defines the apoptosis rates of the different cell types. """
+    def __init__(self):
+        # -> k_B
+        self.OBa = 1.89e-1  # apoptosis rate of active osteoblast [1/day]
+        # -> D_A
+        self.OCa = 7.00e-1  # apoptosis rate of active osteoclasts [pM/day]
+
+
+class activation_coefficient:
+    """ This class defines the activation coefficients of respective receptor-ligand binding. """
+    def __int__(self):
+        # Activation coefficients related to TGF-beta binding on OBu and OCa [pM]
+        self.TGFb_OBu = None
+        self.TGFb_OCa = None
+        # Activation coefficient related to RANKL binding to RANK [pM]
+        self.RANKL_OCp = None
+        # Activation coefficient for RANKL production related to PTH binding to osteoblasts [pM]
+        self.PTH_OB = None
+        # Activation coefficient related to MCSF binding on OCu [pM]
+        self.MCSF_OCu = None
+
+
+class repression_coefficient:
+    """ This class defines the repression coefficients of respective receptor-ligand binding. """
+    def __init__(self):
+        # Repression coefficient related to TGF-beta binding on OBp [pM]
+        self.TGFb_OBp = None
+        # Repression coefficient for OPG production related to PTH binding on osteoblasts [pM]
+        self.PTH_OB = None
+
+
+class degradation_rate:
+    """ This class defines the degradation rates of the different factors. """
+    def __init__(self):
+        # Degradation rate of PTH [1/day]
+        # -> k_P
+        self.PTH = 86
+        # Degradation rate of OPG [1/day]
+        # k_O
+        self.OPG = 3.50e-1
+        # Degradation rate of RANKL [1/day]
+        self.RANKL = None
+
+
+class concentration:
+    """ This class defines fixed concentrations. """
+    def __init__(self):
+        self.OPG_max = 2.00e+8  # Maximum concentration of OPG [pM]
+        self.MCSF = None
+        # -> K
+        self.RANK = 1.00e+1  # [pM] fixed concentration of RANK
+
+
+class binding_constant:
+    """ This class defines the binding constants of RANK RANKL and OPG. """
+    def __init__(self):
+        # Association binding constant for RANKL-OPG [(pM day)^{-1}]
+        # -> k_1
+        self.RANKL_OPG = 1.00e-2
+        # Association binding constant for RANKL-RANK [(pM day)^{-1}]
+        # -> k_3
+        self.RANKL_RANK = 5.80e-4
+        # dissociation binding coefficient of TGFb with its receptor
+        # [pM] value of OC to get half differentiation flux
+        # -> C^s
+        self.TGFb_OC = 5.00e-3
+        # [(pM day)^{-1}] rate of PTH binding with its receptor on OB
+        # -> k_5
+        self.PTH_OB = 2.00e-2
+
+
+class unbinding_constant:
+    """ This class defines the unbinding constants of RANK RANKL and OPG. """
+    def __init__(self):
+        # Association binding constant for RANKL-OPG [1/day]
+        # -> k_2
+        self.RANKL_OPG = 1.00e+1
+        # Association binding constant for RANKL-RANK [1/pM]
+        # -> k_4
+        self.RANKL_RANK = 1.70e-2
+        # dissociation binding coefficient of TGFb with its receptor
+        self.TGFb_OC = None
+        # [(day)^{-1}] rate of PTH binding with its receptor on OB
+        # -> k_6
+        self.PTH_OB = 3.00e+0
+
+
+class production_rate:
+    """ This class defines the intrinsic/ endogenous production rates of the different factors."""
+    def __init__(self):
+        # Intrinsic production rate of PTH [pM/day] (assumed to be constant)
+        self.intrinsic_PTH = 250
+        # Intrinsic production rate of RANKL [pM/day]
+        # -> r_L
+        self.intrinsic_RANKL = 1.0e+3
+        # Minimal rate of OPG production per cell
+        # -> K^P_O
+        self.min_OPG_per_cell = 2.00e+5
+        # Boolean variables determining which cells produce OPG
+        self.bool_OPGprod_OBp = None  # 0=no
+        self.bool_OPGprod_OBa = None  # 1=yes
+        # Constant describing how much RANK is produced per cell [pM/pM]
+        self.RANKrate_per_cell = None
+        # Production rate of RANKL per cell [pM/pM]
+        # -> K^P_L
+        self.max_RANKL_per_cell = 3.00e+6
+        # Boolean variables determining which cells produce RANKL
+        self.bool_RANKLprod_OBp = None  # 1=yes
+        self.bool_RANKLprod_OBa = None  # 0=no
+
+
+class correction_factor:
+    """ This class defines the correction factors. """
+    def __init__(self):
+        # -> f_0
+        self.f0 = 5.00e-2  # correction factor for OBp differentiation rate and TGFb activation function
+
+
+class bone_volume:
+    """ This class defines the parameters relevant for bone volume of the bone model. """
+    def __init__(self):
+        self.formation_rate = 1.571
+        self.resorption_rate = None
+
+
+class Parameters:
+    """ This class defines the parameters of the bone model. """
+    def __init__(self):
+        self.differentiation_rate = differentiation_rate()
+        self.apoptosis_rate = apoptosis_rate()
+        self.activation_coefficient = activation_coefficient()
+        self.repression_coefficient = repression_coefficient()
+        self.correction_factor = correction_factor()
+        self.degradation_rate = degradation_rate()
+        self.concentration = concentration()
+        self.binding_constant = binding_constant()
+        self.unbinding_constant = unbinding_constant()
+        self.production_rate = production_rate()
+        # self.capacity = capacity()
+        self.bone_volume = bone_volume()
