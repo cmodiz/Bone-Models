@@ -57,7 +57,7 @@ class degradation_rate:
         # k_O
         self.OPG = 3.50e-1
         # Degradation rate of RANKL [1/day]
-        self.RANKL = None
+        self.RANKL = 1.0132471014805027e+1
 
 
 class concentration:
@@ -74,10 +74,10 @@ class binding_constant:
     def __init__(self):
         # Association binding constant for RANKL-OPG [(pM day)^{-1}]
         # -> k_1
-        self.RANKL_OPG = 1.00e-2
+        self.RANKL_OPG = 1.00e-3
         # Association binding constant for RANKL-RANK [(pM day)^{-1}]
         # -> k_3
-        self.RANKL_RANK = 5.80e-4
+        self.RANKL_RANK = 3.411764705882353e-2
         # dissociation binding coefficient of TGFb with its receptor
         # [pM] value of OC to get half differentiation flux
         # -> C^s
@@ -110,21 +110,21 @@ class production_rate:
         self.intrinsic_PTH = 250
         # Intrinsic production rate of RANKL [pM/day]
         # -> r_L
-        self.intrinsic_RANKL = 1.0e+3
+        self.intrinsic_RANKL = 1.684195714712206e+002
         # Minimal rate of OPG production per cell
         # -> K^P_O
-        self.min_OPG_per_cell = 2.00e+5
+        self.min_OPG_per_cell = 1.624900337835679e+008
         # Boolean variables determining which cells produce OPG
-        self.bool_OPGprod_OBp = None  # 0=no
-        self.bool_OPGprod_OBa = None  # 1=yes
+        self.bool_OBp_produce_OPG = 0  # 0=no
+        self.bool_OBa_produce_OPG = 1  # 1=yes
         # Constant describing how much RANKL is produced per cell [pM/pM]
         self.RANKL_rate_per_cell = None
         # Production rate of RANKL per cell [pM/pM]
         # -> K^P_L
-        self.max_RANKL_per_cell = 3.00e+6
+        self.max_RANKL_per_cell = 2.703476379131062e+006
         # Boolean variables determining which cells produce RANKL
-        self.bool_RANKLprod_OBp = None  # 1=yes
-        self.bool_RANKLprod_OBa = None  # 0=no
+        self.bool_OBp_produce_RANKL = 1  # 1=yes
+        self.bool_OBa_produce_RANKL = 0  # 0=no
 
 
 class correction_factor:
@@ -142,9 +142,9 @@ class bone_volume:
         # -> k_form
         self.formation_rate = 1.571
         # -> k_res
-        self.resorption_rate = None
+        self.resorption_rate = 200.0
         # -> alpha
-        self.stored_TGFb_content = None  # proportionality constant expressing the TGF-β content stored in bone volume
+        self.stored_TGFb_content = 1.0  # proportionality constant expressing the TGF-β content stored in bone volume
 
 
 class Parameters:
