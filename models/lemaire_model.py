@@ -9,6 +9,7 @@ class Lemaire_Model(Base_Model):
     def __init__(self, load_case):
         super().__init__()
         self.parameters = Parameters()
+        self.parameters.differentiation_rate.OBp = self.parameters.differentiation_rate.OBp * self.parameters.correction_factor.f0
         self.initial_guess_root = np.array([0.7734e-3, 0.7282e-3, 0.9127e-3])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None
@@ -16,17 +17,17 @@ class Lemaire_Model(Base_Model):
         self.steady_state.OCa = None
         self.load_case = load_case
 
-    def calculate_TGFb_activation_OBu(self, OCa):
+    def calculate_TGFb_activation_OBu(self, OCa, t):
         TGFb_activation_OBu = ((OCa + self.parameters.correction_factor.f0 * self.parameters.binding_constant.TGFb_OC) /
                                (OCa + self.parameters.binding_constant.TGFb_OC))
         return TGFb_activation_OBu
 
-    def calculate_TGFb_repression_OBp(self, OCa):
-        TGFb_repression_OBp = 1 / self.calculate_TGFb_activation_OBu(OCa)
+    def calculate_TGFb_repression_OBp(self, OCa, t):
+        TGFb_repression_OBp = 1 / self.calculate_TGFb_activation_OBu(OCa, t)
         return TGFb_repression_OBp
 
-    def calculate_TGFb_activation_OCa(self, OCa):
-        TGFb_activation_OCp = self.calculate_TGFb_activation_OBu(OCa)
+    def calculate_TGFb_activation_OCa(self, OCa, t):
+        TGFb_activation_OCp = self.calculate_TGFb_activation_OBu(OCa, t)
         return TGFb_activation_OCp
 
     def calculate_RANKL_activation_OCp(self, OBp, OBa, t):

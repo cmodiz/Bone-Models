@@ -16,10 +16,10 @@ class Base_Model:
     def bone_cell_population_model(self, x, t=None):
         OBp, OBa, OCa = x
         dOBpdt = ((self.parameters.differentiation_rate.OBu * self.calculate_TGFb_activation_OBu(OCa,t) -
-                   (self.parameters.differentiation_rate.OBp * self.parameters.correction_factor.f0) * OBp *
+                   self.parameters.differentiation_rate.OBp * OBp *
                    self.calculate_TGFb_repression_OBp(OCa,t) + self.calculate_external_injection_OBp(t)) +
                   self.apply_mechanical_effects() + self.apply_medication_effects_OBp())
-        dOBadt = ((self.parameters.differentiation_rate.OBp * self.parameters.correction_factor.f0) * OBp * self.calculate_TGFb_repression_OBp(OCa,t) -
+        dOBadt = (self.parameters.differentiation_rate.OBp * OBp * self.calculate_TGFb_repression_OBp(OCa,t) -
                   self.parameters.apoptosis_rate.OBa * OBa * self.apply_medication_effects_OBa()
                   + self.calculate_external_injection_OBa(t))
         dOCadt = (self.parameters.differentiation_rate.OCp * self.calculate_RANKL_activation_OCp(OBp,OBa,t) -
@@ -44,13 +44,13 @@ class Base_Model:
         print('done')
         return solution
 
-    def calculate_TGFb_activation_OBu(self, OCa):
+    def calculate_TGFb_activation_OBu(self, OCa, t):
         pass
 
-    def calculate_TGFb_repression_OBp(self, OCa):
+    def calculate_TGFb_repression_OBp(self, OCa, t):
         pass
 
-    def calculate_TGFb_activation_OCa(self, OCa):
+    def calculate_TGFb_activation_OCa(self, OCa, t):
         pass
 
     def calculate_RANKL_activation_OCp(self, OBp, OBa, t):
