@@ -9,7 +9,7 @@ class Pivonka_Model(Lemaire_Model):
     def __init__(self, load_case):
         super().__init__(load_case=load_case)
         self.parameters = Parameters()
-        self.initial_guess_root = np.array([0.7734e-3, 0.7282e-3, 0.9127e-3])
+        self.initial_guess_root = np.array([[6.196390627918603e-4, 5.583931899482344e-4, 8.069635262731931e-4]])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None
         self.steady_state.OBa = None
@@ -64,9 +64,9 @@ class Pivonka_Model(Lemaire_Model):
 
     def calculate_effective_carrying_capacity_RANKL(self, OBp, OBa, t):
         RANKL_eff = (self.parameters.production_rate.bool_OBp_produce_RANKL *
-                     self.parameters.concentration.max_RANKL_per_cell * OBp +
+                     self.parameters.production_rate.max_RANKL_per_cell * OBp +
                      self.parameters.production_rate.bool_OBa_produce_RANKL *
-                     self.parameters.concentration.max_RANKL_per_cell * OBa) * self.calculate_PTH_activation_OB(t)
+                     self.parameters.production_rate.max_RANKL_per_cell * OBa) * self.calculate_PTH_activation_OB(t)
         return RANKL_eff
 
     def calculate_RANKL_concentration(self, OBp, OBa, t):
@@ -74,9 +74,9 @@ class Pivonka_Model(Lemaire_Model):
         RANKL_RANK_OPG = RANKL_eff / (1 + self.parameters.binding_constant.RANKL_OPG *
                                       self.calculate_OPG_concentration(OBp, OBa, t) +
                                       self.parameters.binding_constant.RANKL_RANK * self.parameters.concentration.RANK)
-        RANKL = RANKL_RANK_OPG * ((self.parameters.production_rate.RANKL_rate_per_cell +
+        RANKL = RANKL_RANK_OPG * ((self.parameters.production_rate.intrinsic_RANKL +
                                    self.calculate_external_injection_RANKL(t)) /
-                                  self.parameters.production_rate.RANKL_rate_per_cell +
+                                  self.parameters.production_rate.intrinsic_RANKL +
                                   self.parameters.degradation_rate.RANKL * RANKL_eff)
         return RANKL
 
@@ -87,5 +87,5 @@ class Pivonka_Model(Lemaire_Model):
 
     def calculate_RANKL_activation_OCp(self, OBp, OBa, t):
         RANKL_RANK = self.calculate_RANKL_RANK_concentration(OBp, OBa, t)
-        RANKL_activation_OCp = RANKL_RANK / (RANKL_RANK + self.parameters.activation_coefficient.RANKL_OCp)
+        RANKL_activation_OCp = RANKL_RANK / (RANKL_RANK + self.parameters.activation_coefficient.RANKL_RANK)
         return RANKL_activation_OCp
