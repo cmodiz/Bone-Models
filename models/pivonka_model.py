@@ -54,14 +54,18 @@ class Pivonka_Model(Lemaire_Model):
         return PTH_repression_OB
 
     def calculate_OPG_concentration(self, OBp, OBa, t):
-        temp_PTH_OB = (self.parameters.production_rate.min_OPG_per_cell * OBp +
+        temp_PTH_OB = (self.parameters.production_rate.bool_OBp_produce_OPG *
+                       self.parameters.production_rate.min_OPG_per_cell * OBp +
+                       self.parameters.production_rate.bool_OBp_produce_OPG *
                        self.parameters.production_rate.min_OPG_per_cell * OBa) * self.calculate_PTH_repression_OB(t)
         OPG = (((temp_PTH_OB + self.calculate_external_injection_OPG(t)) * self.parameters.concentration.OPG_max) /
                (temp_PTH_OB + self.parameters.degradation_rate.OPG * self.parameters.concentration.OPG_max))
         return OPG
 
     def calculate_effective_carrying_capacity_RANKL(self, OBp, OBa, t):
-        RANKL_eff = (self.parameters.concentration.max_RANKL_per_cell * OBp +
+        RANKL_eff = (self.parameters.production_rate.bool_OBp_produce_RANKL *
+                     self.parameters.concentration.max_RANKL_per_cell * OBp +
+                     self.parameters.production_rate.bool_OBa_produce_RANKL *
                      self.parameters.concentration.max_RANKL_per_cell * OBa) * self.calculate_PTH_activation_OB(t)
         return RANKL_eff
 
