@@ -19,22 +19,12 @@ class Martonova_Model:
                                                    / (self.parameters.kinematics.receptor + 1) * (
                                                            self.parameters.kinematics.complex + 1) - self.parameters.activity.inactive_complex) / self.parameters.kinematics.complex
         # define basal PTH pulse parameters based on load case
-        self.initialise_basal_PTH_pulse(load_case)
+        self.load_case = load_case
         # calculate drug PTH pulse based on load case
         self.calculate_drug_PTH_pulse(load_case)
         self.initial_condition = np.array([0.9, 0, 0])
         self.number_of_periods = 30
         self.period_for_activity_constants = 20
-
-    def initialise_basal_PTH_pulse(self, load_case):
-        """ This function initialises the basal PTH pulse parameters based on the load case.
-        The parameters include min/ max (= base and pulse component) of the pulse, on/off duration, and period."""
-        self.parameters.basal_PTH_pulse.min = load_case.basal_PTH_pulse_min
-        self.parameters.basal_PTH_pulse.max = load_case.basal_PTH_pulse_max
-        self.parameters.basal_PTH_pulse.off_duration = load_case.basal_PTH_pulse_off_duration
-        self.parameters.basal_PTH_pulse.on_duration = load_case.basal_PTH_pulse_on_duration
-        self.parameters.basal_PTH_pulse.period = (self.parameters.basal_PTH_pulse.off_duration +
-                                                  self.parameters.basal_PTH_pulse.on_duration)
 
     def calculate_drug_PTH_pulse(self, load_case):
         """ This function calculates the drug PTH pulse based on the load case. """
@@ -44,7 +34,7 @@ class Martonova_Model:
         else:
             # [pmol] = mg * 10^6 pg/mg / 4117.8 pmol/pg
             init_dose = load_case.drug_dose * (10 ** 6) / 4117.8  # convert mg to pM
-            init_PTH = self.parameters.basal_PTH_pulse.min * 1000  # convert nM to pM
+            init_PTH = self.load_case.basal_PTH_pulse.min * 1000  # convert nM to pM
             init_area = 0
             x0 = np.array([init_dose, init_PTH, init_area])
 
@@ -61,9 +51,9 @@ class Martonova_Model:
             maximum_concentration = np.max(drug_concentration)
             area_without_basal_PTH = area[-1] - init_PTH * sol.t[-1]
             # calculate drug PTH pulse parameters for square wave pulse approximation
-            self.parameters.injected_PTH_pulse.max = (maximum_concentration - init_PTH)/1000  # convert pM to nM
-            self.parameters.injected_PTH_pulse.on_duration = (area_without_basal_PTH/ (maximum_concentration - init_PTH)) * 60  # convert h to min
-            self.parameters.injected_PTH_pulse.off_duration = load_case.injection_frequency * 60 - self.parameters.injected_PTH_pulse.on_duration
+            self.load_case.injected_PTH_pulse.max = (maximum_concentration - init_PTH)/1000  # convert pM to nM
+            self.load_case.injected_PTH_pulse.on_duration = (area_without_basal_PTH/ (maximum_concentration - init_PTH)) * 60  # convert h to min
+            self.load_case.injected_PTH_pulse.off_duration = load_case.injection_frequency * 60 - self.load_case.injected_PTH_pulse.on_duration
             pass
 
     def PK_PD_model(self, t, x):
@@ -91,7 +81,7 @@ class Martonova_Model:
     def calculate_receptor_complex_concentrations(self):
         """ This function calculates the concentrations of receptors and complexes over time."""
         sol = solve_ivp(self.receptor_ligand_model,
-                        [0, self.number_of_periods * self.parameters.basal_PTH_pulse.period],
+                        [0.0, self.number_of_periods * self.load_case.basal_PTH_pulse.period],
                         self.initial_condition, method="Radau", max_step=0.1)
         time = sol.t
         active_receptor = sol.y[0, :]
@@ -131,20 +121,19 @@ class Martonova_Model:
 
     def calculate_PTH_concentration(self, t):
         """ This function calculates the PTH concentration based on the time t."""
-        if self.parameters.injected_PTH_pulse.min is not None:
+        if self.load_case.injected_PTH_pulse.max is not None:
             # TODO: Implement injected PTH pulse calculation
             pass
         else:
             # no injected PTH, only basal PTH pulse is present
-            number_of_pulses = np.floor(t / self.parameters.basal_PTH_pulse.period)
-            if (number_of_pulses * self.parameters.basal_PTH_pulse.period <= t <=
-                    (
-                            number_of_pulses * self.parameters.basal_PTH_pulse.period + self.parameters.basal_PTH_pulse.on_duration)):
+            number_of_pulses = np.floor(t / self.load_case.basal_PTH_pulse.period)
+            if (number_of_pulses * self.load_case.basal_PTH_pulse.period <= t <=
+                    (number_of_pulses * self.load_case.basal_PTH_pulse.period + self.load_case.basal_PTH_pulse.on_duration)):
                 # gland on phase
-                PTH = ((self.parameters.basal_PTH_pulse.max + self.parameters.basal_PTH_pulse.min) *
+                PTH = ((self.load_case.basal_PTH_pulse.max + self.load_case.basal_PTH_pulse.min) *
                        self.parameters.kinematics.active_binding_unbinding)
             else:  # gland off phase
-                PTH = self.parameters.basal_PTH_pulse.min * self.parameters.kinematics.active_binding_unbinding
+                PTH = self.load_case.basal_PTH_pulse.min * self.parameters.kinematics.active_binding_unbinding
         return PTH
 
     def calculate_activity_constants(self, cellular_activity, sol_t):
@@ -155,19 +144,19 @@ class Martonova_Model:
         # calculate integrated activity (alphaT, equation (26))
         chosen_activity_pulse = []
         chosen_activity_pulse_time = []
-        if self.parameters.injected_PTH_pulse.min is not None:
+        if self.load_case.injected_PTH_pulse.max is not None:
             # TODO: Implement injected PTH pulse calculation
             pass
         else:
             for i in range(len(sol_t)):
-                if (self.period_for_activity_constants * self.parameters.basal_PTH_pulse.period <= sol_t[i] <=
-                        self.period_for_activity_constants * self.parameters.basal_PTH_pulse.period + self.parameters.basal_PTH_pulse.on_duration):
+                if (self.period_for_activity_constants * self.load_case.basal_PTH_pulse.period <= sol_t[i] <=
+                        self.period_for_activity_constants * self.load_case.basal_PTH_pulse.period + self.load_case.basal_PTH_pulse.on_duration):
                     chosen_activity_pulse.append(cellular_activity[i])
                     chosen_activity_pulse_time.append(sol_t[i])
         basal_integrated_activity = np.linalg.norm(
             np.trapz(np.array(chosen_activity_pulse) - basal_activity, chosen_activity_pulse_time, axis=0))
         basal_cellular_responsiveness = (basal_integrated_activity / integrated_activity_for_step_increase) * (
-                    basal_integrated_activity / self.parameters.basal_PTH_pulse.period)
+                    basal_integrated_activity / self.load_case.basal_PTH_pulse.period)
         return basal_activity, basal_integrated_activity, basal_cellular_responsiveness
 
     def calculate_basal_activity(self):
@@ -181,11 +170,11 @@ class Martonova_Model:
         """ This function calculates the integrated activity for a step increase in the cellular activity.
         It corresponds to the term alpha_Tstep in equation (28) in the Li & Goldbeter paper. """
         difference_in_receptor_fraction = self.calculate_difference_in_receptor_fraction(
-            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+            self.load_case.basal_PTH_pulse.min + self.load_case.basal_PTH_pulse.max)
         difference_in_weights = self.calculate_difference_in_weights(
-            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+            self.load_case.basal_PTH_pulse.min + self.load_case.basal_PTH_pulse.max)
         adaptation_time = self.calculate_adaptation_time(
-            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+            self.load_case.basal_PTH_pulse.min + self.load_case.basal_PTH_pulse.max)
         # eq 27
         amplitude_of_cellular_activity = difference_in_receptor_fraction * difference_in_weights
         # eq 28
@@ -197,7 +186,7 @@ class Martonova_Model:
         It corresponds to the term Q in equation (20) in the Li & Goldbeter paper. """
         # calculate receptor desensitisation/ resensitisation constants for basal PTH pulse minimum
         desensitised_receptors_after_adaptation_basal_min = self.calculate_desensitised_receptors_after_adaptation(
-            self.parameters.basal_PTH_pulse.min)
+            self.load_case.basal_PTH_pulse.min)
         # calculate receptor desensitisation/ resensitisation constants for basal PTH pulse maximum
         desensitised_receptors_after_adaptation_basal_max = self.calculate_desensitised_receptors_after_adaptation(
             stimulus_concentration)
@@ -257,7 +246,7 @@ class Martonova_Model:
         """ This function calculates the weight of active receptor in the cellular activity.
          It corresponds to the term a in equation (13a) in the Li & Goldbeter paper. """
         weight_active_receptor = (
-                    self.parameters.activity.active_receptor + self.parameters.activity.active_complex * stimulus_concentration
+                (self.parameters.activity.active_receptor + self.parameters.activity.active_complex * stimulus_concentration)
                     / (1 + stimulus_concentration))
         return weight_active_receptor
 
