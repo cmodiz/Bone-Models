@@ -10,6 +10,7 @@ class Martonova_Model:
     Inputs: load_case (object) - an object of the Load_Case class, defines healthy/ disease state and treatment.
     Outputs: cellular_activity (array) - the cellular activity of the model, integrated_activity (float),
             cellular_responsiveness (float)."""
+
     def __init__(self, load_case):
         self.parameters = Parameters()
         # calculate active complex activity constant
@@ -41,8 +42,39 @@ class Martonova_Model:
             # no drug PTH injected, only basal PTH pulses are present
             pass
         else:
-            # TODO: Implement drug PTH pulse calculation
+            # [pmol] = mg * 10^6 pg/mg / 4117.8 pmol/pg
+            init_dose = load_case.drug_dose * (10 ** 6) / 4117.8  # convert mg to pM
+            init_PTH = self.parameters.basal_PTH_pulse.min * 1000  # convert nM to pM
+            init_area = 0
+            x0 = np.array([init_dose, init_PTH, init_area])
+
+            # solve ODE for one compartment model, stop when PTH is at baseline again (event function)
+            def event(t, x):
+                return x[1] - init_PTH
+
+            event.terminal = True
+            event.direction = -1
+            sol = solve_ivp(self.PK_PD_model, [0, load_case.injection_frequency * 60], x0, rtol=1e-7, events=event)
+            dose = sol.y[0, :]
+            drug_concentration = sol.y[1, :]
+            area = sol.y[2, :]
+            maximum_concentration = np.max(drug_concentration)
+            area_without_basal_PTH = area[-1] - init_PTH * sol.t[-1]
+            # calculate drug PTH pulse parameters for square wave pulse approximation
+            self.parameters.injected_PTH_pulse.max = (maximum_concentration - init_PTH)/1000  # convert pM to nM
+            self.parameters.injected_PTH_pulse.on_duration = (area_without_basal_PTH/ (maximum_concentration - init_PTH)) * 60  # convert h to min
+            self.parameters.injected_PTH_pulse.off_duration = load_case.injection_frequency * 60 - self.parameters.injected_PTH_pulse.on_duration
             pass
+
+    def PK_PD_model(self, t, x):
+        dose = x[0]
+        drug_concentration = x[1]
+        d_dose_dt = -self.parameters.pharmacokinetics.absorption_rate * dose * self.parameters.pharmacokinetics.bioavailability
+        d_drug_concentration_dt = ((self.parameters.pharmacokinetics.bioavailability / self.parameters.pharmacokinetics.volume_of_distribution) *
+                                   self.parameters.pharmacokinetics.absorption_rate * dose - self.parameters.pharmacokinetics.elimination_rate * drug_concentration)
+        d_area_dt = drug_concentration
+        d_x_dt = [d_dose_dt, d_drug_concentration_dt, d_area_dt]
+        return d_x_dt
 
     def calculate_cellular_activity(self):
         """This function calculates the cellular activity of the model based on receptor and complex concentrations.
@@ -106,10 +138,11 @@ class Martonova_Model:
             # no injected PTH, only basal PTH pulse is present
             number_of_pulses = np.floor(t / self.parameters.basal_PTH_pulse.period)
             if (number_of_pulses * self.parameters.basal_PTH_pulse.period <= t <=
-                    (number_of_pulses * self.parameters.basal_PTH_pulse.period + self.parameters.basal_PTH_pulse.on_duration)):
+                    (
+                            number_of_pulses * self.parameters.basal_PTH_pulse.period + self.parameters.basal_PTH_pulse.on_duration)):
                 # gland on phase
                 PTH = ((self.parameters.basal_PTH_pulse.max + self.parameters.basal_PTH_pulse.min) *
-                     self.parameters.kinematics.active_binding_unbinding)
+                       self.parameters.kinematics.active_binding_unbinding)
             else:  # gland off phase
                 PTH = self.parameters.basal_PTH_pulse.min * self.parameters.kinematics.active_binding_unbinding
         return PTH
@@ -131,8 +164,10 @@ class Martonova_Model:
                         self.period_for_activity_constants * self.parameters.basal_PTH_pulse.period + self.parameters.basal_PTH_pulse.on_duration):
                     chosen_activity_pulse.append(cellular_activity[i])
                     chosen_activity_pulse_time.append(sol_t[i])
-        basal_integrated_activity = np.linalg.norm(np.trapz(np.array(chosen_activity_pulse) - basal_activity, chosen_activity_pulse_time, axis=0))
-        basal_cellular_responsiveness = (basal_integrated_activity / integrated_activity_for_step_increase) * (basal_integrated_activity / self.parameters.basal_PTH_pulse.period)
+        basal_integrated_activity = np.linalg.norm(
+            np.trapz(np.array(chosen_activity_pulse) - basal_activity, chosen_activity_pulse_time, axis=0))
+        basal_cellular_responsiveness = (basal_integrated_activity / integrated_activity_for_step_increase) * (
+                    basal_integrated_activity / self.parameters.basal_PTH_pulse.period)
         return basal_activity, basal_integrated_activity, basal_cellular_responsiveness
 
     def calculate_basal_activity(self):
@@ -145,9 +180,12 @@ class Martonova_Model:
     def calculate_integrated_activity_for_step_increase(self):
         """ This function calculates the integrated activity for a step increase in the cellular activity.
         It corresponds to the term alpha_Tstep in equation (28) in the Li & Goldbeter paper. """
-        difference_in_receptor_fraction = self.calculate_difference_in_receptor_fraction(self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
-        difference_in_weights = self.calculate_difference_in_weights(self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
-        adaptation_time = self.calculate_adaptation_time(self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+        difference_in_receptor_fraction = self.calculate_difference_in_receptor_fraction(
+            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+        difference_in_weights = self.calculate_difference_in_weights(
+            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
+        adaptation_time = self.calculate_adaptation_time(
+            self.parameters.basal_PTH_pulse.min + self.parameters.basal_PTH_pulse.max)
         # eq 27
         amplitude_of_cellular_activity = difference_in_receptor_fraction * difference_in_weights
         # eq 28
@@ -170,9 +208,12 @@ class Martonova_Model:
     def calculate_adaptation_time(self, stimulus_concentration):
         """ This function calculates the adaptation time of the cellular activity to a stimulus.
          It corresponds to the term tau_a in equation (11) in the Li & Goldbeter paper. """
-        contribution_of_receptor_desensitation_basal_max = self.calculate_contribution_of_receptor_desensitation(stimulus_concentration)
-        contribution_of_receptor_resensitisation_basal_max = self.calculate_contribution_of_receptor_resensitisation(stimulus_concentration)
-        adaptation_time = (1 / (contribution_of_receptor_desensitation_basal_max + contribution_of_receptor_resensitisation_basal_max))
+        contribution_of_receptor_desensitation_basal_max = self.calculate_contribution_of_receptor_desensitation(
+            stimulus_concentration)
+        contribution_of_receptor_resensitisation_basal_max = self.calculate_contribution_of_receptor_resensitisation(
+            stimulus_concentration)
+        adaptation_time = (1 / (
+                    contribution_of_receptor_desensitation_basal_max + contribution_of_receptor_resensitisation_basal_max))
         return adaptation_time
 
     def calculate_difference_in_weights(self, stimulus_concentration):
@@ -203,23 +244,28 @@ class Martonova_Model:
     def calculate_desensitised_receptors_after_adaptation(self, stimulus_concentration):
         """ This function calculates the total fraction of desensitised receptors after adaptation to a stimulus.
          It corresponds to the term Ds in equation (8) in the Li & Goldbeter paper. """
-        contribution_of_receptor_desensitation = self.calculate_contribution_of_receptor_desensitation(stimulus_concentration)
-        contribution_of_receptor_resensitisation = self.calculate_contribution_of_receptor_resensitisation(stimulus_concentration)
+        contribution_of_receptor_desensitation = self.calculate_contribution_of_receptor_desensitation(
+            stimulus_concentration)
+        contribution_of_receptor_resensitisation = self.calculate_contribution_of_receptor_resensitisation(
+            stimulus_concentration)
         desensitised_receptors_after_adaptation = (contribution_of_receptor_desensitation /
-                                                   (contribution_of_receptor_desensitation + contribution_of_receptor_resensitisation))
+                                                   (
+                                                               contribution_of_receptor_desensitation + contribution_of_receptor_resensitisation))
         return desensitised_receptors_after_adaptation
 
     def calculate_weight_active_receptor(self, stimulus_concentration):
         """ This function calculates the weight of active receptor in the cellular activity.
          It corresponds to the term a in equation (13a) in the Li & Goldbeter paper. """
-        weight_active_receptor = (self.parameters.activity.active_receptor + self.parameters.activity.active_complex * stimulus_concentration
-                                  / (1 + stimulus_concentration))
+        weight_active_receptor = (
+                    self.parameters.activity.active_receptor + self.parameters.activity.active_complex * stimulus_concentration
+                    / (1 + stimulus_concentration))
         return weight_active_receptor
 
     def calculate_weight_desensitised_receptor(self, stimulus_concentration):
         """ This function calculates the weight of desensitised receptor in the cellular activity.
          It corresponds to the term b in equation (13b) in the Li & Goldbeter paper. """
         kinetic_constant = self.parameters.kinematics.receptor / self.parameters.kinematics.complex
-        weight_desensitised_receptor = (self.parameters.activity.inactive_receptor + self.parameters.activity.inactive_complex * stimulus_concentration * kinetic_constant) / (
+        weight_desensitised_receptor = (
+                                                   self.parameters.activity.inactive_receptor + self.parameters.activity.inactive_complex * stimulus_concentration * kinetic_constant) / (
                                                1 + stimulus_concentration * kinetic_constant)
         return weight_desensitised_receptor
