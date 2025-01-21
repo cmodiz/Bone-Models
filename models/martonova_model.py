@@ -133,7 +133,7 @@ class Martonova_Model:
                     chosen_activity_pulse_time.append(sol_t[i])
         basal_integrated_activity = np.linalg.norm(np.trapz(np.array(chosen_activity_pulse) - basal_activity, chosen_activity_pulse_time, axis=0))
         basal_cellular_responsiveness = (basal_integrated_activity / integrated_activity_for_step_increase) * (basal_integrated_activity / self.parameters.basal_PTH_pulse.period)
-        return basal_activity, integrated_activity_for_step_increase, basal_cellular_responsiveness
+        return basal_activity, basal_integrated_activity, basal_cellular_responsiveness
 
     def calculate_basal_activity(self):
         """ This function calculates the basal activity of the cellular activity.
@@ -185,7 +185,7 @@ class Martonova_Model:
     def calculate_contribution_of_receptor_desensitation(self, stimulus_concentration):
         """ This function calculates the contribution of receptor desensitisation to the cellular activity.
          It corresponds to the term u in equation (12a) in the Li & Goldbeter paper. """
-        contribution_of_receptor_desensitation_basal_min = (self.parameters.kinematics.receptor_desensitized *
+        contribution_of_receptor_desensitation_basal_min = (self.parameters.kinematics.receptor_desensitized +
                                                             self.parameters.kinematics.complex_desensitized *
                                                             stimulus_concentration) / (1 + stimulus_concentration)
         return contribution_of_receptor_desensitation_basal_min
@@ -194,7 +194,7 @@ class Martonova_Model:
         """ This function calculates the contribution of receptor resensitisation to the cellular activity.
          It corresponds to the term v in equation (12b) in the Li & Goldbeter paper. """
         kinetic_constant = self.parameters.kinematics.receptor / self.parameters.kinematics.complex
-        contribution_of_receptor_resensitisation_basal_min = ((self.parameters.kinematics.receptor_resensitized *
+        contribution_of_receptor_resensitisation_basal_min = ((self.parameters.kinematics.receptor_resensitized +
                                                                self.parameters.kinematics.complex_resensitized *
                                                                stimulus_concentration * kinetic_constant) /
                                                               (1 + stimulus_concentration * kinetic_constant))
