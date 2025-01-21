@@ -15,9 +15,9 @@ class kinematics:
         # k_d
         self.inactive_complex_binding = 1
         # K_1
-        self.receptor = self.receptor_desensitized / self.receptor_resensitized
+        self.receptor = self.receptor_resensitized / self.receptor_desensitized
         # K_2
-        self.complex = self.complex_desensitized / self.complex_resensitized
+        self.complex = self.complex_resensitized / self.complex_desensitized
         # K_r
         self.active_binding_unbinding = self.active_complex_unbinding / self.active_complex_binding
         # k_{-d}
