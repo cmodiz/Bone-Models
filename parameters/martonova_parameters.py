@@ -56,10 +56,22 @@ class injected_PTH_pulse:
     def __init__(self):
         # -> gamma_off
         self.min = None
-        # -> gamme_on
+        # -> gamma_on
         self.max = None
         # -> tau_on
         self.on_duration = None
+
+
+class pharmacokinetics:
+    def __init__(self):
+        # -> ka
+        self.absorption_rate = 4.38  # [1/h]
+        # -> ke
+        self.elimination_rate = 0.693  # [1/h]
+        # -> V
+        self.volume_of_distribution = 110  # [L]
+        # F
+        self.bioavailability = 0.95  # [-]
 
 
 class Parameters:
@@ -68,3 +80,4 @@ class Parameters:
         self.activity = activity()
         self.basal_PTH_pulse = basal_PTH_pulse()
         self.injected_PTH_pulse = injected_PTH_pulse()
+        self.pharmacokinetics = pharmacokinetics()
