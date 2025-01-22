@@ -1,0 +1,4 @@
+from models import Modiz_Model
+from models.modiz_model import identify_calibration_parameters
+
+identify_calibration_parameters()
