@@ -27,3 +27,7 @@ solution_hpt_integrated_activity = model.solve_bone_cell_population_model(tspan=
 model = Modiz_Model(Healthy_to_Glucocorticoid_Induced_Osteoporosis(), model_type='integrated activity')
 solution_gio_integrated_activity = model.solve_bone_cell_population_model(tspan=tspan)
 
+# solve with Lemaire model old activation
+model = Reference_Lemaire_Model(Reference_Healthy_to_Hyperparathyroidism())
+solution_old_activation = model.solve_bone_cell_population_model(tspan=tspan)
+utils.plots.plot_bone_cell_concentrations(solution_old_activation.t, solution_old_activation.y[0], solution_old_activation.y[1], solution_old_activation.y[2], r'$\pi_{PTH}$')
