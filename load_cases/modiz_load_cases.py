@@ -35,4 +35,21 @@ class Healthy_to_Glucocorticoid_Induced_Osteoporosis:
         self.martonova = Glucocorticoid_Induced_Osteoporosis()
 
 
+class Reference_Healthy_to_Hyperparathyroidism:
+    def __init__(self):
+        self.OBp_injection = 0
+        self.OBa_injection = 0
+        self.OCa_injection = 0
+        # -> I_P
+        self.PTH_injection = 0
+        # -> I_O
+        self.OPG_injection = 0
+        # -> I_L
+        self.RANKL_injection = 0
+        self.PTH_elevation = 3.8782894736842097
+        # 1.0, 3.8782894736842097, 0.8252796052631578, 0.9, 0.19098684210526315, 7.3500657894736845, 1.0565131578947367
+        self.start_time = 20
+        self.end_time = 80
+
+
 
