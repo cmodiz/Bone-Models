@@ -9,7 +9,6 @@ class Lemaire_Model(Base_Model):
     def __init__(self, load_case):
         super().__init__()
         self.parameters = Parameters()
-        self.parameters.differentiation_rate.OBp = self.parameters.differentiation_rate.OBp * self.parameters.correction_factor.f0
         self.initial_guess_root = np.array([0.7734e-3, 0.7282e-3, 0.9127e-3])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None
