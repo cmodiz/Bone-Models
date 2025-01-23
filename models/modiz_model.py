@@ -37,6 +37,21 @@ class Modiz_Model(Lemaire_Model):
         return PTH_activation
 
 
+class Reference_Lemaire_Model(Lemaire_Model):
+    """ This class is used to modify the Lemaire model to include a disease load case with multiplicative elevation. """
+    def __init__(self, load_case):
+        super().__init__(load_case)
+        self.load_case = load_case
+
+    def calculate_PTH_concentration(self, t):
+        if (t is not None) and self.load_case.start_time <= t <= self.load_case.end_time:
+            PTH = ((self.parameters.production_rate.intrinsic_PTH * self.load_case.PTH_elevation) /
+                   self.parameters.degradation_rate.PTH)
+        else:
+            PTH = self.parameters.production_rate.intrinsic_PTH / self.parameters.degradation_rate.PTH
+        return PTH
+
+
 def identify_calibration_parameters():
     diseases = [Healthy(), Hyperparathyroidism(), Osteoporosis(), Postmenopausal_Osteoporosis(),
                 Hypercalcemia(), Hypocalcemia(), Glucocorticoid_Induced_Osteoporosis()]
