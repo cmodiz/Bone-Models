@@ -151,3 +151,5 @@ class Parameters:
         self.production_rate = production_rate()
         # self.capacity = capacity()
         self.bone_volume = bone_volume()
+
+        self.differentiation_rate.OBp = self.differentiation_rate.OBp * self.correction_factor.f0
