@@ -93,13 +93,16 @@ class Lemaire_Model(Base_Model):
         else:
             return self.load_case.RANKL_injection
 
-    def calculate_bone_volume_fraction_change(self, solution, steady_state, initial_bone_volume_fraction):
+    def calculate_bone_volume_fraction_change(self, time, solution, steady_state, initial_bone_volume_fraction):
         self.parameters.bone_volume.resorption_rate = self.parameters.bone_volume.formation_rate * steady_state[1]/steady_state[2]
         bone_volume_fraction = [initial_bone_volume_fraction]
-        for i in range(len(solution)):
-            bone_volume_fraction.append(
-                bone_volume_fraction[-1] +
-                self.parameters.bone_volume.formation_rate * (solution[i][1] - steady_state[1]) -
-                self.parameters.bone_volume.resorption_rate * (solution[i][2] - steady_state[2])
-            )
+        # for i in range(len(solution[1][:])):
+        #     bone_volume_fraction.append(bone_volume_fraction[-1] + self.parameters.bone_volume.formation_rate * (solution[1][i]-steady_state[1])
+        #                                 - self.parameters.bone_volume.resorption_rate * (solution[2][i] - steady_state[2]))
+        # dBV_dt = self.parameters.bone_volume.formation_rate * (solution[1][:] - steady_state[1]) - self.parameters.bone_volume.resorption_rate * (solution[2][:] - steady_state[2])  # Compute dBV/dt
+        dBV_dt = self.parameters.bone_volume.formation_rate * (solution[1][:]) - self.parameters.bone_volume.resorption_rate * (solution[2][:])  # Compute dBV/dt
+        for i in range(1, len(time)):
+            dt = time[i] - time[i - 1]
+            trapezoid = (dBV_dt[i - 1] + dBV_dt[i]) / 2 * dt
+            bone_volume_fraction.append(bone_volume_fraction[-1] + trapezoid)
         return bone_volume_fraction
