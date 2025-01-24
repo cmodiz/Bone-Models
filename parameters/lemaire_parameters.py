@@ -132,7 +132,7 @@ class correction_factor:
 class bone_volume:
     """ This class defines the parameters relevant for bone volume of the bone model. """
     def __init__(self):
-        self.formation_rate = 1.571
+        self.formation_rate = 1.571/ 100
         self.resorption_rate = None
 
 
