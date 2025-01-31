@@ -162,7 +162,6 @@ class Hyperparathyroidism_With_Drug:
         # -> T
         self.basal_PTH_pulse.period = self.basal_PTH_pulse.off_duration + self.basal_PTH_pulse.on_duration
         # drug
-        self.drug_dose = 40  # micrograms
+        self.drug_dose = 20  # micrograms
         self.injection_frequency = 24  # injections per day
         self.injected_PTH_pulse = injected_PTH_pulse()
-
