@@ -65,7 +65,7 @@ class Base_Model:
         dOBpdt = ((self.parameters.differentiation_rate.OBu * self.calculate_TGFb_activation_OBu(OCa,t) -
                    self.parameters.differentiation_rate.OBp * OBp *
                    self.calculate_TGFb_repression_OBp(OCa,t) + self.calculate_external_injection_OBp(t)) +
-                  self.apply_mechanical_effects() + self.apply_medication_effects_OBp())
+                  self.apply_mechanical_effects(OBp, OCa, t) + self.apply_medication_effects_OBp())
         dOBadt = (self.parameters.differentiation_rate.OBp * OBp * self.calculate_TGFb_repression_OBp(OCa,t) -
                   self.parameters.apoptosis_rate.OBa * OBa * self.apply_medication_effects_OBa()
                   + self.calculate_external_injection_OBa(t))
@@ -196,7 +196,7 @@ class Base_Model:
             )
         return bone_volume_fraction
 
-    def apply_mechanical_effects(self):
+    def apply_mechanical_effects(self, OBp, OCa, t):
         """ Apply mechanical effects to the bone cell population model.
 
         :return: mechanical effects acting on the bone cell population model
