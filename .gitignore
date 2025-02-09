@@ -1,4 +1,8 @@
+dist/
+bone_models.egg-info
 notes.txt
 .idea/
 Code/
 **/__pycache__/
+docs/build/
+env/
