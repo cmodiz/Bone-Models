@@ -1,14 +1,14 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from parameters.scheiner_parameters import Parameters
-from models.pivonka_model import Pivonka_Model
+from ..parameters.scheiner_parameters import Scheiner_Parameters
+from .pivonka_model import Pivonka_Model
 
 
 class Scheiner_Model(Pivonka_Model):
     def __init__(self, load_case):
         super().__init__(load_case=load_case)
-        self.parameters = Parameters()
+        self.parameters = Scheiner_Parameters()
         self.initial_guess_root = np.array([6.196390627918603e-004, 5.583931899482344e-004, 8.069635262731931e-004])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None

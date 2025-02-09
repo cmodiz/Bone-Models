@@ -1,14 +1,14 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from parameters.pivonka_parameters import Parameters
-from models.lemaire_model import Lemaire_Model
+from ..parameters.pivonka_parameters import Pivonka_Parameters
+from .lemaire_model import Lemaire_Model
 
 
 class Pivonka_Model(Lemaire_Model):
     def __init__(self, load_case):
         super().__init__(load_case=load_case)
-        self.parameters = Parameters()
+        self.parameters = Pivonka_Parameters()
         self.initial_guess_root = np.array([[6.196390627918603e-4, 5.583931899482344e-4, 8.069635262731931e-4]])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None
@@ -56,7 +56,7 @@ class Pivonka_Model(Lemaire_Model):
     def calculate_OPG_concentration(self, OBp, OBa, t):
         temp_PTH_OB = (self.parameters.production_rate.bool_OBp_produce_OPG *
                        self.parameters.production_rate.min_OPG_per_cell * OBp +
-                       self.parameters.production_rate.bool_OBp_produce_OPG *
+                       self.parameters.production_rate.bool_OBa_produce_OPG *
                        self.parameters.production_rate.min_OPG_per_cell * OBa) * self.calculate_PTH_repression_OB(t)
         OPG = (((temp_PTH_OB + self.calculate_external_injection_OPG(t)) * self.parameters.concentration.OPG_max) /
                (temp_PTH_OB + self.parameters.degradation_rate.OPG * self.parameters.concentration.OPG_max))
@@ -76,13 +76,13 @@ class Pivonka_Model(Lemaire_Model):
                                       self.parameters.binding_constant.RANKL_RANK * self.parameters.concentration.RANK)
         RANKL = RANKL_RANK_OPG * ((self.parameters.production_rate.intrinsic_RANKL +
                                    self.calculate_external_injection_RANKL(t)) /
-                                  self.parameters.production_rate.intrinsic_RANKL +
-                                  self.parameters.degradation_rate.RANKL * RANKL_eff)
+                                  (self.parameters.production_rate.intrinsic_RANKL +
+                                  self.parameters.degradation_rate.RANKL * RANKL_eff))
         return RANKL
 
     def calculate_RANKL_RANK_concentration(self, OBp, OBa, t):
         RANKL = self.calculate_RANKL_concentration(OBp, OBa, t)
-        RANKL_RANK = self.parameters.activation_coefficient.RANKL_RANK * RANKL * self.parameters.concentration.RANK
+        RANKL_RANK = self.parameters.binding_constant.RANKL_RANK * RANKL * self.parameters.concentration.RANK
         return RANKL_RANK
 
     def calculate_RANKL_activation_OCp(self, OBp, OBa, t):

@@ -1,4 +1,4 @@
-from parameters.lemaire_parameters import Parameters as Lemaire_Parameters
+from .lemaire_parameters import Lemaire_Parameters
 
 
 class Calibration_Parameters:
@@ -13,7 +13,7 @@ class Calibration_Parameters_Only_For_Healthy_State:
         self.integrated_activity = 0.0005288141739266334
 
 
-class Parameters(Lemaire_Parameters):
+class Modiz_Parameters(Lemaire_Parameters):
     def __init__(self):
         super().__init__()
         self.calibration = Calibration_Parameters()

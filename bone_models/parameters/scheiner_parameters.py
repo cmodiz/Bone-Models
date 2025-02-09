@@ -177,7 +177,7 @@ class mechanics:
         # self.OBu_proliferation_rate = 0
 
 
-class Parameters:
+class Scheiner_Parameters:
     """ This class defines the parameters of the bone model. """
     def __init__(self):
         self.differentiation_rate = differentiation_rate()

@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from parameters.base_parameters import Parameters
+from ..parameters.base_parameters import Base_Parameters
 
 
 class Base_Model:
@@ -44,7 +44,7 @@ class Base_Model:
 
     def __init__(self):
         """ Constructor for the Base_Model class. """
-        self.parameters = Parameters()
+        self.parameters = Base_Parameters()
         self.initial_guess_root = np.array([None, None, None])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None

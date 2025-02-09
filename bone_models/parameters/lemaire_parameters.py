@@ -268,7 +268,7 @@ class bone_volume:
         self.resorption_rate = None
 
 
-class Parameters:
+class Lemaire_Parameters:
     """ This class defines the parameters of the Lemaire bone cell population model.
 
     :param differentiation_rate: differentiation rates of the different cell types, see :class:`differentiation_rate` for details

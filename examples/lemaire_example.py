@@ -1,8 +1,8 @@
-from models import Lemaire_Model
-from load_cases.lemaire_load_cases import Load_Case_5
+from bone_models.models import Lemaire_Model
+from bone_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_5
 import matplotlib.pyplot as plt
 
-load_case = Load_Case_5()
+load_case = Lemaire_Load_Case_5()
 model = Lemaire_Model(load_case)
 
 tspan = [0, 140]

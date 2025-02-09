@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from parameters.martonova_parameters import Parameters
+from ..parameters.martonova_parameters import Martonova_Parameters
 from scipy.integrate import solve_ivp
 
 
@@ -23,7 +23,7 @@ class Martonova_Model:
 
         :param load_case: Load case for the model, see :class:`Martonova_Load_Case` for details.
         :type load_case: object """
-        self.parameters = Parameters()
+        self.parameters = Martonova_Parameters()
         # calculate active complex activity constant
         self.parameters.activity.active_complex = ((self.parameters.activity.active_receptor *
                                                     self.parameters.kinematics.receptor + self.parameters.activity.inactive_receptor)
@@ -34,7 +34,7 @@ class Martonova_Model:
         # calculate drug PTH pulse based on load case
         self.calculate_drug_PTH_pulse(load_case)
         self.initial_condition = np.array([0.9, 0, 0])
-        self.number_of_periods = 30
+        self.number_of_periods = 200
         self.period_for_activity_constants = 20
 
     def calculate_drug_PTH_pulse(self, load_case):

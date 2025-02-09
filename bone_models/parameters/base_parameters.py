@@ -121,7 +121,7 @@ class bone_volume:
         self.resorption_rate = None
 
 
-class Parameters:
+class Base_Parameters:
     """ This class defines the parameters of the bone model. """
     def __init__(self):
         self.differentiation_rate = differentiation_rate()

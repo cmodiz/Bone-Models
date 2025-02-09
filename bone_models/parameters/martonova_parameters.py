@@ -208,7 +208,7 @@ class pharmacokinetics:
         self.bioavailability = 0.95  # [-]
 
 
-class Parameters:
+class Martonova_Parameters:
     """ This class contains all parameters of the two-state receptor model by Martonova et al.
 
     :param kinematics: kinematic parameters of the model, see :class:`kinematics` for details

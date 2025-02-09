@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from parameters.lemaire_parameters import Parameters
-from models.base_model import Base_Model
+from ..parameters.lemaire_parameters import Lemaire_Parameters
+from .base_model import Base_Model
 
 
 class Lemaire_Model(Base_Model):
@@ -43,7 +43,7 @@ class Lemaire_Model(Base_Model):
         :param load_case: load case for the model
         :type load_case: object """
         super().__init__()
-        self.parameters = Parameters()
+        self.parameters = Lemaire_Parameters()
         self.initial_guess_root = np.array([0.7734e-3, 0.7282e-3, 0.9127e-3])
         self.steady_state = type('', (), {})()
         self.steady_state.OBp = None

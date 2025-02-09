@@ -1,5 +1,5 @@
-from load_cases.martonova_load_cases import Healthy, Hyperparathyroidism, Osteoporosis, Postmenopausal_Osteoporosis, \
-    Hypercalcemia, Hypocalcemia, Glucocorticoid_Induced_Osteoporosis
+from .martonova_load_cases import Martonova_Healthy, Martonova_Hyperparathyroidism, Martonova_Osteoporosis, Martonova_Postmenopausal_Osteoporosis, \
+    Martonova_Hypercalcemia, Martonova_Hypocalcemia, Martonova_Glucocorticoid_Induced_Osteoporosis
 
 
 class Lemaire_Load_Case:
@@ -18,7 +18,7 @@ class Lemaire_Load_Case:
         self.end_time = 80
 
 
-class Healthy_to_Hyperparathyroidism:
+class Modiz_Healthy_to_Hyperparathyroidism:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Hyperparathyroidism.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -27,10 +27,10 @@ class Healthy_to_Hyperparathyroidism:
     :param martonova: Hyperparathyroidism, see :class:`Hyperparathyroidism` for details"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Hyperparathyroidism()
+        self.martonova = Martonova_Hyperparathyroidism()
 
 
-class Healthy_to_Osteoporosis:
+class Modiz_Healthy_to_Osteoporosis:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Osteoporosis.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -39,10 +39,10 @@ class Healthy_to_Osteoporosis:
     :param martonova: Osteoporosis, see :class:`Osteoporosis` for details"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Osteoporosis()
+        self.martonova = Martonova_Osteoporosis()
 
 
-class Healthy_to_Postmenopausal_Osteoporosis:
+class Modiz_Healthy_to_Postmenopausal_Osteoporosis:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Postmenopausal Osteoporosis.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -51,10 +51,10 @@ class Healthy_to_Postmenopausal_Osteoporosis:
     :param martonova: Postmenopausal_Osteoporosis, see :class:`Postmenopausal_Osteoporosis` for details"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Postmenopausal_Osteoporosis()
+        self.martonova = Martonova_Postmenopausal_Osteoporosis()
 
 
-class Healthy_to_Hypercalcemia:
+class Modiz_Healthy_to_Hypercalcemia:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Hypercalcemia.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -63,10 +63,10 @@ class Healthy_to_Hypercalcemia:
     :param martonova: Hypercalcemia, see :class:`Hypercalcemia` for details"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Hypercalcemia()
+        self.martonova = Martonova_Hypercalcemia()
 
 
-class Healthy_to_Hypocalcemia:
+class Modiz_Healthy_to_Hypocalcemia:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Hypocalcemia.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -75,10 +75,10 @@ class Healthy_to_Hypocalcemia:
     :param martonova: Hypocalcemia, see :class:`Hypocalcemia` for details"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Hypocalcemia()
+        self.martonova = Martonova_Hypocalcemia()
 
 
-class Healthy_to_Glucocorticoid_Induced_Osteoporosis:
+class Modiz_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
     """ Load case for the subclass Modiz_Model for the transition from Healthy to Glucocorticoid-Induced Osteoporosis.
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
@@ -87,10 +87,10 @@ class Healthy_to_Glucocorticoid_Induced_Osteoporosis:
     :param martonova: Glucocorticoid_Induced_Osteoporosis, see :class:`Glucocorticoid_Induced_Osteoporosis` for details """
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
-        self.martonova = Glucocorticoid_Induced_Osteoporosis()
+        self.martonova = Martonova_Glucocorticoid_Induced_Osteoporosis()
 
 
-class Reference_Healthy_to_Hyperparathyroidism:
+class Modiz_Reference_Healthy_to_Hyperparathyroidism:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hyperparathyroidism.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 
@@ -111,7 +111,7 @@ class Reference_Healthy_to_Hyperparathyroidism:
         self.end_time = 80
 
 
-class Reference_Healthy_to_Osteoporosis:
+class Modiz_Reference_Healthy_to_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 
@@ -132,7 +132,7 @@ class Reference_Healthy_to_Osteoporosis:
         self.end_time = 80
 
 
-class Reference_Healthy_to_Postmenopausal_Osteoporosis:
+class Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Postmenopausal Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 
@@ -153,7 +153,7 @@ class Reference_Healthy_to_Postmenopausal_Osteoporosis:
         self.end_time = 80
 
 
-class Reference_Healthy_to_Hypercalcemia:
+class Modiz_Reference_Healthy_to_Hypercalcemia:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hypercalcemia.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 
@@ -174,7 +174,7 @@ class Reference_Healthy_to_Hypercalcemia:
         self.end_time = 80
 
 
-class Reference_Healthy_to_Hypocalcemia:
+class Modiz_Reference_Healthy_to_Hypocalcemia:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hypocalcemia.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 
@@ -195,7 +195,7 @@ class Reference_Healthy_to_Hypocalcemia:
         self.end_time = 80
 
 
-class Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
+class Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Glucocorticoid-Induced Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
 

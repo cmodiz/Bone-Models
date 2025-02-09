@@ -61,7 +61,7 @@ class Basal_PTH_pulse:
         self.period = None
 
 
-class Healthy:
+class Martonova_Healthy:
     """ This class contains the parameters for the healthy state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -90,7 +90,7 @@ class Healthy:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Hyperparathyroidism:
+class Martonova_Hyperparathyroidism:
     """ This class contains the parameters for the hyperparathyroidism state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -120,7 +120,7 @@ class Hyperparathyroidism:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Osteoporosis:
+class Martonova_Osteoporosis:
     """ This class contains the parameters for the osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -149,7 +149,7 @@ class Osteoporosis:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Postmenopausal_Osteoporosis:
+class Martonova_Postmenopausal_Osteoporosis:
     """ This class contains the parameters for the postmenopausal osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -178,7 +178,7 @@ class Postmenopausal_Osteoporosis:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Hypercalcemia:
+class Martonova_Hypercalcemia:
     """ This class contains the parameters for the hypercalcemia state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -207,7 +207,7 @@ class Hypercalcemia:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Hypocalcemia:
+class Martonova_Hypocalcemia:
     """ This class contains the parameters for the hypocalcemia state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -236,7 +236,7 @@ class Hypocalcemia:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Glucocorticoid_Induced_Osteoporosis:
+class Martonova_Glucocorticoid_Induced_Osteoporosis:
     """ This class contains the parameters for the glucocorticoid-induced osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
@@ -265,7 +265,7 @@ class Glucocorticoid_Induced_Osteoporosis:
         self.injected_PTH_pulse = injected_PTH_pulse()
 
 
-class Hyperparathyroidism_With_Drug:
+class Martonova_Hyperparathyroidism_With_Drug:
     """ This class contains the parameters for the hyperparathyroidism state with injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters

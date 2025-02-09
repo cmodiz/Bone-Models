@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
 
-from models.lemaire_model import Lemaire_Model
-from models.martonova_model import Martonova_Model
-from load_cases.martonova_load_cases import Healthy, Hyperparathyroidism, Osteoporosis, Postmenopausal_Osteoporosis, \
-    Hypercalcemia, Hypocalcemia, Glucocorticoid_Induced_Osteoporosis
-from parameters.modiz_parameters import Parameters
+from .lemaire_model import Lemaire_Model
+from .martonova_model import Martonova_Model
+from ..load_cases.martonova_load_cases import *
+from ..parameters.modiz_parameters import Modiz_Parameters
+import matplotlib as mpl
 
 
 class Modiz_Model(Lemaire_Model):
@@ -40,11 +40,11 @@ class Modiz_Model(Lemaire_Model):
         assert calibration_type in ['all', 'only for healthy state'], \
             "Invalid calibration_type. Must be 'all' or 'only for healthy state'."
 
-        self.parameters = Parameters()
+        self.parameters = Modiz_Parameters()
         self.model_type = model_type
         self.calibration_type = calibration_type
 
-        martonova_healthy_model = Martonova_Model(Healthy())
+        martonova_healthy_model = Martonova_Model(Martonova_Healthy())
         _, _, _, self.parameters.healthy_integrated_activity, self.parameters.healthy_cellular_responsiveness = (
             martonova_healthy_model.solve_for_activity())
         martonova_disease_model = Martonova_Model(load_case.martonova)
@@ -121,8 +121,8 @@ def identify_calibration_parameters():
     cellular responsiveness and integrated activity using all states.
 
     :print: calibration parameters for cellular responsiveness and integrated activity """
-    diseases = [Healthy(), Hyperparathyroidism(), Osteoporosis(), Postmenopausal_Osteoporosis(),
-                Hypercalcemia(), Hypocalcemia(), Glucocorticoid_Induced_Osteoporosis()]
+    diseases = [Martonova_Healthy(), Martonova_Hyperparathyroidism(), Martonova_Osteoporosis(), Martonova_Postmenopausal_Osteoporosis(),
+                Martonova_Hypercalcemia(), Martonova_Hypocalcemia(), Martonova_Glucocorticoid_Induced_Osteoporosis()]
 
     lemaire_activation_PTH_list = []
     martonova_integrated_activity = []
@@ -185,7 +185,7 @@ def calculate_elevation_parameter(disease):
 
     :return: elevation parameter
     :rtype: float """
-    healthy = Healthy()
+    healthy = Martonova_Healthy()
     min_healthy = healthy.basal_PTH_pulse.min
     max_healthy = healthy.basal_PTH_pulse.max
     min_disease = disease.basal_PTH_pulse.min
@@ -201,12 +201,12 @@ def identify_calibration_parameters_only_for_healthy_state():
     :print: calibration parameters for cellular responsiveness and integrated activity """
     lemaire_model = Lemaire_Model(load_case=None)
     lemaire_PTH_activation = lemaire_model.calculate_PTH_activation_OB(t=None)
-    elevation_parameter = calculate_elevation_parameter(Healthy())
+    elevation_parameter = calculate_elevation_parameter(Martonova_Healthy())
     print(elevation_parameter)
 
     lemaire_activation_PTH = lemaire_PTH_activation * elevation_parameter
 
-    martonova_model = Martonova_Model(load_case=Healthy())
+    martonova_model = Martonova_Model(load_case=Martonova_Healthy())
     cellular_activity, time = martonova_model.calculate_cellular_activity()
     _, integrated_activity, cellular_responsiveness = martonova_model.calculate_activity_constants(
         cellular_activity, time)
@@ -216,3 +216,77 @@ def identify_calibration_parameters_only_for_healthy_state():
 
     calibration_parameter_integrated_activity = lemaire_activation_PTH / integrated_activity
     print("Calibration parameter for integrated activity:", calibration_parameter_integrated_activity)
+
+
+def analyse_effect_of_different_pulse_characteristics(plot=True):
+    diseases = [Martonova_Healthy(), Martonova_Hyperparathyroidism(), Martonova_Osteoporosis(), Martonova_Postmenopausal_Osteoporosis(),
+                Martonova_Hypercalcemia(), Martonova_Hypocalcemia(), Martonova_Glucocorticoid_Induced_Osteoporosis()]
+    integrated_activity_list = []
+    cellular_responsiveness_list = []
+    integrated_activity_list_for_disease = []
+    cellular_responsiveness_list_for_disease = []
+    log_on_off_phase_disease_list = []
+
+    load_case = Martonova_Healthy()
+    model = Martonova_Model(load_case)
+    period = model.load_case.basal_PTH_pulse.period
+    on_duration_of_pulse_list = np.linspace(0, period, num=30)
+
+    for on_duration_of_pulse in on_duration_of_pulse_list:
+        model.load_case.basal_PTH_pulse.on_duration = on_duration_of_pulse
+        model.load_case.basal_PTH_pulse.off_duration = period - on_duration_of_pulse
+        cellular_activity, time = model.calculate_cellular_activity()
+        _, integrated_activity, cellular_responsiveness = model.calculate_activity_constants(cellular_activity, time)
+        integrated_activity_list.append(integrated_activity)
+        cellular_responsiveness_list.append(cellular_responsiveness)
+
+    for disease in diseases:
+        model = Martonova_Model(load_case=disease)
+        cellular_activity, time = model.calculate_cellular_activity()
+        _, integrated_activity, cellular_responsiveness = model.calculate_activity_constants(
+            cellular_activity, time)
+        integrated_activity_list_for_disease.append(integrated_activity)
+        cellular_responsiveness_list_for_disease.append(cellular_responsiveness)
+        log_on_off_phase_disease_list.append(np.log(model.load_case.basal_PTH_pulse.on_duration /
+                                                    model.load_case.basal_PTH_pulse.off_duration))
+
+    if plot:
+        colors=['k', '#59a89c', '#0b81a2', '#7E4794', '#e25759', '#595959', '#9d2c00']
+        markers = ['o', 's', '^', 'D', 'P', '*', 'X']
+        labels = ['Healthy', 'HPT', 'OP', 'PMO', 'HyperC', 'HypoC', 'GIO']
+
+        plt.figure(figsize=(7, 6))
+        mpl.rcParams['font.size'] = 16
+        plt.plot(np.log(on_duration_of_pulse_list/(period - on_duration_of_pulse_list)), integrated_activity_list, label='Varied healthy', color='k')
+        for i in range(len(log_on_off_phase_disease_list)):
+            plt.scatter(log_on_off_phase_disease_list[i],
+                        integrated_activity_list_for_disease[i],
+                        color=colors[i],
+                        marker=markers[i],
+                        label=labels[i])
+        plt.xlabel(r'$\log(\frac{\tau_{on}}{\tau_{off}}) [-]$')
+        plt.ylabel(r'Integrated Activity $\alpha_T$ [-]')
+        plt.legend()
+        plt.grid(True)
+        # plt.title('Integrated Activity Over Different Pulse Characteristics')
+        plt.show()
+
+        plt.figure(figsize=(7, 6))
+        mpl.rcParams['font.size'] = 16
+        plt.plot(np.log(on_duration_of_pulse_list/(period - on_duration_of_pulse_list)), cellular_responsiveness_list, label='Varied healthy', color='k')
+        for i in range(len(log_on_off_phase_disease_list)):
+            plt.scatter(log_on_off_phase_disease_list[i],
+                        cellular_responsiveness_list_for_disease[i],
+                        color=colors[i],
+                        marker=markers[i],
+                        label=labels[i])
+        plt.xlabel(r'$\log(\frac{\tau_{on}}{\tau_{off}}) [-]$')
+        plt.ylabel(r'Cellular Responsiveness $\alpha_R$ [-]')
+        plt.legend()
+        plt.grid(True)
+        # plt.title('Integrated Activity Over Different Pulse Characteristics')
+        plt.show()
+
+    pass
+
+

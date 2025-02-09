@@ -1,8 +1,8 @@
-from models import Martonova_Model
-from load_cases.martonova_load_cases import Healthy, Hyperparathyroidism_With_Drug
+from bone_models.models import Martonova_Model
+from bone_models.load_cases import Martonova_Healthy, Martonova_Hyperparathyroidism_With_Drug
 import matplotlib.pyplot as plt
 
-load_case = Healthy()
+load_case = Martonova_Healthy()
 model = Martonova_Model(load_case)
 cellular_activity, time = model.calculate_cellular_activity()
 basal_activity, basal_integrated_activity, basal_cellular_responsiveness = model.calculate_activity_constants(cellular_activity, time)
@@ -19,7 +19,7 @@ plt.title('Cellular Activity Over Time')
 plt.legend()
 plt.show()
 
-load_case = Hyperparathyroidism_With_Drug()
+load_case = Martonova_Hyperparathyroidism_With_Drug()
 model = Martonova_Model(load_case)
 cellular_activity, time = model.calculate_cellular_activity()
 basal_activity, basal_integrated_activity, basal_cellular_responsiveness = model.calculate_activity_constants(cellular_activity, time)
