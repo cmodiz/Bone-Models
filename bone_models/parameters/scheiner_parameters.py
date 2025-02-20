@@ -9,7 +9,7 @@ class differentiation_rate:
         self.OBp = 0.165696312976030  # differentiation rate of preosteoblasts [pM/day]
         self.OCu = 4.200000000000000e-003  # differentiation rate of uncommitted osteoclast [pM/day]
         # -> D_OC_p
-        self.OCp = 2.100000000000000e+000  # differentiation rate of preosteoclasts [pM/day]
+        self.OCp = 2.100000000000000e+000 * 0.001 # differentiation rate of preosteoclasts [pM/day]
 
 
 class apoptosis_rate:
@@ -18,7 +18,7 @@ class apoptosis_rate:
         # -> A_OB_a
         self.OBa = 0.211072625806496  # apoptosis rate of active osteoblast [1/day]
         # -> A_OC_a
-        self.OCa = 5.64874468409633  # apoptosis rate of active osteoclasts [pM/day]
+        self.OCa = 5.64874468409633   # apoptosis rate of active osteoclasts [pM/day]
 
 
 class proliferation_rate:
@@ -44,8 +44,8 @@ class activation_coefficient:
         # Activation coefficient related to MCSF binding on OCu [pM]
         self.MCSF_OCu = None
         # Activation coefficient related to RANKL binding on RANK [pM]
-        # -> K_{D8, RANKL}
-        self.RANKL_RANK = 1.306e+1
+        # -> K_{d, [RANKL-RANK]}
+        self.RANKL_RANK = 5.6797
 
 
 class repression_coefficient:
@@ -83,7 +83,7 @@ class concentration:
         self.OPG_max = 2.00e+8  # Maximum concentration of OPG [pM]
         # self.MCSF = None
         # -> RANK
-        # self.RANK = 1.00e+1  # [pM] fixed concentration of RANK
+        self.RANK = 1.00e+1  # [pM] fixed concentration of RANK
         self.OCp = 0.001  # [pM] fixed concentration of preosteoclasts
 
 
@@ -160,21 +160,49 @@ class bone_volume:
     """ This class defines the parameters relevant for bone volume of the bone model. """
     def __init__(self):
         # -> k_form
-        self.formation_rate = 1.571
+        self.formation_rate = 40
         # -> k_res
-        self.resorption_rate = 2
+        self.resorption_rate = 200
         # -> alpha
-        self.stored_TGFb_content = 1.0e-2  # proportionality constant expressing the TGF-β content stored in bone volume
+        self.stored_TGFb_content = 1.0 # proportionality constant expressing the TGF-β content stored in bone volume
+        self.vascular_pore_fraction = 5  # fraction of vascular pores in bone volume in percentage
+        self.bone_fraction = 95  # fraction of bone matrix in bone volume in percentage
 
 
 class mechanics:
     def __init__(self):
         self.strain_effect_on_OBp_steady_state = 0.5
         self.strain_effect_on_OBp = np.array(self.strain_effect_on_OBp_steady_state)
+        self.strain_energy_density_steady_state = None
         self.update_OBp_proliferation_rate = True
         self.fraction_of_OBu_differentiation_rate = 0.1
         self.RANKL_production = 0
         # self.OBu_proliferation_rate = 0
+        self.bulk_modulus_water = 2.3  # [GPa]
+        self.shear_modulus_water = 0  # [GPa]
+        self.volumetric_part_of_unit_tensor = np.array([[1, 1, 1, 0, 0, 0],
+                                                       [1, 1, 1, 0, 0, 0],
+                                                       [1, 1, 1, 0, 0, 0],
+                                                       [0, 0, 0, 0, 0, 0],
+                                                       [0, 0, 0, 0, 0, 0],
+                                                       [0, 0, 0, 0, 0, 0]]) * (1 / 3)
+        self.unit_tensor_as_matrix = np.array([[1, 0, 0, 0, 0, 0],
+                                               [0, 1, 0, 0, 0, 0],
+                                               [0, 0, 1, 0, 0, 0],
+                                               [0, 0, 0, 1, 0, 0],
+                                               [0, 0, 0, 0, 1, 0],
+                                               [0, 0, 0, 0, 0, 1]])
+        self.deviatoric_part_of_unit_tensor = self.unit_tensor_as_matrix - self.volumetric_part_of_unit_tensor
+        self.stiffness_tensor_vascular_pores = 3 * self.bulk_modulus_water * self.volumetric_part_of_unit_tensor + 2 * self.shear_modulus_water  * self.deviatoric_part_of_unit_tensor
+        self.stiffness_tensor_bone_matrix = np.array([[18.5, 10.3, 10.4, 0, 0, 0],
+                                                    [10.3, 20.8, 11.0, 0, 0, 0],
+                                                    [10.4, 11.0, 28.4, 0, 0, 0],
+                                                    [0, 0, 0, 12.9, 0, 0],
+                                                    [0, 0, 0, 0, 11.5, 0],
+                                                    [0, 0, 0, 0, 0, 9.3]])
+        self.step_size_for_Hill_tensor_integration = 2 * np.pi / 50
+        self.hill_tensor_cylindrical_inclusion = None
+        self.stress_tensor_normal_loading = np.array([[0, 0, 0], [0, 0, 0], [0, 0, -30]]) * (10 ** -3)  # [GPa]
 
 
 class Scheiner_Parameters:
