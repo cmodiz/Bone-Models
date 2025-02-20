@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath('../../bone_models'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'bone_models'
+project = 'Bone Models'
 copyright = '2025, Corinna Modiz'
 author = 'Corinna Modiz'
 release = '1.0.0'
@@ -18,8 +18,11 @@ release = '1.0.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.viewcode']
-
+# extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.viewcode']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.mathjax', "sphinx.ext.intersphinx", "sphinx.ext.extlinks"]
+extlinks = {
+    'doi': ('https://doi.org/%s', 'DOI: %s')
+}
 templates_path = ['_templates']
 exclude_patterns = []
 

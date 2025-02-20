@@ -1,10 +1,8 @@
-bone\_models.utils package
+Utils
 ==========================
 
-Submodules
-----------
 
-bone\_models.utils.plots module
+Plots
 -------------------------------
 
 .. automodule:: bone_models.utils.plots
@@ -12,10 +10,3 @@ bone\_models.utils.plots module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: bone_models.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
