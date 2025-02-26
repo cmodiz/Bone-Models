@@ -464,7 +464,7 @@ class mechanics:
         # P_{RANKL}
         self.RANKL_production = 0
         # \Sigma_{cort}
-        self.stress_tensor_normal_loading = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 30]]) * (10 ** -3)  # [GPa]
+        self.stress_tensor_normal_loading = np.array([[0, 0, 0], [0, 0, 0], [0, 0, -5]]) * (10 ** -3)  # [GPa]
         self.poissons_ratio = 0.3
 
 
@@ -475,7 +475,7 @@ class mineralisation:
         self.volume_fraction_organic = 3/7
         # t_mlt
         self.lag_time = 12
-        # t_prim
+        # t_prim 10
         self.primary_phase_duration = 10
         # v_m prim
         self.primary_mineral_content = 0.121
@@ -491,7 +491,7 @@ class denosumab:
         # \chi
         self.accessibility_factor = 0.012
         # M_den
-        self.molar_mass = 149
+        self.molar_mass = 149*(10**3)  # kDa in g/mol
         # ka
         self.absorption_rate = 0.17
         # Vc
@@ -504,6 +504,9 @@ class denosumab:
         self.michaelis_menten_constant = 4.11e2
         # ke
         self.elimination_rate = 1.15e-2
+        self.reference_body_weight = 60
+        self.maximum_volume = self.maximum_volume * self.reference_body_weight
+        self.volume_central_compartment = self.volume_central_compartment * self.reference_body_weight
 
 
 class PMO:
