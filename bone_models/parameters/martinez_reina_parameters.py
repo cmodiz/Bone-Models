@@ -10,7 +10,7 @@ class differentiation_rate:
     +--------------+--------------------------+----------+
     |Parameter Name| Symbol                   | Units    |
     +==============+==========================+==========+
-    | OBu          |:math:`D_{OB_u}^{Pivonka}`|  1/day   |
+    | OBu          |:math:`D_{OB_u}`          |  1/day   |
     +--------------+--------------------------+----------+
     | OBp          | :math:`D_{OB_p}`         |  1/day   |
     +--------------+--------------------------+----------+
@@ -60,7 +60,7 @@ class apoptosis_rate:
 
 class proliferation_rate:
     """ This class defines the proliferation rates. The prolifaration rate of OBp is depends the mechanics effect and is
-    thus computed in the model (Eq. (16) in the paper).
+    thus computed in the model (Eq. (16) in the paper by Scheiner et al., 2013).
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
@@ -83,7 +83,7 @@ class activation_coefficient:
     """ This class defines the activation coefficients of respective receptor-ligand binding.
 
     The following table provides a mapping between the model parameters
-    and their original names from the publication:
+    and their original names from the publication by Scheiner et al., 2013:
 
     +------------------+---------------------------+---------+
     | Parameter Name   | Symbol                    | Units   |
@@ -128,7 +128,7 @@ class repression_coefficient:
     """ This class defines the repression coefficients of respective receptor-ligand binding.
 
     The following table provides a mapping between the model parameters
-    and their original names from the publication:
+    and their original names from the publication by Scheiner et al., 2013:
 
     +------------------+---------------------------+---------+
     | Parameter Name   | Symbol                    | Units   |
@@ -155,7 +155,7 @@ class degradation_rate:
     r""" This class defines the degradation rates of the different factors.
 
     The following table provides a mapping between the model parameters
-    and their original names from the publication:
+    and their original names from the publication by Scheiner et al., 2013:
 
     +------------------+------------------------------+---------+
     | Parameter Name   | Symbol                       | Units   |
@@ -196,7 +196,7 @@ class concentration:
     """ This class defines fixed concentrations.
 
     The following table provides a mapping between the model parameters
-    and their original names from the publication:
+    and their original names from the publication by Scheiner et al., 2013:
 
     +------------------+---------------------------+---------+
     | Parameter Name   | Symbol                    | Units   |
@@ -206,7 +206,14 @@ class concentration:
     | RANK             |-                          |  pM     |
     +------------------+---------------------------+---------+
     | OCp              |-                          |  pM     |
-    +------------------+---------------------------+---------+"""
+    +------------------+---------------------------+---------+
+
+    :param OPG_max: maximum concentration of OPG
+    :type OPG_max: float
+    :param RANK: fixed concentration of RANK
+    :type RANK: float
+    :param OCp: fixed concentration of preosteoclasts
+    :type OCp: float"""
     def __init__(self):
         # -> C^max_OPG
         self.OPG_max = 2.00e+8  # Maximum concentration of OPG [pM]
@@ -229,11 +236,15 @@ class binding_constant:
     +------------------+---------------------------+---------+
     | RANKL_RANK       |:math:`K_{a, [RANKL-RANK]}`|1/pM     |
     +------------------+---------------------------+---------+
+    | RANKL_denosumab  |:math:`K_{a, [RANKL-den]}` |1/pM     |
+    +------------------+---------------------------+---------+
 
     :param RANKL_OPG: association binding constant for RANKL-OPG
     :type RANKL_OPG: float
     :param RANKL_RANK: association binding constant for RANKL-RANK
-    :type RANKL_RANK: float"""
+    :type RANKL_RANK: float
+    :param RANKL_denosumab: association binding constant for RANKL-denosumab
+    :type RANKL_denosumab: float"""
     def __init__(self):
         # Association binding constant for RANKL-OPG [(pM)^{-1}]
         # -> K_{a, [RANKL-OPG]}
@@ -252,27 +263,11 @@ class binding_constant:
         self.RANKL_denosumab = 0.333
 
 
-# class unbinding_constant:
-#     """ This class defines the unbinding constants of RANK RANKL and OPG. """
-#     def __init__(self):
-        # Association binding constant for RANKL-OPG [1/day]
-        # -> k_2
-        # self.RANKL_OPG = 1.00e+1
-        # Association binding constant for RANKL-RANK [1/pM]
-        # -> k_4
-        # self.RANKL_RANK = 1.70e-2
-        # dissociation binding coefficient of TGFb with its receptor
-        # self.TGFb_OC = None
-        # [(day)^{-1}] rate of PTH binding with its receptor on OB
-        # -> k_6
-        # self.PTH_OB = 3.00e+0
-
-
 class production_rate:
     r""" This class defines the intrinsic/ endogenous production rates of the different factors.
 
     The following table provides a mapping between the model parameters
-    and their original names from the publication:
+    and their original names from the publication by Scheiner et al., 2013:
 
     +----------------------+---------------------------+---------+
     | Parameter Name       | Symbol                    | Units   |
@@ -392,67 +387,35 @@ class mechanics:
     +-------------------------------------+--------------------------------------+---------+
     | Parameter Name                      | Symbol                               | Units   |
     +=====================================+======================================+=========+
-    | strain_effect_on_OBp                |:math:`\check{\Pi}_{act, OB_p}^{mech}`|  -      |
+    | strain_effect_on_OBp_steady_state   |:math:`\breve{\Pi}_{act, OB_p}^{mech}`|  -      |
     +-------------------------------------+--------------------------------------+---------+
-    | strain_energy_density               |:math:`\check{\psi}_{bm}`             |  -      |
+    | strain_energy_density_steady_state  |:math:`\breve{\psi}_{bm}`             |  -      |
     +-------------------------------------+--------------------------------------+---------+
     | update_OBp_proliferation_rate       | -                                    |  -      |
     +-------------------------------------+--------------------------------------+---------+
-    | OBu_differentiation_rate            |:math:`a_{P_{OB_p}}`                  |  -      |
+    | fraction_of_OBu_differentiation_rate|:math:`a_{P_{OB_p}}`                  |  -      |
     +-------------------------------------+--------------------------------------+---------+
-    | RANKL_production                    |:math:`P_{RANKL}`                     |  -      |
+    | RANKL_production                    |:math:`P_{RANKL}`                     |  pM/day |
     +-------------------------------------+--------------------------------------+---------+
-    | bulk_modulus_water                  |:math:`k_{H_2O}`                      |  GPa    |
+    | stress_tensor_normal_loading        |:math:`\Sigma_{cort}`                 |  GPa    |
     +-------------------------------------+--------------------------------------+---------+
-    | shear_modulus_water                 |:math:`\mu_{H_2O}`                    |  GPa    |
-    +-------------------------------------+--------------------------------------+---------+
-    | volumetric_part_of_unit_tensor      |:math:`\mathbb{J}`                    |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    | unit_tensor_as_matrix               |:math:`\mathbb{I}`                    |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    | deviatoric_part_of_unit_tensor      |:math:`\mathbb{K}`                    |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    | stiffness_tensor_vascular_pores     |:math:`\mathbb{c}_{vas}`              |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    | stiffness_tensor_bone_matrix        |:math:`\mathbb{c}_{bm}`               |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    |step_size_for_Hill_tensor_integration| -                                    |  -      |
-    +-------------------------------------+--------------------------------------+---------+
-    | hill_tensor_cylindrical_inclusion   |:math:`\mathbb{P}_{r}^{bm}`           |        -|
-    +-------------------------------------+--------------------------------------+---------+
-    | stress_tensor_normal_loading        |:math:`\mathbb{\Sigma}_{cort}`        |  -      |
+    | poissons_ratio                      |:math:`\nu`                           |  -      |
     +-------------------------------------+--------------------------------------+---------+
 
     :param strain_effect_on_OBp_steady_state: strain effect on OBp steady state
     :type strain_effect_on_OBp_steady_state: float
     :param strain_energy_density_steady_state: strain energy density steady state
     :type strain_energy_density_steady_state: float
-    :param update_OBp_proliferation_rate: update OBp proliferation rate
+    :param update_OBp_proliferation_rate: boolean variable determining if the OBp proliferation rate is updated
     :type update_OBp_proliferation_rate: bool
     :param fraction_of_OBu_differentiation_rate: fraction of OBu differentiation rate
     :type fraction_of_OBu_differentiation_rate: float
-    :param RANKL_production: RANKL production
+    :param RANKL_production: production rate of RANKL
     :type RANKL_production: float
-    :param bulk_modulus_water: bulk modulus of water
-    :type bulk_modulus_water: float
-    :param shear_modulus_water: shear modulus of water
-    :type shear_modulus_water: float
-    :param volumetric_part_of_unit_tensor: volumetric part of unit tensor
-    :type volumetric_part_of_unit_tensor: numpy.ndarray
-    :param unit_tensor_as_matrix: unit tensor as matrix
-    :type unit_tensor_as_matrix: numpy.ndarray
-    :param deviatoric_part_of_unit_tensor: deviatoric part of unit tensor
-    :type deviatoric_part_of_unit_tensor: numpy.ndarray
-    :param stiffness_tensor_vascular_pores: stiffness tensor of vascular pores
-    :type stiffness_tensor_vascular_pores: numpy.ndarray
-    :param stiffness_tensor_bone_matrix: stiffness tensor of bone matrix
-    :type stiffness_tensor_bone_matrix: numpy.ndarray
-    :param step_size_for_Hill_tensor_integration: step size for Hill tensor integration
-    :type step_size_for_Hill_tensor_integration: float
-    :param hill_tensor_cylindrical_inclusion: Hill tensor of cylindrical inclusion
-    :type hill_tensor_cylindrical_inclusion: numpy.ndarray
-    :param stress_tensor_normal_loading: stress tensor of normal/ habitual loading
-    :type stress_tensor_normal_loading: numpy.ndarray"""
+    :param stress_tensor_normal_loading: stress tensor under normal loading
+    :type stress_tensor_normal_loading: numpy.ndarray
+    :param poissons_ratio: Poisson's ratio
+    :type poissons_ratio: float"""
     def __init__(self):
         # \breve{\Pi}_{act, OB_p}^{mech}
         self.strain_effect_on_OBp_steady_state = 0.5
@@ -469,51 +432,173 @@ class mechanics:
 
 
 class mineralisation:
+    """ This class defines the parameters relevant for mineralisation of the bone model.
+
+    The following table provides a mapping between the model parameters
+    and their original names from the publication:
+
+    +-----------------------+---------------------------+---------+
+    | Parameter Name        | Symbol                    | Units   |
+    +=======================+===========================+=========+
+    | density_organic       |:math:`\rho_o`             |  g/cm^3 |
+    +-----------------------+---------------------------+---------+
+    | density_mineral       |:math:`\rho_m`             |  g/cm^3 |
+    +-----------------------+---------------------------+---------+
+    |volume_fraction_organic|:math:`\nu_o`              |  -      |
+    +-----------------------+---------------------------+---------+
+    | lag_time              |:math:`t_{mlt}`            |  days   |
+    +-----------------------+---------------------------+---------+
+    | primary_phase_duration|:math:`t_{prim}`           |  days   |
+    +-----------------------+---------------------------+---------+
+    |primary_mineral_content|:math:`v_{m, prim}`        |  -      |
+    +-----------------------+---------------------------+---------+
+    |maximum_mineral_content|:math:`v_{m, max}`         |  -      |
+    +-----------------------+---------------------------+---------+
+    |length_of_queue        |:math:`-`                  |  -      |
+    +-----------------------+---------------------------+---------+
+    |rate                   |:math:`\kappa`             |  -      |
+    +-----------------------+---------------------------+---------+
+
+    :param density_organic: density of organic material
+    :type density_organic: float
+    :param density_mineral: density of mineral material
+    :type density_mineral: float
+    :param volume_fraction_organic: volume fraction of organic material
+    :type volume_fraction_organic: float
+    :param lag_time: lag time
+    :type lag_time: float
+    :param primary_phase_duration: primary phase duration
+    :type primary_phase_duration: float
+    :param primary_mineral_content: primary mineral content
+    :type primary_mineral_content: float
+    :param maximum_mineral_content: maximum mineral content
+    :type maximum_mineral_content: float
+    :param length_of_queue: length of ageing queue
+    :type length_of_queue: int
+    :param rate: mineralisation rate
+    :type rate: float
+    """
     def __init__(self):
+        # \rho_o
         self.density_organic = 1.1  # [g/cm^3]
+        # \rho_m
         self.density_mineral = 3.2  # [g/cm^3]
+        # \nu_o
         self.volume_fraction_organic = 3/7
         # t_mlt
-        self.lag_time = 12
+        self.lag_time = 12 # [days]
         # t_prim 10
-        self.primary_phase_duration = 10
+        self.primary_phase_duration = 10 # [days]
         # v_m prim
         self.primary_mineral_content = 0.121
-        # v_ m prim
+        # v_ m max
         self.maximum_mineral_content = 0.442
+        # -
         self.length_of_queue = 1000
         # kappa
         self.rate = 0.007
 
 
 class denosumab:
+    r""" This class defines the parameters of the denosumab model.
+
+    The following table provides a mapping between the model parameters
+    and their original names from the publication:
+
+    +---------------------------+---------------------------+-----------+
+    | Parameter Name            | Symbol                    | Units     |
+    +===========================+===========================+===========+
+    | accessibility_factor      |:math:`\chi`               |  -        |
+    +---------------------------+---------------------------+-----------+
+    | molar_mass                |:math:`M_{den}`            |  g/mol    |
+    +---------------------------+---------------------------+-----------+
+    | absorption_rate           |:math:`k_a`                |  1/day    |
+    +---------------------------+---------------------------+-----------+
+    | volume_central_compartment|:math:`V_c`                |  ml/kg    |
+    +---------------------------+---------------------------+-----------+
+    | bioavailability           |:math:`F`                  |  -        |
+    +---------------------------+---------------------------+-----------+
+    | maximum_volume            |:math:`V_{max}`            |ng/(kg day)|
+    +---------------------------+---------------------------+-----------+
+    | michaelis_menten_constant |:math:`K_m`                |  ng/ml    |
+    +---------------------------+---------------------------+-----------+
+    | elimination_rate          |:math:`k_{el}`             |  1/day    |
+    +---------------------------+---------------------------+-----------+
+    | reference_body_weight     |:math:`-`                  |  kg       |
+    +---------------------------+---------------------------+-----------+
+
+    :param accessibility_factor: denosumab site-specific accessibility factor
+    :type accessibility_factor: float
+    :param molar_mass: molar mass of denosumab, given in kDa and converted to g/mol
+    :type molar_mass: float
+    :param absorption_rate: absorption rate of denosumab
+    :type absorption_rate: float
+    :param volume_central_compartment: volume of the central compartment, multiplied by the reference body weight
+    :type volume_central_compartment: float
+    :param bioavailability: bioavailability of denosumab
+    :type bioavailability: float
+    :param maximum_volume: maximum volume of denosumab, multiplied by the reference body weight
+    :type maximum_volume: float
+    :param michaelis_menten_constant: Michaelis-Menten constant of denosumab
+    :type michaelis_menten_constant: float
+    :param elimination_rate: elimination rate of denosumab
+    :type elimination_rate: float
+    :param reference_body_weight: reference body weight
+    :type reference_body_weight: float
+    """
     def __init__(self):
         # \chi
-        self.accessibility_factor = 0.012
+        self.accessibility_factor = 0.012  # -
         # M_den
         self.molar_mass = 149*(10**3)  # kDa in g/mol
-        # ka
-        self.absorption_rate = 0.17
-        # Vc
-        self.volume_central_compartment = 7.79e1
+        # k_a
+        self.absorption_rate = 0.17  # [1/day]
+        # V_c
+        self.volume_central_compartment = 7.79e1  # ml/kg
         # F
-        self.bioavailability = 1
+        self.bioavailability = 1  # -
         # V_max
-        self.maximum_volume = 2.672e3
-        # Km
-        self.michaelis_menten_constant = 4.11e2
-        # ke
-        self.elimination_rate = 1.15e-2
-        self.reference_body_weight = 60
+        self.maximum_volume = 2.672e3  # ng/(kg day)
+        # K_m
+        self.michaelis_menten_constant = 4.11e2  # ng/ml
+        # k_el
+        self.elimination_rate = 1.15e-2  # [1/day]
+        # -
+        self.reference_body_weight = 60  # kg
         self.maximum_volume = self.maximum_volume * self.reference_body_weight
         self.volume_central_compartment = self.volume_central_compartment * self.reference_body_weight
 
 
 class PMO:
+    r""" This class defines the parameters of the postmenopausal osteoporosis model.
+
+    The following table provides a mapping between the model parameters
+    and their original names from the publication:
+
+    +---------------------------+---------------------------+-----------+
+    | Parameter Name            | Symbol                    | Units     |
+    +===========================+===========================+===========+
+    | increase_in_RANKL         |:math:`P_{RANKL}^{PMO,ini}`|  pM       |
+    +---------------------------+---------------------------+-----------+
+    | reduction_factor          |:math:`\xi`                |  -        |
+    +---------------------------+---------------------------+-----------+
+    | characteristic_time       |:math:`\tau_{PMO}^{RANKL}` |  days     |
+    +---------------------------+---------------------------+-----------+
+
+    :param increase_in_RANKL: initial increase in RANKL concentration
+    :type increase_in_RANKL: float
+    :param reduction_factor: reduction factor
+    :type reduction_factor: float
+    :param characteristic_time: characteristic time (900 days in the paper, but doesn't agree with the results -> corrected here)
+    :type characteristic_time: float
+    """
     def __init__(self):
+        # P_{RANKL}^{PMO,ini}
         self.increase_in_RANKL = 4e3  # [pM]
+        # \xi
         self.reduction_factor = 65
-        self.characteristic_time = 900  # [days]
+        # \tau_{PMO}^{RANKL}
+        self.characteristic_time = 30  # [days]
 
 
 class Martinez_Reina_Parameters:
