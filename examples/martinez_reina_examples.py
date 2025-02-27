@@ -31,8 +31,6 @@ plt.plot(time, vascular_pore_fraction, label='fbm')
 plt.xlabel('Time [days]')
 plt.ylabel('Vascular pore fraction [%]')
 
-plt.show()
-
 plt.figure()
 plt.plot(np.arange(tspan[0], tspan[1], 1), model.bone_apparent_density, label='apparent density')
 plt.xlabel('Time [days]')
