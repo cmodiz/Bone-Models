@@ -19,6 +19,9 @@ The extension is based on the :ref:`martonova_model`.
 
 The :ref:`martonova_model` calculates cellular activity constants using pulsatile PTH based on the work of Martonova et al. (2023).
 
+The :ref:`martinez_reina_model` contains the bone cell population model based on the work of Martinez-Reina et al. (2019) and is a submodule of the Scheiner Model.
+It includes a bone cell population model for trabecular bone with mechanical loading, mineralisation, postmenopausal osteoporosis, and denosumab treatment.
+
 
 .. _base_model:
 Base Model
@@ -70,6 +73,15 @@ Scheiner Model
 ------------------------------------------
 
 .. automodule:: bone_models.models.scheiner_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. _martinez_reina_model:
+Martinez-Reina Model
+------------------------------------------
+
+.. automodule:: bone_models.models.martinez_reina_model
    :members:
    :undoc-members:
    :show-inheritance:

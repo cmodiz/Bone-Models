@@ -141,6 +141,46 @@ This will generate graphs showing the bone cell concentrations, vascular pore vo
    :alt: Example output of Scheiner Model
    :align: center
 
+Martinez-Reina Model Example
+----------------------------------------------------
+
+.. code-block:: python
+
+        from bone_models.models import Martinez_Reina_Model
+        from bone_models.load_cases.martinez_reina_load_cases import Martinez_Reina_Load_Case
+        import matplotlib.pyplot as plt
+
+        # Define the time span for the simulation
+        tspan = [0, 4000]
+        # Initialize the load case - in this case the load case determines the PMO onset at the simulation start time
+        # and denosumab injection every half year after 1 year of simulation according to
+        # Martinez-Reina et al. (2019)
+        load_case = Martinez_Reina_Load_Case()
+        # Create a model instance with the load case
+        model = Martinez_Reina_Model(load_case)
+        # Solve the model and get the solution.
+        # The solution contains time points, cell concentrations (OBp, OBa, OCa), vascular pores volume fraction,
+        # bone volume fraction. Th solution is a list of arrays rather than the result of the solve_ivp function as the
+        # model has to be solved in multiple steps.
+        solution = model.solve_bone_cell_population_model(tspan=tspan)
+        [time, OBp, OBa, OCa, vascular_pore_fraction, bone_volume_fraction] = solution
+
+        # Plot the resulting apparent density, calculated each tim the ageing queue is updated
+        plt.figure()
+        plt.plot(np.arange(tspan[0], tspan[1], 1), model.bone_apparent_density)
+        plt.grid(True)
+        plt.xlabel('Time [days]')
+        plt.ylabel('Density [g/cm3]')
+        plt.show()
+
+This will generate a graph showing the apparent density over time.
+
+.. image:: _static/martinez_reina_model_results.png
+   :alt: Example output of Martinez-Reina Model
+   :align: center
+   :scale: 60%
+
+
 Martonova Model Example
 ----------------------------------------------------
 

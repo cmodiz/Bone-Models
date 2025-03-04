@@ -4,22 +4,6 @@ Load Cases
 This module contains the load cases used in the bone models. The load cases are used to implement e.g. disease states
 or different loading conditions for a certain time interval.
 
-The :ref:`lemaire_load_cases` contains the load cases based on the work of Lemaire et al. (2004) to simulate respective
-disease states with increase/decreased concentrations.
-
-The :ref:`pivonka_load_cases` contains the load cases based on the work of Pivonka et al. (2008) to simulate respective
-disease states with increase/decreased concentrations.
-
-The :ref:`modiz_load_cases` contains the load cases based on the work of Modiz et al. (2025) to simulate respective
-disease states using altered pulse characteristics. It includes both :ref:`lemaire_load_cases` and :ref:`martonova_load_cases`.
-
-The :ref:`martonova_load_cases` contains the load cases based on the work of Martonova et al. (2023) to simulate respective
-disease states using altered pulse characteristics. Drug injections are also included.
-
-The :ref:`scheiner_load_cases` contains the load cases based on the work of Scheiner et al. (2021) to simulate disuse
-or overuse scenarios based on altered stress tensors. Former load cases (Lemaire et al., Pivonka et al.) can be included.
-
-
 .. _lemaire_load_cases:
 Lemaire Load Cases
 ----------------------------------------------------
@@ -84,6 +68,19 @@ The load cases are used to define disuse or overuse conditions during a certain 
 The load cases from Lemaire et al. or Pivonka et al., can also be included.
 
 .. automodule:: bone_models.load_cases.scheiner_load_cases
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. _martinez_reina_load_cases:
+Martinez-Reina Load Cases
+----------------------------------------------------
+
+This module contains the load cases for the bone cell population model by Martinez-Reina et al. (2019).
+The load cases are used to define disuse or overuse conditions, PMO and denosumab treatment during certain time intervals.
+The load cases from Lemaire et al. or Pivonka et al., can also be included.
+
+.. automodule:: bone_models.load_cases.martinez_reina_load_cases
    :members:
    :undoc-members:
    :show-inheritance:

@@ -6,18 +6,6 @@ governing its behavior, interaction dynamics, and biological processes.
 For the bone cell population models, the parameters are named consistently across models to facilitate comparison and understanding.
 In each parameter file, the parameter names are matched with the corresponding model nomenclature and units.
 
-The :ref:`base_parameters` define the most general set of parameters for bone cell population models.
-
-The :ref:`lemaire_parameters` correspond to the parameters for the model by Lemaire et al. (2004).
-
-The :ref:`pivonka_parameters` correspond to the parameters for the model by Pivonka et al. (2008).
-
-The :ref:`scheiner_parameters` correspond to the parameters for the model by Scheiner et al. (2013).
-
-The :ref:`modiz_parameters`  correspond to the parameters for the model by Modiz et al. (2025).
-
-The :ref:`martonova_parameters` correspond to the parameters for the model by Martonova et al. (2023).
-
 .. _base_parameters:
 Base Parameters
 -----------------------------------------------
@@ -84,3 +72,15 @@ In each parameter class, the parameter names are matched with the corresponding 
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. _martinez_reina_parameters:
+Martinez-Reina Parameters
+---------------------------------------------------
+This module contains the parameters for the model by Martinez-Reina et al. (2019).
+In each parameter class, the parameter names are matched with the corresponding model nomenclature and units.
+
+.. automodule:: bone_models.parameters.martinez_reina_parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
