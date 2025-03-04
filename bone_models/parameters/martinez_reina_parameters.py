@@ -432,7 +432,7 @@ class mechanics:
 
 
 class mineralisation:
-    """ This class defines the parameters relevant for mineralisation of the bone model.
+    r""" This class defines the parameters relevant for mineralisation of the bone model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:

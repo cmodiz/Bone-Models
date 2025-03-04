@@ -4,21 +4,33 @@ class kinematics:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | receptor_desensitized | k_1       |    [1/min]
-    | receptor_resensitized | k_{-1}    |    [1/min]
-    | complex_desensitized  | k_2       |    [1/min]
-    | complex_resensitized  | k_{-2}    |      [1/min]
-    | active_complex_binding | k_r       |  [-]
-    | active_complex_unbinding | k_{-r}    |    [-]
-    | inactive_complex_binding | k_d       |    [-]
-    | receptor              | K_1           | [-]
-    | complex               | K_2           | [-]
-    | active_binding_unbinding | K_r        | [nM]
-    | inactive_complex_unbinding | k_{-d}    | [1/h]
-    | inactive_binding_unbinding | K_d       | [nM]
+    +----------------------------+----------------+------------+
+    | Parameter Name             | Symbol         | Units      |
+    +============================+================+============+
+    | receptor_desensitized      | :math:`k_1`    | 1/min      |
+    +----------------------------+----------------+------------+
+    | receptor_resensitized      | :math:`k_{-1}` | 1/min      |
+    +----------------------------+----------------+------------+
+    | complex_desensitized       | :math:`k_2`    | 1/min      |
+    +----------------------------+----------------+------------+
+    | complex_resensitized       | :math:`k_{-2}` | 1/min      |
+    +----------------------------+----------------+------------+
+    | active_complex_binding     | :math:`k_r`    | -          |
+    +----------------------------+----------------+------------+
+    | active_complex_unbinding   | :math:`k_{-r}` | -          |
+    +----------------------------+----------------+------------+
+    | inactive_complex_binding   | :math:`k_d`    | -          |
+    +----------------------------+----------------+------------+
+    | receptor                   | :math:`K_1`    | -          |
+    +----------------------------+----------------+------------+
+    | complex                    | :math:`K_2`    | -          |
+    +----------------------------+----------------+------------+
+    | active_binding_unbinding   | :math:`K_r`    | nM         |
+    +----------------------------+----------------+------------+
+    | inactive_complex_unbinding | :math:`k_{-d}` | 1/min      |
+    +----------------------------+----------------+------------+
+    | inactive_binding_unbinding | :math:`K_d`    | nM         |
+    +----------------------------+----------------+------------+
 
     :param receptor_desensitized: rate of receptor desensitization
     :type receptor_desensitized: float
@@ -78,13 +90,17 @@ class activity:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | active_receptor        | a_1       |    [nM]
-    | active_complex         | a_2       |    [nM]
-    | inactive_complex       | a_3       |    [nM]
-    | inactive_receptor      | a_4       |    [nM]
+    +---------------------+-------------+------+
+    | Parameter Name      | Symbol      | Units|
+    +=====================+=============+======+
+    | active_receptor     | :math:`a_1` | nM   |
+    +---------------------+-------------+------+
+    | active_complex      | :math:`a_2` | nM   |
+    +---------------------+-------------+------+
+    | inactive_complex    | :math:`a_3` | nM   |
+    +---------------------+-------------+------+
+    | inactive_receptor   | :math:`a_4` | nM   |
+    +---------------------+-------------+------+
 
     :param active_receptor: activity constant of active receptor
     :type active_receptor: float
@@ -107,19 +123,24 @@ class activity:
 
 
 class basal_PTH_pulse:
-    """ This class contains the basal PTH pulse parameters of the two-state receptor model by Martonova et al.
+    r""" This class contains the basal PTH pulse parameters of the two-state receptor model by Martonova et al.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | min                   | gamma_off |    [nM]
-    | max                   | gamma_on  |    [nM]
-    | off_duration          | tau_off   |    [min]
-    | on_duration           | tau_on    |    [min]
-    | period                | T         |    [min]
+    +----------------+----------------------+------+
+    | Parameter Name | Symbol               | Units|
+    +================+======================+======+
+    | min            | :math:`\gamma_{off}` | nM   |
+    +----------------+----------------------+------+
+    | max            |:math:`\gamma_{on}`   | nM   |
+    +----------------+----------------------+------+
+    | off_duration   | :math:`\tau_{off}`   | min  |
+    +----------------+----------------------+------+
+    | on_duration    | :math:`\tau_{on}`    | min  |
+    +----------------+----------------------+------+
+    | period         | :math:`T`            | min  |
+    +----------------+----------------------+------+
 
     :param min: concentration of non-pulsatile share of PTH pulse
     :type min: float
@@ -146,17 +167,20 @@ class basal_PTH_pulse:
 
 
 class injected_PTH_pulse:
-    """ This class contains the injected PTH pulse parameters of the two-state receptor model by Martonova et al.
+    r""" This class contains the injected PTH pulse parameters of the two-state receptor model by Martonova et al.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | min                   | gamma_off |    [nM]
-    | max                   | gamma_on  |    [nM]
-    | on_duration           | tau_on    |    [min]
+    +----------------+----------------------+------+
+    | Parameter Name | Symbol               |Units |
+    +================+======================+======+
+    | min            | :math:`\gamma_{off}` | nM   |
+    +----------------+----------------------+------+
+    | max            | :math:`\gamma_{on}`  | nM   |
+    +----------------+----------------------+------+
+    | on_duration    | :math:`\tau_{on}`    | min  |
+    +----------------+----------------------+------+
 
     :param min: concentration of non-pulsatile share of PTH pulse
     :type min: float
@@ -180,13 +204,17 @@ class pharmacokinetics:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | absorption_rate       | k_a        |    [1/h]
-    | elimination_rate      | k_e        |    [1/h]
-    | volume_of_distribution| V         |    [L]
-    | bioavailability       | F         |    [-]
+    +-------------------------+-------------+------+
+    | Parameter Name          | Symbol      | Units|
+    +=========================+=============+======+
+    | absorption_rate         | :math:`k_a` | 1/h  |
+    +-------------------------+-------------+------+
+    | elimination_rate        | :math:`k_e` | 1/h  |
+    +-------------------------+-------------+------+
+    | volume_of_distribution  | :math:`V`   | L    |
+    +-------------------------+-------------+------+
+    | bioavailability         | :math:`F`   | -    |
+    +-------------------------+-------------+------+
 
     :param absorption_rate: rate of absorption of the injected PTH
     :type absorption_rate: float

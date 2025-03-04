@@ -4,23 +4,23 @@ class differentiation_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OBu             | D_R       | pM/day          |
-    | OBp             | d_B       | pM/day              |
-    | OCp             | D_C       | pM/day              |
-    +------------------+-----------+------------------+
+    +------------------+------------+----------+
+    | Parameter Name   | Symbol     | Units    |
+    +==================+============+==========+
+    | OBu              |:math:`D_R` | pM/day   |
+    +------------------+------------+----------+
+    | OBp              |:math:`d_B` | pM/day   |
+    +------------------+------------+----------+
+    | OCp              |:math:`D_C` | pM/day   |
+    +------------------+------------+----------+
 
-     :param OBu: differentiation rate of uncommitted osteoblasts
-     :type OBu: float
-     :param OBp: differentiation rate of precursor osteoblasts
-     :type OBp: float
-     :param OCu: differentiation rate of uncommitted osteoclast
-     :type OCu: float
-     :param OCp: differentiation rate of precursor osteoclasts
-     :type OCp: float
-     """
+    :param OBu: differentiation rate of uncommitted osteoblasts
+    :type OBu: float
+    :param OBp: differentiation rate of precursor osteoblasts
+    :type OBp: float
+    :param OCp: differentiation rate of precursor osteoclasts
+    :type OCp: float
+    """
     def __init__(self):
         """ Constructor method. """
         self.OBu = 7.00e-4
@@ -35,12 +35,13 @@ class apoptosis_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OBa             | k_B       | 1/day           |
-    | OCa             | D_A       | pM/day          |
-    +------------------+-----------+------------------+
+    +------------------+-------------+----------------+
+    | Parameter Name   | Symbol      | Units          |
+    +==================+=============+================+
+    | OBa              | :math:`k_B` | 1/day          |
+    +------------------+-------------+----------------+
+    | OCa              | :math:`D_A` | pM/day         |
+    +------------------+-------------+----------------+
 
     :param OBa: apoptosis rate of active osteoblasts
     :type OBa: float
@@ -80,19 +81,18 @@ class degradation_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | PTH             | k_P       | 1/day           |
-    | OPG             | k_O       | 1/day           |
-    +------------------+-----------+------------------+
+    +------------------+-------------+-----------------+
+    | Parameter Name   | Symbol      | Units           |
+    +==================+=============+=================+
+    | PTH              | :math:`k_P` | 1/day           |
+    +------------------+-------------+-----------------+
+    | OPG              | :math:`k_O` | 1/day           |
+    +------------------+-------------+-----------------+
 
     :param PTH: degradation rate of PTH
     :type PTH: float
     :param OPG: degradation rate of OPG
-    :type OPG: float
-    :param RANKL: degradation rate of RANKL
-    :type RANKL: float """
+    :type OPG: float """
     def __init__(self):
         self.PTH = 86
         self.OPG = 3.50e-1
@@ -105,12 +105,13 @@ class concentration:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OPG_max         | OPG_max   | pM              |
-    | RANK            | K        | pM              |
-    +------------------+-----------+------------------+
+    +------------------+-------------------+------------------+
+    | Parameter Name   | Symbol            | Units            |
+    +==================+===================+==================+
+    | OPG_max          | :math:`OPG_{\max}`| pM               |
+    +------------------+-------------------+------------------+
+    | RANK             | :math:`K`         | pM               |
+    +------------------+-------------------+------------------+
 
     :param OPG_max: Maximum concentration of OPG
     :type OPG_max: float
@@ -130,14 +131,17 @@ class binding_constant:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | RANKL_OPG       | k_1       | (pM day)^{-1}   |
-    | RANKL_RANK      | k_3       | (pM day)^{-1}   |
-    | TGFb_OC         | C^s       | pM              |
-    | PTH_OB          | k_5       | (pM day)^{-1}   |
-    +------------------+-----------+------------------+
+    +------------------+-------------+------------------+
+    | Parameter Name   | Symbol      | Units            |
+    +==================+=============+==================+
+    | RANKL_OPG        | :math:`k_1` | 1/(pM·day)       |
+    +------------------+-------------+------------------+
+    | RANKL_RANK       | :math:`k_3` | 1/(pM·day)       |
+    +------------------+-------------+------------------+
+    | TGFb_OC          | :math:`C^s` | pM               |
+    +------------------+-------------+------------------+
+    | PTH_OB           | :math:`k_5` | 1/(pM·day)       |
+    +------------------+-------------+------------------+
 
     :param RANKL_OPG: Association binding constant for RANKL-OPG
     :type RANKL_OPG: float
@@ -170,13 +174,15 @@ class unbinding_constant:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | RANKL_OPG       | k_2       | day^{-1}        |
-    | RANKL_RANK      | k_4       | day^{-1}        |
-    | PTH_OB          | k_6       | day^{-1}        |
-    +------------------+-----------+------------------+
+    +------------------+------------+----------+
+    | Parameter Name   | Symbol     | Units    |
+    +==================+============+==========+
+    | RANKL_OPG        | :math:`k_2`| 1/day    |
+    +------------------+------------+----------+
+    | RANKL_RANK       | :math:`k_4`| 1/day    |
+    +------------------+------------+----------+
+    | PTH_OB           | :math:`k_6`| 1/day    |
+    +------------------+------------+----------+
 
     :param RANKL_OPG: Unbinding constant for RANKL-OPG
     :type RANKL_OPG: float
@@ -204,14 +210,18 @@ class production_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | intrinsic_PTH    | S_P       | pM/day          |
-    | intrinsic_RANKL  | r_L       | pM/day          |
-    | min_OPG_per_cell | K^P_O     | pM/day          |
-    | max_RANKL_per_cell| K^P_L     | pM/pM           |
-    +------------------+-----------+------------------+
+    +---------------------+-------------+------------------+
+    | Parameter Name      | Symbol      | Units            |
+    +=====================+=============+==================+
+    | intrinsic_PTH       | :math:`S_P` | pM/day           |
+    +---------------------+-------------+------------------+
+    | intrinsic_RANKL     |:math:`r_L`  | pM/day           |
+    +---------------------+-------------+------------------+
+    | min_OPG_per_cell    |:math:`K^P_O`| pM/day           |
+    +---------------------+-------------+------------------+
+    | max_RANKL_per_cell  |:math:`K^P_L`| pM/pM            |
+    +---------------------+-------------+------------------+
+
 
     :param intrinsic_PTH: Intrinsic production rate of PTH
     :type intrinsic_PTH: float
@@ -275,14 +285,11 @@ class Lemaire_Parameters:
     :type differentiation_rate: differentiation_rate
     :param apoptosis_rate: apoptosis rates of the different cell types, see :class:`apoptosis_rate` for details
     :type apoptosis_rate: apoptosis_rate
-    :param activation_coefficient: activation coefficients of the different cell types, see :class:`activation
-    _coefficient` for details
+    :param activation_coefficient: activation coefficients of the different cell types, see :class:`activation_coefficient` for details
     :type activation_coefficient: activation_coefficient
-    :param repression_coefficient: repression coefficients of the different cell types, see :class:`repression
-    _coefficient` for details
+    :param repression_coefficient: repression coefficients of the different cell types, see :class:`repression_coefficient` for details
     :type repression_coefficient: repression_coefficient
-    :param correction_factor: correction factors for the model, see :class:`correction
-    _factor` for details
+    :param correction_factor: correction factors for the model, see :class:`correction_factor` for details
     :type correction_factor: correction_factor
     :param degradation_rate: degradation rates of the different factors, see :class:`degradation_rate` for details
     :type degradation_rate: degradation_rate
@@ -292,8 +299,7 @@ class Lemaire_Parameters:
     :type binding_constant: binding_constant
     :param unbinding_constant: unbinding constants of the receptor-ligand interactions, see :class:`unbinding_constant` for details
     :type unbinding_constant: unbinding_constant
-    :param production_rate: intrinsic production rates of the different factors, see :class:`production
-    _rate` for details
+    :param production_rate: intrinsic production rates of the different factors, see :class:`production_rate` for details
     :type production_rate: production_rate
     :param bone_volume: parameters relevant for bone volume, see :class:`bone_volume` for details
     :type bone_volume: bone_volume

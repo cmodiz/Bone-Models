@@ -4,27 +4,29 @@ class differentiation_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OBu             | D_OB_u       | pM/day        |
-    | OBp             | D_OB_p      | pM/day         |
-    | OCp             | D_OC_p      | pM/day         |
-    +------------------+-----------+------------------+
+    +------------------+------------------+----------+
+    | Parameter Name   | Symbol           | Units    |
+    +==================+==================+==========+
+    | OBu              | :math:`D_{OB_u}` | pM/day   |
+    +------------------+------------------+----------+
+    | OBp              | :math:`D_{OB_p}` | pM/day   |
+    +------------------+------------------+----------+
+    | OCp              | :math:`D_{OC_p}` | pM/day   |
+    +------------------+------------------+----------+
 
-     :param OBu: differentiation rate of uncommitted osteoblasts
-     :type OBu: float
-     :param OBp: differentiation rate of precursor osteoblasts
-     :type OBp: float
-     :param OCp: differentiation rate of precursor osteoclasts
-     :type OCp: float
+    :param OBu: differentiation rate of uncommitted osteoblasts
+    :type OBu: float
+    :param OBp: differentiation rate of precursor osteoblasts
+    :type OBp: float
+    :param OCp: differentiation rate of precursor osteoclasts
+    :type OCp: float
     """
     def __init__(self):
         # -> D_OB_u
         self.OBu = 7.00e-4  # corrected differentiation rate of osteoblast progenitors [pM/day]
         # -> D_OB_p
-        # self.OBp = 2.674077909527713e-1   # differentiation rate of preosteoblasts [pM/day]
-        self.OBp = 5.348   # differentiation rate of preosteoblasts [pM/day]
+        self.OBp = 2.674077909527713e-001/0.05   # differentiation rate of preosteoblasts [pM/day]
+        # self.OBp = 5.348   # differentiation rate of preosteoblasts [pM/day]
         self.OCu = None  # differentiation rate of uncommitted osteoclast [pM/day]
         # -> D_OC_p
         self.OCp = 2.1e-3  # differentiation rate of preosteoclasts [pM/day]
@@ -36,12 +38,13 @@ class apoptosis_rate:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OBa             | A_OB_a     | 1/day          |
-    | OCa             | A_OC_a     | pM/day         |
-    +------------------+-----------+------------------+
+    +------------------+------------------+---------+
+    | Parameter Name   | Symbol           | Units   |
+    +==================+==================+=========+
+    | OBa              |:math:`A_{OB_a}`  | 1/day   |
+    +------------------+------------------+---------+
+    | OCa              | :math:`A_{OC_a}` | pM/day  |
+    +------------------+------------------+---------+
 
     :param OBa: apoptosis rate of active osteoblasts
     :type OBa: float
@@ -55,19 +58,22 @@ class apoptosis_rate:
 
 
 class activation_coefficient:
-    """ This class defines the activation coefficients of respective receptor-ligand bindings in the Pivonka bone cell population model.
+    r""" This class defines the activation coefficients of respective receptor-ligand bindings in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | TGFb_OBu         | K_{D1, TGF-beta} | pM           |
-    | TGFb_OCa         | K_{D3, TGF-beta} | pM           |
-    | PTH_OB           | K_{D4, PTH}, K_{D5, PTH} | pM |
-    | RANKL_RANK       | K_{D8, RANKL} | pM           |
-    +------------------+-----------+------------------+
+    +------------------+------------------------------------------------+------+
+    | Parameter Name   | Symbol                                         | Units|
+    +==================+================================================+======+
+    | TGFb_OBu         | :math:`K_{D1, \text{TGF-}\beta}`               | pM   |
+    +------------------+------------------------------------------------+------+
+    | TGFb_OCa         | :math:`K_{D3, \text{TGF-}\beta}`               | pM   |
+    +------------------+------------------------------------------------+------+
+    | PTH_OB           | :math:`K_{D4, \text{PTH}}, K_{D5, \text{PTH}}` | pM   |
+    +------------------+------------------------------------------------+------+
+    | RANKL_RANK       | :math:`K_{D8, \text{RANKL}}`                   | pM   |
+    +------------------+------------------------------------------------+------+
 
     :param TGFb_OBu: activation coefficient related to TGF-beta binding on OBu
     :type TGFb_OBu: float
@@ -92,22 +98,23 @@ class activation_coefficient:
         # Activation coefficient related to MCSF binding on OCu [pM]
         self.MCSF_OCu = None
         # Activation coefficient related to RANKL binding on RANK [pM]
-        # -> K_{D8, RANKL}
-        self.RANKL_RANK = 1.306e+1
+        # -> K_{D8, RANKL} (wrong in the paper - 13.06?)
+        self.RANKL_RANK = 4.457452802710724e+000
 
 
 class repression_coefficient:
-    """ This class defines the repression coefficients of respective receptor-ligand binding in the Pivonka bone cell population model.
+    r""" This class defines the repression coefficients of respective receptor-ligand binding in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | TGFb_OBp         | K_{D2, TGF-beta} | pM           |
-    | PTH_OB           | K_{D6, PTH}, K_{D7, PTH} | pM |
-    +------------------+-----------+------------------+
+    +------------------+----------------------------------------------+-----+
+    | Parameter Name   | Symbol                                       |Units|
+    +==================+==============================================+=====+
+    | TGFb_OBp         | :math:`K_{D2, \text{TGF-}\beta}`             | pM  |
+    +------------------+----------------------------------------------+-----+
+    | PTH_OB           |:math:`K_{D6, \text{PTH}}, K_{D7, \text{PTH}}`| pM  |
+    +------------------+----------------------------------------------+-----+
 
     :param TGFb_OBp: repression coefficient related to TGF-beta binding on OBp
     :type TGFb_OBp: float
@@ -123,19 +130,22 @@ class repression_coefficient:
 
 
 class degradation_rate:
-    """ This class defines the degradation rates of the different factors in the Pivonka bone cell population model.
+    r""" This class defines the degradation rates of the different factors in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | PTH              | D^tilde_{PTH} | 1/day        |
-    | OPG              | D^tilde_{OPG} | 1/day        |
-    | RANKL            | D^tilde_{RANKL} | 1/day      |
-    | TGFb             | D^tilde_{TGFb} | 1/day       |
-    +------------------+-----------+------------------+
+    +------------------+----------------------------------+------+
+    | Parameter Name   | Symbol                           | Units|
+    +==================+==================================+======+
+    | PTH              | :math:`\tilde{D}_{\text{PTH}}`   | 1/day|
+    +------------------+----------------------------------+------+
+    | OPG              | :math:`\tilde{D}_{\text{OPG}}`   | 1/day|
+    +------------------+----------------------------------+------+
+    | RANKL            | :math:`\tilde{D}_{\text{RANKL}}` | 1/day|
+    +------------------+----------------------------------+------+
+    | TGFb             | :math:`\tilde{D}_{\text{TGFb}}`  | 1/day|
+    +------------------+----------------------------------+------+
 
     :param PTH: degradation rate of PTH
     :type PTH: float
@@ -161,17 +171,18 @@ class degradation_rate:
 
 
 class concentration:
-    """ This class defines fixed concentrations in the Pivonka bone cell population model.
+    r""" This class defines fixed concentrations in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | OPG_max          | C^max_OPG | pM              |
-    | RANK             | C^RANK    | pM              |
-    +------------------+-----------+------------------+
+    +------------------+------------------------------+------+
+    | Parameter Name   | Symbol                       | Units|
+    +==================+==============================+======+
+    | OPG_max          | :math:`C^{\max}_{\text{OPG}}`| pM   |
+    +------------------+------------------------------+------+
+    | RANK             | :math:`C^{\text{RANK}}`      | pM   |
+    +------------------+------------------------------+------+
 
     :param OPG_max: maximum concentration of OPG
     :type OPG_max: float
@@ -186,19 +197,22 @@ class concentration:
 
 
 class binding_constant:
-    """ This class defines the binding constants of receptor-ligand bindings in the Pivonka bone cell population model.
+    r""" This class defines the binding constants of receptor-ligand bindings in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | RANKL_OPG        | K_A1,RANKL | (pM day)^{-1}  |
-    | RANKL_RANK       | K_A2,RANKL | (pM day)^{-1}  |
-    | TGFb_OC          | C^s        | pM              |
-    | PTH_OB           | k_5        | (pM day)^{-1}  |
-    +------------------+-----------+------------------+
+    +------------------+-----------------------------+------------------+
+    | Parameter Name   | Symbol                      | Units            |
+    +==================+=============================+==================+
+    | RANKL_OPG        | :math:`K_{A1,\text{RANKL}}` | 1/(pM day)       |
+    +------------------+-----------------------------+------------------+
+    | RANKL_RANK       | :math:`K_{A2,\text{RANKL}}` | 1/(pM day)       |
+    +------------------+-----------------------------+------------------+
+    | TGFb_OC          | :math:`C^s`                 | pM               |
+    +------------------+-----------------------------+------------------+
+    | PTH_OB           | :math:`k_5`                 | 1/(pM day)       |
+    +------------------+-----------------------------+------------------+
 
     :param RANKL_OPG: association binding constant for RANKL-OPG
     :type RANKL_OPG: float
@@ -230,13 +244,15 @@ class unbinding_constant:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | RANKL_OPG        | k_2       | 1/day           |
-    | RANKL_RANK       | k_4       | 1/pM            |
-    | PTH_OB           | k_6       | 1/day           |
-    +------------------+-----------+------------------+
+    +------------------+------------+----------+
+    | Parameter Name   | Symbol     | Units    |
+    +==================+============+==========+
+    | RANKL_OPG        | :math:`k_2`| 1/day    |
+    +------------------+------------+----------+
+    | RANKL_RANK       | :math:`k_4`| 1/pM     |
+    +------------------+------------+----------+
+    | PTH_OB           | :math:`k_6`| 1/day    |
+    +------------------+------------+----------+
 
     :param RANKL_OPG: unbinding constant for RANKL-OPG
     :type RANKL_OPG: float
@@ -259,23 +275,30 @@ class unbinding_constant:
 
 
 class production_rate:
-    """ This class defines the intrinsic/ endogenous production rates of the different factors in the Pivonka bone cell population model.
+    r""" This class defines the intrinsic/ endogenous production rates of the different factors in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | intrinsic_PTH    | beta_PTH  | pM/day          |
-    | intrinsic_RANKL  | beta_RANKL | pM/day          |
-    | min_OPG_per_cell | beta_1,OPG, beta_2,OPG | pM/day |
-    | bool_OBp_produce_OPG | -     | -              |
-    | bool_OBa_produce_OPG | -     | -              |
-    | max_RANKL_per_cell | R_1^RANKL, R_2^RANKL | pM/pM |
-    | bool_OBp_produce_RANKL | -   | -              |
-    | bool_OBa_produce_RANKL | -   | -              |
-    +------------------+-----------+------------------+
+    +---------------------------+--------------------------------------+---------+
+    | Parameter Name            | Symbol                               | Units   |
+    +===========================+======================================+=========+
+    | intrinsic_PTH             | :math:`\beta_{PTH}`                  | pM/day  |
+    +---------------------------+--------------------------------------+---------+
+    | intrinsic_RANKL           | :math:`\beta_{RANKL}`                | pM/day  |
+    +---------------------------+--------------------------------------+---------+
+    | min_OPG_per_cell          | :math:`\beta_{1,OPG}, \beta_{2,OPG}` | pM/day  |
+    +---------------------------+--------------------------------------+---------+
+    | bool_OBp_produce_OPG      | -                                    | -       |
+    +---------------------------+--------------------------------------+---------+
+    | bool_OBa_produce_OPG      | -                                    | -       |
+    +---------------------------+--------------------------------------+---------+
+    | max_RANKL_per_cell        | :math:`R_1^{RANKL}, R_2^{RANKL}`     | pM/pM   |
+    +---------------------------+--------------------------------------+---------+
+    | bool_OBp_produce_RANKL    | -                                    | -       |
+    +---------------------------+--------------------------------------+---------+
+    | bool_OBa_produce_RANKL    | -                                    | -       |
+    +---------------------------+--------------------------------------+---------+
 
     :param intrinsic_PTH: intrinsic production rate of PTH
     :type intrinsic_PTH: float
@@ -311,8 +334,8 @@ class production_rate:
         # Constant describing how much RANKL is produced per cell [pM/pM]
         self.RANKL_rate_per_cell = None
         # Production rate of RANKL per cell [pM/pM]
-        # -> R_1^RANKL, R_2^RANKL
-        self.max_RANKL_per_cell = 3e+006
+        # -> R_1^RANKL, R_2^RANKL, wrong in the paper 6e+6
+        self.max_RANKL_per_cell = 2.703476379131062e+006
         # Boolean variables determining which cells produce RANKL
         self.bool_OBp_produce_RANKL = 1  # 1=yes
         self.bool_OBa_produce_RANKL = 0  # 0=no
@@ -325,11 +348,11 @@ class correction_factor:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | f0               | f_0       | -               |
-    +------------------+-----------+------------------+
+    +------------------+------------+-------+
+    | Parameter Name   | Symbol     | Units |
+    +==================+============+=======+
+    | f0               |:math:`f_0` | -     |
+    +------------------+------------+-------+
 
     :param f0: correction factor for OBp differentiation rate and TGFb activation function
     :type f0: float """
@@ -339,18 +362,20 @@ class correction_factor:
 
 
 class bone_volume:
-    """ This class defines the parameters relevant for bone volume of the bone model in the Pivonka bone cell population model.
+    r""" This class defines the parameters relevant for bone volume of the bone model in the Pivonka bone cell population model.
 
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name   | Symbol    | Units           |
-    +==================+===========+==================+
-    | formation_rate   | k_form    | 1/day           |
-    | resorption_rate  | k_res     | 1/day           |
-    | stored_TGFb_content | alpha  | -               |
-    +------------------+-----------+------------------+
+    +----------------------+-------------------------+-------+
+    | Parameter Name       | Symbol                  | Units |
+    +======================+=========================+=======+
+    | formation_rate       | :math:`k_{\text{form}}` | 1/day |
+    +----------------------+-------------------------+-------+
+    | resorption_rate      | :math:`k_{\text{res}}`  | 1/day |
+    +----------------------+-------------------------+-------+
+    | stored_TGFb_content  | :math:`\alpha`          | -     |
+    +----------------------+-------------------------+-------+
 
     :param formation_rate: formation rate of bone volume
     :type formation_rate: float
@@ -370,29 +395,27 @@ class bone_volume:
 class Pivonka_Parameters:
     """ This class defines the parameters of the Pivonka bone cell population model.
 
-    :param differentiation_rate: differentiation rates of the different cell types, see :class:`differentiation_rate` for details
+    :param differentiation_rate: differentiation rates of the different cell types
     :type differentiation_rate: differentiation_rate
-    :param apoptosis_rate: apoptosis rates of the different cell types, see :class:`apoptosis_rate` for details
+    :param apoptosis_rate: apoptosis rates of the different cell types
     :type apoptosis_rate: apoptosis_rate
-    :param activation_coefficient: activation coefficients of respective receptor-ligand bindings, see :class:`activation
-    _coefficient` for details
+    :param activation_coefficient: activation coefficients of respective receptor-ligand bindings
     :type activation_coefficient: activation_coefficient
-    :param repression_coefficient: repression coefficients of respective receptor-ligand binding, see :class:`repression
-    _coefficient` for details
+    :param repression_coefficient: repression coefficients of respective receptor-ligand binding
     :type repression_coefficient: repression_coefficient
     :param correction_factor: correction factors, see :class:`correction_factor` for details
     :type correction_factor: correction_factor
-    :param degradation_rate: degradation rates of the different factors, see :class:`degradation_rate` for details
+    :param degradation_rate: degradation rates of the different factors
     :type degradation_rate: degradation_rate
-    :param concentration: fixed concentrations, see :class:`concentration` for details
+    :param concentration: fixed concentrations
     :type concentration: concentration
-    :param binding_constant: binding constants of receptor-ligand bindings, see :class:`binding_constant` for details
+    :param binding_constant: binding constants of receptor-ligand bindings
     :type binding_constant: binding_constant
-    :param unbinding_constant: unbinding constants of receptor-ligand bindings, see :class:`unbinding_constant` for details
+    :param unbinding_constant: unbinding constants of receptor-ligand bindings
     :type unbinding_constant: unbinding_constant
-    :param production_rate: intrinsic/ endogenous production rates of the different factors, see :class:`production_rate` for details
+    :param production_rate: intrinsic/ endogenous production rates of the different factors
     :type production_rate: production_rate
-    :param bone_volume: parameters relevant for bone volume, see :class:`bone_volume` for details
+    :param bone_volume: parameters relevant for bone volume
     :type bone_volume: bone_volume """
     def __init__(self):
         self.differentiation_rate = differentiation_rate()
