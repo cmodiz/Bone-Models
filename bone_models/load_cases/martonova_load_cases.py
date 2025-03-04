@@ -5,13 +5,16 @@ class injected_PTH_pulse:
     and their original names from the publication:
 
     +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
+    | Parameter Name   | Symbol    | Units            |
     +==================+===========+==================+
-    | max                   | gamma_on  |    [nM]
-    | off_duration          | tau_off   |    [min]
-    | on_duration           | tau_on    |    [min]
-    | period               |   T        |    [min]
-
+    | max              | gamma_on  |    [nM]          |
+    +------------------+-----------+------------------+
+    | off_duration     | tau_off   |    [min]         |
+    +------------------+-----------+------------------+
+    | on_duration      | tau_on    |    [min]         |
+    +------------------+-----------+------------------+
+    | period           |   T       |    [min]         |
+    +------------------+-----------+------------------+
 
     :param max: concentration of pulsatile share of injected PTH pulse
     :type max: float
@@ -34,14 +37,19 @@ class Basal_PTH_pulse:
     The following table provides a mapping between the model parameters
     and their original names from the publication:
 
-    +------------------+-----------+------------------+
-    | Parameter Name        | Symbol    | Units
-    +==================+===========+==================+
-    | min                   | gamma_off |    [nM]
-    | max                   | gamma_on  |    [nM]
-    | off_duration          | tau_off   |    [min]
-    | on_duration           | tau_on    |    [min]
-    | period                | T         |    [min]
+    +-----------------------+-----------+-------------+
+    | Parameter Name        | Symbol    | Units       |
+    +=======================+===========+=============+
+    | min                   | gamma_off |    [nM]     |
+    +-----------------------+-----------+-------------+
+    | max                   | gamma_on  |    [nM]     |
+    +-----------------------+-----------+-------------+
+    | off_duration          | tau_off   |    [min]    |
+    +-----------------------+-----------+-------------+
+    | on_duration           | tau_on    |    [min]    |
+    +-----------------------+-----------+-------------+
+    | period                | T         |    [min]    |
+    +-----------------------+-----------+-------------+
 
     :param min: concentration of non-pulsatile share of PTH pulse
     :type min: float
@@ -65,12 +73,12 @@ class Martonova_Healthy:
     """ This class contains the parameters for the healthy state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -94,12 +102,12 @@ class Martonova_Hyperparathyroidism:
     """ This class contains the parameters for the hyperparathyroidism state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
 
     def __init__(self):
@@ -124,12 +132,12 @@ class Martonova_Osteoporosis:
     """ This class contains the parameters for the osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -153,12 +161,12 @@ class Martonova_Postmenopausal_Osteoporosis:
     """ This class contains the parameters for the postmenopausal osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected_PTH_pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -182,12 +190,12 @@ class Martonova_Hypercalcemia:
     """ This class contains the parameters for the hypercalcemia state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -211,12 +219,12 @@ class Martonova_Hypocalcemia:
     """ This class contains the parameters for the hypocalcemia state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -240,12 +248,12 @@ class Martonova_Glucocorticoid_Induced_Osteoporosis:
     """ This class contains the parameters for the glucocorticoid-induced osteoporosis state without injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()
@@ -269,12 +277,12 @@ class Martonova_Hyperparathyroidism_With_Drug:
     """ This class contains the parameters for the hyperparathyroidism state with injection of the two-state receptor model by Martonova et al.
 
     :param basal_PTH_pulse: basal PTH pulse parameters
-    :type basal_PTH_pulse: Basal_PTH_pulse, see :class:`Basal_PTH_pulse` for details
+    :type basal_PTH_pulse: Basal_PTH_pulse
     :param drug_dose: dose of the drug in micrograms
     :type drug_dose: float
     :param injection_frequency: frequency of the drug injection (e.g. 24h)
     :type injection_frequency: float
-    :param injected_PTH_pulse: injected_PTH_pulse, see :class:`injected_PTH_pulse` for details
+    :param injected_PTH_pulse: injected PTH pulse parameters
     :type injected_PTH_pulse: injected_PTH_pulse """
     def __init__(self):
         self.basal_PTH_pulse = Basal_PTH_pulse()

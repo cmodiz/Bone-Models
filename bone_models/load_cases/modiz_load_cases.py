@@ -3,7 +3,7 @@ from .martonova_load_cases import Martonova_Healthy, Martonova_Hyperparathyroidi
 
 
 class Lemaire_Load_Case:
-    """ Load case for the parent class Lemaire model """
+    """ Load case for the reference class Lemaire model with external injections. """
     def __init__(self):
         self.OBp_injection = 0
         self.OBa_injection = 0
@@ -23,8 +23,10 @@ class Modiz_Healthy_to_Hyperparathyroidism:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Hyperparathyroidism, see :class:`Hyperparathyroidism` for details"""
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Hyperparathyroidism load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Hyperparathyroidism"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Hyperparathyroidism()
@@ -35,8 +37,10 @@ class Modiz_Healthy_to_Osteoporosis:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Osteoporosis, see :class:`Osteoporosis` for details"""
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Osteoporosis load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Osteoporosis"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Osteoporosis()
@@ -47,8 +51,10 @@ class Modiz_Healthy_to_Postmenopausal_Osteoporosis:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Postmenopausal_Osteoporosis, see :class:`Postmenopausal_Osteoporosis` for details"""
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Postmenopausal Osteoporosis load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Postmenopausal_Osteoporosis"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Postmenopausal_Osteoporosis()
@@ -59,8 +65,10 @@ class Modiz_Healthy_to_Hypercalcemia:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Hypercalcemia, see :class:`Hypercalcemia` for details"""
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Hypercalcemia load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Hypercalcemia"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Hypercalcemia()
@@ -71,8 +79,10 @@ class Modiz_Healthy_to_Hypocalcemia:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Hypocalcemia, see :class:`Hypocalcemia` for details"""
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Hypocalcemia load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Hypocalcemia"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Hypocalcemia()
@@ -83,8 +93,10 @@ class Modiz_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
     It contains the load case class for the Lemaire model and the Martonova model.
     The latter is directly imported from the Martonova load cases.
 
-    :param lemaire: Lemaire_Load_Case, see :class:`Lemaire_Load_Case` for details
-    :param martonova: Glucocorticoid_Induced_Osteoporosis, see :class:`Glucocorticoid_Induced_Osteoporosis` for details """
+    :param lemaire: Lemaire load case for reference model
+    :type lemaire: Lemaire_Load_Case
+    :param martonova: Glucocorticoid-Induced Osteoporosis load case for Martonova model
+    :type martonova: bone_models.load_cases.martonova_load_cases.Martonova_Glucocorticoid_Induced_Osteoporosis"""
     def __init__(self):
         self.lemaire = Lemaire_Load_Case()
         self.martonova = Martonova_Glucocorticoid_Induced_Osteoporosis()
@@ -93,6 +105,7 @@ class Modiz_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
 class Modiz_Reference_Healthy_to_Hyperparathyroidism:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hyperparathyroidism.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
@@ -114,6 +127,7 @@ class Modiz_Reference_Healthy_to_Hyperparathyroidism:
 class Modiz_Reference_Healthy_to_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
@@ -135,6 +149,7 @@ class Modiz_Reference_Healthy_to_Osteoporosis:
 class Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Postmenopausal Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
@@ -156,6 +171,7 @@ class Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis:
 class Modiz_Reference_Healthy_to_Hypercalcemia:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hypercalcemia.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
@@ -177,6 +193,7 @@ class Modiz_Reference_Healthy_to_Hypercalcemia:
 class Modiz_Reference_Healthy_to_Hypocalcemia:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Hypocalcemia.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
@@ -198,6 +215,7 @@ class Modiz_Reference_Healthy_to_Hypocalcemia:
 class Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
     """ Load case for the subclass Reference_Lemaire_Model for the transition from Healthy to Glucocorticoid-Induced Osteoporosis.
     It contains a PTH_elevation factor, which is used to align disease states with the Modiz_Model to make them comparable.
+    The PTH_elevation factor is calculated by the ratio of the maximum PTH values in :func:`bone_models.models.modiz_model.calculate_elevation_parameter`.
 
     :param PTH_elevation: PTH_elevation factor to align the disease states
     :type PTH_elevation: float """
