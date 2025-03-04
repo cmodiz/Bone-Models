@@ -6,12 +6,19 @@ from .base_model import Base_Model
 
 
 class Lemaire_Model(Base_Model):
-    """ This class implements the bone cell population model by Lemaire et al. (2004). It is a subclass of the Base_Model class.
+    """ This class implements the bone cell population model by Lemaire et al. (2004) as a subclass of the Base_Model class.
+
+    .. note::
+       **Source Publication**:
+       Lemaire, V., Tobin, F. L., Greller, L. D., Cho, C. R., & Suva, L. J. (2004).
+       *Modeling the interactions between osteoblast and osteoclast activities in bone remodeling.*
+       Journal of Theoretical Biology, 229(3), 293-309.
+       :doi:`10.1016/j.jtbi.2004.03.023`
 
     :param load_case: load case for the model
     :type load_case: object
-    :param parameters: model parameters, see :class:`Parameters
-    :type parameters: Parameters
+    :param parameters: model parameters
+    :type parameters: Lemaire_Parameters
     :param initial_guess_root: initial guess for the root-finding algorithm for steady-state
     :type initial_guess_root: numpy.ndarray
     :param steady_state: steady state values of the model

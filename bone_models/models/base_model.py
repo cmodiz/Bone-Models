@@ -5,8 +5,9 @@ from ..parameters.base_parameters import Base_Parameters
 
 
 class Base_Model:
-    """This class implements the base model for bone cell population models. It essentially includes the ODE system that
-    is shared across future models. It is not intended to be used as a model but only indicates the basis of the models.
+    """This class implements the base model for bone cell population models. It essentially includes the ODE system that is shared across future models and the functions to solve for steady-state and solution.
+    It is not intended to be used as a model itself but only indicates the most basic version of the bone cell population models.
+    Functions that are specific to a certain model should be implemented in the respective model class, otherwise the functions return 0 (additive) or 1 (multiplicative) values.
 
     :param OBp: precursor osteoblast cell concentration
     :type OBp: float
@@ -52,7 +53,9 @@ class Base_Model:
         self.steady_state.OCa = None
 
     def bone_cell_population_model(self, x, t=None):
-        """ ODE system for the bone cell population model.
+        """ Calculates the system of ordinary differential equations for the bone cell population model.
+        This function is inherited by the specific models. If a function is not relevant in the specific model
+        (e.g. mechanical effects), it returns 0 (additive) or 1 (multiplicative) as neutral values.
 
         :param x: state variables of the model
         :type x: list
@@ -65,7 +68,7 @@ class Base_Model:
         dOBpdt = ((self.parameters.differentiation_rate.OBu * self.calculate_TGFb_activation_OBu(OCa,t) -
                    self.parameters.differentiation_rate.OBp * OBp *
                    self.calculate_TGFb_repression_OBp(OCa,t) + self.calculate_external_injection_OBp(t)) +
-                  self.apply_mechanical_effects(OBp, OCa, t) + self.apply_medication_effects_OBp())
+                  self.apply_mechanical_effects(OBp, OBa, OCa, t) + self.apply_medication_effects_OBp())
         dOBadt = (self.parameters.differentiation_rate.OBp * OBp * self.calculate_TGFb_repression_OBp(OCa,t) -
                   self.parameters.apoptosis_rate.OBa * OBa * self.apply_medication_effects_OBa()
                   + self.calculate_external_injection_OBa(t))
@@ -77,6 +80,7 @@ class Base_Model:
 
     def calculate_steady_state(self):
         """ Calculate the steady state of the bone cell population model using root finding of the ODE system.
+
         :return: steady state values of the model
         :rtype: numpy.ndarray
         """
@@ -89,7 +93,8 @@ class Base_Model:
         return steady_state.x
 
     def solve_bone_cell_population_model(self, tspan):
-        """ Solve the bone cell population model using the ODE system.
+        """ Solve the bone cell population model using the ODE system over a given time interval.
+        The initial conditions are set to the steady-state values.
 
         :param tspan: time span for the ODE solver
         :type tspan: numpy.ndarray with start and end time
@@ -196,8 +201,8 @@ class Base_Model:
             )
         return bone_volume_fraction
 
-    def apply_mechanical_effects(self, OBp, OCa, t):
-        """ Apply mechanical effects to the bone cell population model.
+    def apply_mechanical_effects(self, OBp, OBa, OCa, t):
+        """ Apply mechanical effects to the bone cell population model. Returns 0 (additive) as neutral value if not relevant to the specific model.
 
         :return: mechanical effects acting on the bone cell population model
         :rtype: float
@@ -205,7 +210,7 @@ class Base_Model:
         return 0
 
     def apply_medication_effects_OBp(self):
-        """ Apply medication effects to precursor osteoblasts.
+        """ Apply medication effects to precursor osteoblasts. Returns 0 (additive) as neutral value if not relevant to the specific model.
 
         :return: medication effects acting on precursor osteoblasts
         :rtype: float
@@ -213,7 +218,7 @@ class Base_Model:
         return 0
 
     def apply_medication_effects_OBa(self):
-        """ Apply medication effects to active osteoblasts.
+        """ Apply medication effects to active osteoblasts. Returns 1 (multiplicative) as neutral value if not relevant to the specific model.
 
         :return: medication effects acting on active osteoblasts
         :rtype: float

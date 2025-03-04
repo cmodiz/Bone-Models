@@ -16,24 +16,43 @@ class Modiz_Model(Lemaire_Model):
     osteoblasts by PTH calculated by a 2-state receptor model with pulsatile PTH (Martonova et al., 2023).
     It is a subclass of the Lemaire model (see :class:`Lemaire_Model`), inherits most methods,
     but modifies the calculate_PTH_activation_OB method. The Martonova model is used to calculate the activation by
-    PTH separately for healthy and disease states. """
+    PTH separately for healthy and disease states.
+
+    .. note::
+        **Source Publication:**
+        Modiz C., Castoldi N.M., Scheiner S., Martinez Reina J., Gallego J. L. C., Sansalone V., Martelli S., Pivonka P. (2025).
+        *Computational Simulations of Endocrine Bone Diseases Related to Pathological Glandular PTH Secretion Using a
+        Multi-Scale Bone Cell Population Model*
+        Journal of Applied Mathematical Modelling (submitted)
+
+        The model is based on the following publications:
+        Lemaire, V., Tobin, F. L., Greller, L. D., Cho, C. R., & Suva, L. J. (2004).
+        *Modeling the interactions between osteoblast and osteoclast activities in bone remodeling.*
+        Journal of Theoretical Biology, 229(3), 293-309.
+        :doi:`10.1016/j.jtbi.2004.03.023`
+
+        Martonova D., Lavaill M., Forwood M.R., Robling A., Cooper D.M.L., Leyendecker S., Pivonka P. (2023).
+        *Effects of PTH glandular and external dosing patterns on bone cell activity using a two-state receptor model
+        —Implications for bone disease progression and treatment*
+        PLOS ONE, 18(3), e0283544.
+        :doi:`10.1371/journal.pone.0283544`
+
+    :param load_case: load case for the model, include both load cases for Lemaire and Martonova model
+    :type load_case: Modiz_Load_Cases
+    :param model_type: type of the model (which activity constant is used) either 'cellular responsiveness' or 'integrated activity'
+    :type model_type: str
+    :param calibration_type: type of calibration (alignment of activity constants and old activation using either all states or only healthy state), either 'all' or 'only for healthy state'
+    :type calibration_type: str
+    :param parameters: instance of the Modiz_Parameters class
+    :type parameters: Modiz_Parameters
+
+    :raises ValueError: If model_type is not 'cellular responsiveness' or 'integrated activity'.
+    :raises ValueError: If calibration_type is not 'all' or 'only for healthy state'. """
     def __init__(self, load_case, model_type='cellular responsiveness', calibration_type='all'):
         """ Constructor method. Initialises parent class with respective load case and sets model type and calibration.
         Asserts that model type and calibration type are valid. Calculates the activity constants for healthy and
-        disease states (in load case) using the Martonova model.
+        disease states (in load case) using the Martonova model. """
 
-        :param load_case: load case for the model, include both loadcases for Lemaire and Martonova model, see :class:`Load_Case` for details
-        :type load_case: Load_Case
-        :param model_type: type of the model (which activity constant is used) either 'cellular responsiveness' or 'integrated activity'
-        :type model_type: str
-        :param calibration_type: type of calibration (alignment of activity constants and old activation using either all
-        states or only healthy state), either 'all' or 'only for healthy state'
-        :type calibration_type: str
-        :param parameters: instance of the Parameters class, see :class:`Parameters` for details
-        :type parameters: Parameters
-
-        :raises ValueError: If model_type is not 'cellular responsiveness' or 'integrated activity'.
-        :raises ValueError: If calibration_type is not 'all' or 'only for healthy state'. """
         super().__init__(load_case.lemaire)
         assert model_type in ['cellular responsiveness', 'integrated activity'], \
             "Invalid model_type. Must be 'cellular responsiveness' or 'integrated activity'."
@@ -86,13 +105,12 @@ class Modiz_Model(Lemaire_Model):
 
 class Reference_Lemaire_Model(Lemaire_Model):
     """ This class is used to modify the Lemaire model to include a disease load case with multiplicative elevation.
-    It is used a reference model for the calibration of the Modiz model. """
+    It is used a reference model for the calibration of the Modiz model.
 
+    :param load_case: load case for the model
+    :type load_case: Modiz_Load_Case"""
     def __init__(self, load_case):
-        """ Constructor method. Initialises parent class with respective load case.
-
-        :param load_case: load case for the model, see :class:`Load_Case` for details
-        :type load_case: Load_Case """
+        """ Constructor method. Initialises parent class with respective load case.  """
         super().__init__(load_case)
         self.load_case = load_case
 
@@ -118,7 +136,8 @@ def identify_calibration_parameters():
     It calculates integrated activity, cellular responsiveness and old activation for healthy and disease states using
     the Martonova model and the Lemaire model. The old activation of the Lemaire model is made comparable using the
     elevation/decrease parameter. It then performs an optimization to find the calibration parameters for
-    cellular responsiveness and integrated activity using all states.
+    cellular responsiveness and integrated activity using all states. The calibration parameters are printed.
+    The calibration parameters are then saved as parameters for the Modiz model.
 
     :print: calibration parameters for cellular responsiveness and integrated activity """
     diseases = [Martonova_Healthy(), Martonova_Hyperparathyroidism(), Martonova_Osteoporosis(), Martonova_Postmenopausal_Osteoporosis(),
@@ -219,6 +238,17 @@ def identify_calibration_parameters_only_for_healthy_state():
 
 
 def analyse_effect_of_different_pulse_characteristics(plot=True):
+    """ This function analyses the effect of different pulse characteristics on the integrated activity and cellular responsiveness.
+    It calculates the integrated activity and cellular responsiveness for healthy and disease states using the Martonova
+    model for different pulse characteristics. The pulse characteristics are varied by changing the on duration of the
+    pulse on adn off phases. The integrated activity and cellular responsiveness are then plotted against the log of the
+    ratio of the on and off duration of the pulse. The integrated activity and cellular responsiveness for the disease
+    states are also plotted as a comparison.
+
+    :param plot: if True, the results are plotted
+    :type plot: bool
+    :return: -
+    :rtype: - """
     diseases = [Martonova_Healthy(), Martonova_Hyperparathyroidism(), Martonova_Osteoporosis(), Martonova_Postmenopausal_Osteoporosis(),
                 Martonova_Hypercalcemia(), Martonova_Hypocalcemia(), Martonova_Glucocorticoid_Induced_Osteoporosis()]
     integrated_activity_list = []

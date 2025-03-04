@@ -5,18 +5,35 @@ from scipy.integrate import solve_ivp
 
 
 class Martonova_Model:
-    """ This class defines the two-state receptor model by Martonova et al. (2023) for pulsatile PTH.
+    """ This class defines the two-state receptor model by Martonova et al. (2023) for pulsatile endogenous PTH in
+    healthy and disease state including drug administration.
 
-    :param load_case: Load case for the model, see :class:`Martonova_Load_Case` for details.
+    .. note::
+       **Source Publication**:
+       Martonova D., Lavaill M., Forwood M.R., Robling A., Cooper D.M.L., Leyendecker S., Pivonka P. (2023).
+       *Effects of PTH glandular and external dosing patterns on bone cell activity using a two-state receptor model
+       —Implications for bone disease progression and treatment*
+       PLOS ONE, 18(3), e0283544.
+       :doi:`10.1371/journal.pone.0283544`
+
+       It is based on the model by Li and Goldbeter (1986) for receptor-ligand binding, which will be referred to in
+       some of the implemented model functions.
+
+       Li Y., Goldbeter A. (1989).
+       *Frequency specificity in intercellular communication. Influence of patterns of periodic signaling on target cell responsiveness.*
+       Biophysical journal, 55(1), 125–145.
+       :doi:`10.1016/S0006-3495(89)82785-7`
+
+    :param load_case: Load case for the model
     :type load_case: Martonova_Load_Case
-    :param parameters: Model parameters, see :class:`Martonova_Parameters` for details.
+    :param parameters: Model parameters
     :type parameters: Martonova_Parameters
     :param initial_condition: Initial condition for the ODE system for receptor-ligand binding.
     :type initial_condition: numpy.ndarray
     :param number_of_periods: Number of periods for basal PTH pulse.
     :type number_of_periods: int
     :param period_for_activity_constants: Period for calculating activity constants after cellular adaptation to basal PTH.
-    :type period_for_activity_constants: int"""
+    :type period_for_activity_constants: int """
     def __init__(self, load_case):
         """ Constructor method for the Martonova_Model class.
         It calculates the active complex activity constant and the drug PTH pulse based on the load case.
@@ -35,10 +52,17 @@ class Martonova_Model:
         self.calculate_drug_PTH_pulse(load_case)
         self.initial_condition = np.array([0.9, 0, 0])
         self.number_of_periods = 200
-        self.period_for_activity_constants = 20
+        self.period_for_activity_constants = 100
 
     def calculate_drug_PTH_pulse(self, load_case):
-        """ This function calculates the drug PTH pulse based on the load case. """
+        """ This function calculates the drug PTH pulse based on the load case. If there is a drug PTH injection, the
+        ODE system (pharmacokinetics-pharmacodynamics model) is solved to determine the drug PTH pulse parameters for a
+        square-wave pulse approximation (on/off-phase, pulse height).
+
+        :param load_case: Load case for the model
+        :type load_case: Martonova_Load_Case
+        :return: None
+        :rtype: None """
         if load_case.drug_dose is None:
             # no drug PTH injected, only basal PTH pulses are present
             pass
@@ -70,17 +94,31 @@ class Martonova_Model:
             pass
 
     def PK_PD_model(self, t, x):
+        """ This function defines the pharmacokinetics-pharmacodynamics model based on an ODE system for drug PTH pulse.
+        The ODE system describes the change of dose, drug concentration, and area under the curve over time depending on
+        absorption, elimination, distribution rates and bioavailability.
+
+        :param t: time variable
+        :type t: float
+        :param x: concentrations of dose, drug concentration, and area under the curve
+        :type x: list
+        :return: dxdt (change of concentrations of dose, drug concentration, and area under the curve with t)
+        :rtype: list """
         dose = x[0]
         drug_concentration = x[1]
         d_dose_dt = -self.parameters.pharmacokinetics.absorption_rate * dose * self.parameters.pharmacokinetics.bioavailability
-        d_drug_concentration_dt = ((
-                                               self.parameters.pharmacokinetics.bioavailability / self.parameters.pharmacokinetics.volume_of_distribution) *
+        d_drug_concentration_dt = ((self.parameters.pharmacokinetics.bioavailability / self.parameters.pharmacokinetics.volume_of_distribution) *
                                    self.parameters.pharmacokinetics.absorption_rate * dose - self.parameters.pharmacokinetics.elimination_rate * drug_concentration)
         d_area_dt = drug_concentration
         d_x_dt = [d_dose_dt, d_drug_concentration_dt, d_area_dt]
         return d_x_dt
 
     def solve_for_activity(self):
+        """ This function calculates the time dependent cellular activity and the activity constants basal activity,
+        cellular responsiveness, and integrated activity.
+
+        :return: cellular activity, time, basal activity, integrated activity, cellular responsiveness
+        :rtype: list """
         cellular_activity, time = self.calculate_cellular_activity()
         basal_activity, integrated_activity, cellular_responsiveness = self.calculate_activity_constants(cellular_activity, time)
         return cellular_activity, time, basal_activity, integrated_activity, cellular_responsiveness
@@ -101,7 +139,8 @@ class Martonova_Model:
         return cellular_activity, time
 
     def calculate_receptor_complex_concentrations(self):
-        """ This function calculates the concentrations of receptors and complexes over time by solving the ODE system.
+        """ This function calculates the concentrations of receptors and complexes over time by solving the ODE system
+        for the receptor-ligand model.
 
         :return: concentrations of active receptor, active complex, inactive complex, inactive receptor, and time
         :rtype: list"""
@@ -118,7 +157,9 @@ class Martonova_Model:
 
     def receptor_ligand_model(self, t, x):
         """ This function defines the receptor-ligand model based on an ODE system depending on the current PTH concentration.
-        It corresponds to equation (2) in the Li & Goldbeter paper.
+        The system describes the change of concentrations of active receptor, active complex, and inactive complex over
+        time. The concentration of inactive receptor is calculated based on the sum of the other concentrations.
+        The receptor-ligand model corresponds to equation (2) in the Li & Goldbeter paper.
 
         :param t: time variable
         :type t: float
@@ -152,7 +193,8 @@ class Martonova_Model:
         return dxdt
 
     def calculate_PTH_concentration(self, t):
-        """ This function calculates the PTH concentration depending on time, basal PTH pulse and injected PTH pulse (if present).
+        """ This function calculates the PTH concentration depending on time, basal PTH pulse and injected PTH pulse
+        (if present).
 
         :param t: time variable
         :type t: float
@@ -227,7 +269,10 @@ class Martonova_Model:
         :param cellular_activity: cellular activity (alpha(t) in original publication)
         :type cellular_activity: list
         :param time: time variable
-        :type time: list """
+        :type time: list
+
+        :return: basal activity, integrated activity, cellular responsiveness
+        :rtype: list"""
         basal_activity = self.calculate_basal_activity()
         integrated_activity_for_step_increase = self.calculate_integrated_activity_for_step_increase(self.load_case.basal_PTH_pulse.min + self.load_case.basal_PTH_pulse.max)
         if self.load_case.injected_PTH_pulse.max is not None:
@@ -389,11 +434,11 @@ class Martonova_Model:
         """ This function calculates the adaptation time of the cellular activity to a stimulus depending on desensitised
         and resensitised receptors. It corresponds to the term tau_a in equation (11) in the Li & Goldbeter paper.
 
-         :param stimulus_concentration: stimulus/ ligand concentration
-         :type stimulus_concentration: float
+        :param stimulus_concentration: stimulus/ ligand concentration
+        :type stimulus_concentration: float
 
-         :return: adaptation time
-         :rtype: float"""
+        :return: adaptation time
+        :rtype: float"""
         contribution_of_receptor_desensitation_basal_max = self.calculate_contribution_of_receptor_desensitation(
             stimulus_concentration)
         contribution_of_receptor_resensitisation_basal_max = self.calculate_contribution_of_receptor_resensitisation(
@@ -418,13 +463,13 @@ class Martonova_Model:
 
     def calculate_contribution_of_receptor_desensitation(self, stimulus_concentration):
         """ This function calculates the contribution of receptor desensitisation to the cellular activity.
-         It corresponds to the term u in equation (12a) in the Li & Goldbeter paper.
+        It corresponds to the term u in equation (12a) in the Li & Goldbeter paper.
 
-         :param stimulus_concentration: stimulus/ ligand concentration
-         :type stimulus_concentration: float
+        :param stimulus_concentration: stimulus/ ligand concentration
+        :type stimulus_concentration: float
 
-         :return: contribution of receptor desensitisation
-         :rtype: float"""
+        :return: contribution of receptor desensitisation
+        :rtype: float"""
         contribution_of_receptor_desensitation_basal_min = (self.parameters.kinematics.receptor_desensitized +
                                                             self.parameters.kinematics.complex_desensitized *
                                                             stimulus_concentration) / (1 + stimulus_concentration)
@@ -432,13 +477,13 @@ class Martonova_Model:
 
     def calculate_contribution_of_receptor_resensitisation(self, stimulus_concentration):
         """ This function calculates the contribution of receptor resensitisation to the cellular activity.
-         It corresponds to the term v in equation (12b) in the Li & Goldbeter paper.
+        It corresponds to the term v in equation (12b) in the Li & Goldbeter paper.
 
-         :param stimulus_concentration: stimulus/ ligand concentration
-         :type stimulus_concentration: float
+        :param stimulus_concentration: stimulus/ ligand concentration
+        :type stimulus_concentration: float
 
-         :return: contribution of receptor resensitisation
-         :rtype: float"""
+        :return: contribution of receptor resensitisation
+        :rtype: float"""
         kinetic_constant = self.parameters.kinematics.receptor / self.parameters.kinematics.complex
         contribution_of_receptor_resensitisation_basal_min = ((self.parameters.kinematics.receptor_resensitized +
                                                                self.parameters.kinematics.complex_resensitized *
@@ -464,26 +509,26 @@ class Martonova_Model:
 
     def calculate_weight_active_receptor(self, stimulus_concentration):
         """ This function calculates the weight of active receptor in the cellular activity.
-         It corresponds to the term a in equation (13a) in the Li & Goldbeter paper.
+        It corresponds to the term a in equation (13a) in the Li & Goldbeter paper.
 
-         :param stimulus_concentration: stimulus/ ligand concentration
-         :type stimulus_concentration: float
+        :param stimulus_concentration: stimulus/ ligand concentration
+        :type stimulus_concentration: float
 
-         :return: weight of active receptor
-         :rtype: float"""
+        :return: weight of active receptor
+        :rtype: float"""
         weight_active_receptor = ((self.parameters.activity.active_receptor + self.parameters.activity.active_complex * stimulus_concentration)
                                   / (1 + stimulus_concentration))
         return weight_active_receptor
 
     def calculate_weight_desensitised_receptor(self, stimulus_concentration):
         """ This function calculates the weight of desensitised receptor in the cellular activity.
-         It corresponds to the term b in equation (13b) in the Li & Goldbeter paper.
+        It corresponds to the term b in equation (13b) in the Li & Goldbeter paper.
 
-         :param stimulus_concentration: stimulus/ ligand concentration
-         :type stimulus_concentration: float
+        :param stimulus_concentration: stimulus/ ligand concentration
+        :type stimulus_concentration: float
 
-         :return: weight of desensitised receptor
-         :rtype: float"""
+        :return: weight of desensitised receptor
+        :rtype: float"""
         kinetic_constant = self.parameters.kinematics.receptor / self.parameters.kinematics.complex
         weight_desensitised_receptor = (self.parameters.activity.inactive_receptor + self.parameters.activity.inactive_complex
                                         * stimulus_concentration * kinetic_constant) / (1 + stimulus_concentration * kinetic_constant)

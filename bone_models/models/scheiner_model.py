@@ -1,12 +1,60 @@
 import numpy as np
-from scipy.optimize import root
 from scipy.integrate import solve_ivp
 from ..parameters.scheiner_parameters import Scheiner_Parameters
 from .pivonka_model import Pivonka_Model
 
 
 class Scheiner_Model(Pivonka_Model):
+    """ This class implements the bone cell population model by Scheiner et al. (2013) as a subclass of the Pivonka_Model class.
+    The main difference to the Pivonka model is the inclusion of mechanical effects on the precursor osteoblast cell
+    concentration and RANKL concentration. The mutual influence between bone cells and mechanical effects is modeled as follows:
+    Bone cells form and resorb bone matrix, which influences the strain energy density (mechanics model) felt by the
+    bone cells (bone cell population model). The strain energy density in turn influences the proliferation rate of the
+    osteoblast precursor cells and RANKL production. This again effects the cell concentrations and thus bone and
+    vascular pore volume fraction.
+
+    .. note::
+       **Source Publication**:
+       Scheiner, S., Pivonka, P., Hellmich, C. (2013).
+       *Coupling systems biology with multiscale mechanics, for computer simulations of bone remodeling.*
+       Computer Methods in Applied Mechanics and Engineering, 254, 181-196.
+       :doi:`10.1016/j.cma.2012.10.015`
+
+    :param load_case: load case for the model
+    :type load_case: object
+    :param parameters: model parameters
+    :type parameters: Scheiner_Parameters
+    :param initial_guess_root: initial guess for the root-finding algorithm for steady-state
+    :type initial_guess_root: numpy.ndarray
+    :param steady_state: steady state values of the model
+    :type steady_state: object
+    :param t: time variable
+    :type t: float
+    :param tspan: time span for the ODE solver
+    :type tspan: numpy.ndarray with start and end time
+    :param x: state variables of the model
+    :type x: list
+    :param solution: solution of the ODE system
+    :type solution: scipy.integrate._ivp.ivp.OdeResult
+    :param initial_bone_volume_fraction: initial bone volume fraction
+    :type initial_bone_volume_fraction: float
+    :param dOBpdt: rate of change of precursor osteoblast cell concentration
+    :type dOBpdt: float
+    :param dOBadt: rate of change of active osteoblast cell concentration
+    :type dOBadt: float
+    :param dOCadt: rate of change of osteoclast cell concentration
+    :type dOCadt: float
+    :param dvascular_pore_fractiondt: rate of change of vascular pore volume fraction
+    :type dvascular_pore_fractiondt: float
+    :param dbone_volume_fractiondt: rate of change of bone volume fraction
+    :type dbone_volume_fractiondt: float
+    :param dxdt: rate of change of state variables
+    :type dxdt: list """
     def __init__(self, load_case):
+        """ Constructor for the Scheiner_Model class as subclass of the Pivonka_Model class.
+
+        :param load_case: load case for the model
+        :type load_case: object """
         super().__init__(load_case=load_case)
         self.parameters = Scheiner_Parameters()
         self.initial_guess_root = np.array([6.196390627918603e-004, 5.583931899482344e-004, 8.069635262731931e-004, self.parameters.bone_volume.vascular_pore_fraction, self.parameters.bone_volume.bone_fraction])
@@ -16,9 +64,10 @@ class Scheiner_Model(Pivonka_Model):
         self.steady_state.OCa = None
 
     def bone_cell_population_model(self, x, t=None):
-        """ Calculates the system of ordinary differential equations for the bone cell population model.
-        This function is inherited by the specific models. If a function is not relevant in the specific model
-        (e.g. mechanical effects), it returns 0 (additive) or 1 (multiplicative) as neutral values.
+        """ Calculates the system of ordinary differential equations for the bone cell population model, vascular pore
+        volume fraction and bone volume fraction.
+        This function is overwritten from the source model to add vascular pore volume fraction and bone volume fraction,
+        that are necessary to solve in every time step.
 
         :param x: state variables of the model
         :type x: list
@@ -44,8 +93,10 @@ class Scheiner_Model(Pivonka_Model):
         return dxdt
 
     def solve_bone_cell_population_model(self, tspan):
-        """ Solve the bone cell population model using the ODE system over a given time interval.
+        """ Solve the bone cell population model and volume fractions using the ODE system over a given time interval.
         The initial conditions are set to the steady-state values.
+        This function is overwritten from the source model to add vascular pore volume fraction and bone volume fraction,
+        that are necessary to solve in every time step.
 
         :param tspan: time span for the ODE solver
         :type tspan: numpy.ndarray with start and end time
@@ -61,6 +112,7 @@ class Scheiner_Model(Pivonka_Model):
     def calculate_TGFb_concentration(self, OCa, t):
         """ Calculates the TGF-beta concentration based on the osteoclastic resorption, external injection and
         degradation rate.
+        Note: the resorption rate in this formula is included in the original model, but not coded.
 
         :param OCa: active osteoclast cell concentration
         :type OCa: float
@@ -74,7 +126,7 @@ class Scheiner_Model(Pivonka_Model):
 
     def calculate_RANKL_concentration(self, OBp, OBa, t):
         """ Calculates the RANKL concentration based on the effective carrying capacity, RANKL-RANK-OPG binding,
-        degradation rate, intrinsic RANKL production and external injection of RANKL.
+        degradation rate, intrinsic RANKL production and external injection of RANKL. An additional RANKL production is added due to mechanical effects.
 
         :param OBp: precursor osteoblast cell concentration
         :type OBp: float
@@ -95,11 +147,28 @@ class Scheiner_Model(Pivonka_Model):
         return RANKL
 
     def apply_mechanical_effects(self, OBp, OBa, OCa, vascular_pore_fraction, bone_volume_fraction, t):
+        """ Applies the mechanical effects on the precursor osteoblast cell concentration. The mechanical effects depend
+        on the strain energy density and proliferation rate of precursor osteoblasts. The latter is updated during the habitual loading phase.
+
+        :param OBp: precursor osteoblast cell concentration
+        :type OBp: float
+        :param OBa: active osteoblast cell concentration
+        :type OBa: float
+        :param OCa: active osteoclast cell concentration
+        :type OCa: float
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :param t: time variable
+        :type t: float
+        :return: rate of change of precursor osteoblast cell concentration due to mechanical effects
+        :rtype: float"""
         if t is None:
             # no mechanical effects in steady-state
             return 0
         else:
-            strain_effect_on_OBp = self.calculate_strain_effect_on_OBp(vascular_pore_fraction, bone_volume_fraction, t)
+            strain_effect_on_OBp = self.calculate_strain_effect_on_OBp(OBa, OCa, vascular_pore_fraction, bone_volume_fraction, t)
             if self.parameters.mechanics.update_OBp_proliferation_rate:
                 self.parameters.proliferation_rate.OBp = ((self.parameters.differentiation_rate.OBu *
                                                            self.parameters.mechanics.fraction_of_OBu_differentiation_rate *
@@ -108,14 +177,29 @@ class Scheiner_Model(Pivonka_Model):
             return (self.parameters.differentiation_rate.OBu*(-self.parameters.mechanics.fraction_of_OBu_differentiation_rate)*self.calculate_TGFb_activation_OBu(OCa, t) +
                     self.parameters.proliferation_rate.OBp * OBp * strain_effect_on_OBp)
 
-    def calculate_strain_effect_on_OBp(self, vascular_pore_fraction, bone_volume_fraction, t):
+    def calculate_strain_effect_on_OBp(self, OBa, OCa, vascular_pore_fraction, bone_volume_fraction, t):
+        """ Calculates the effect of strain on the proliferation rate of precursor osteoblasts. The effect depends on
+        the time and strain energy density.
+        For the steady-state, strain energy density is calculated once. During the load case scenario, the effect is
+        updated based on the relation of current strain energy density to steady-state strain energy density.
+        This relation also determines if RANKL production is set to 0 or computed depending on the strain energy density.
+        The OBp proliferation rate is not updated during the load cse scenario.
+
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :param t: time variable
+        :type t: float
+        :return: effect of strain on the proliferation rate of precursor osteoblasts
+        :rtype: float"""
         if t <= self.load_case.start_time:
             if self.parameters.mechanics.strain_energy_density_steady_state is None:
-                self.parameters.mechanics.strain_energy_density_steady_state = self.calculate_strain_energy_density(vascular_pore_fraction, bone_volume_fraction,t)
+                self.parameters.mechanics.strain_energy_density_steady_state = self.calculate_strain_energy_density(OBa, OCa, vascular_pore_fraction, bone_volume_fraction,t)
             return self.parameters.mechanics.strain_effect_on_OBp_steady_state
         else:
             self.parameters.mechanics.update_OBp_proliferation_rate = False
-            strain_energy_density = self.calculate_strain_energy_density(vascular_pore_fraction, bone_volume_fraction, t)
+            strain_energy_density = self.calculate_strain_energy_density(OBa, OCa,vascular_pore_fraction, bone_volume_fraction, t)
             if strain_energy_density > self.parameters.mechanics.strain_energy_density_steady_state:
                 strain_effect_on_OBp = self.parameters.mechanics.strain_effect_on_OBp_steady_state * (
                             1 + 1.25 * (strain_energy_density
@@ -127,6 +211,7 @@ class Scheiner_Model(Pivonka_Model):
                 else:
                     return strain_effect_on_OBp
             elif strain_energy_density < self.parameters.mechanics.strain_energy_density_steady_state:
+                # corresponds to Eq. (5) in the paper
                 self.parameters.mechanics.RANKL_production = (-10 ** 5 * (strain_energy_density -
                                                                           self.parameters.mechanics.strain_energy_density_steady_state)
                                                               / self.parameters.mechanics.strain_energy_density_steady_state)
@@ -135,19 +220,79 @@ class Scheiner_Model(Pivonka_Model):
                 self.parameters.mechanics.RANKL_production = 0
                 return self.parameters.mechanics.strain_effect_on_OBp_steady_state
 
-    def calculate_strain_energy_density(self, vascular_pore_fraction, bone_volume_fraction, t):
+    def calculate_strain_energy_density(self, OBa, OCa, vascular_pore_fraction, bone_volume_fraction, t):
+        """ Calculates the microscopic strain energy density, experienced by the extravascular bone matrix,
+        that drives the mechanoregulatory responses. It depends on the microscopic strain tensor (calculated in dependent
+        functions) and the stiffness tensor of the bone matrix (fixed parameter). The calculation corresponds to Eq. (15) in the paper.
+
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :param t: time variable
+        :type t: float
+        :return: microscopic strain energy density
+        :rtype: float"""
         microscopic_strain_tensor = self.calculate_microscopic_strain_tensor(vascular_pore_fraction, bone_volume_fraction, t)
         return (1 / 2) * (microscopic_strain_tensor.T @ self.parameters.mechanics.stiffness_tensor_bone_matrix @ microscopic_strain_tensor)
 
     def calculate_microscopic_strain_tensor(self, vascular_pore_fraction, bone_volume_fraction, t):
+        """ Calculates the microscopic strain tensor depending on the strain concentration tensors and the macroscopic
+        strain tensor. The calculation corresponds to Eq. (14) in the paper.
+
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :param t: time variable
+        :type t: float
+
+        :return: microscopic strain tensor
+        :rtype: numpy.ndarray"""
         [strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores] = self.calculate_strain_concentration_tensors(bone_volume_fraction)
-        return strain_concentration_tensor_bone_matrix @ self.calculate_macroscopic_strain_tensor(strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores, vascular_pore_fraction, bone_volume_fraction, t)
+        microscopic_strain_tensor = (strain_concentration_tensor_bone_matrix @
+                                     self.calculate_macroscopic_strain_tensor(strain_concentration_tensor_bone_matrix,
+                                                                              strain_concentration_tensor_vascular_pores,
+                                                                              vascular_pore_fraction, bone_volume_fraction, t))
+        return microscopic_strain_tensor
 
     def calculate_macroscopic_strain_tensor(self, strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores, vascular_pore_fraction, bone_volume_fraction, t):
+        """ Calculates the macroscopic strain tensor depending on the macroscopic stiffness tensor and the macroscopic
+        stress vector. It is needed to calculate the microscopic strain tensor. The calculation corresponds to Eq. (13)
+        in the paper.
+
+        :param strain_concentration_tensor_bone_matrix: strain concentration tensor for bone matrix
+        :type strain_concentration_tensor_bone_matrix: numpy.ndarray
+        :param strain_concentration_tensor_vascular_pores: strain concentration tensor for vascular pores
+        :type strain_concentration_tensor_vascular_pores: numpy.ndarray
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :param t: time variable
+        :type t: float
+
+        :return: macroscopic strain tensor
+        :rtype: numpy.ndarray"""
         macroscopic_stiffness_tensor = self.calculate_macroscopic_stiffness_tensor(strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores, vascular_pore_fraction, bone_volume_fraction)
         return np.linalg.inv(macroscopic_stiffness_tensor) @ self.calculate_macroscopic_stress_vector(t).T
 
     def calculate_macroscopic_stiffness_tensor(self, strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores, vascular_pore_fraction, bone_volume_fraction):
+        """ Calculates the macroscopic stiffness tensor depending on the strain concentration tensors, volume fractions
+        and stiffness tensors for the both vascular pores and bone matrix. The calculation corresponds to
+        Eq. (9) in the paper.
+
+        :param strain_concentration_tensor_bone_matrix: strain concentration tensor for bone matrix
+        :type strain_concentration_tensor_bone_matrix: numpy.ndarray
+        :param strain_concentration_tensor_vascular_pores: strain concentration tensor for vascular pores
+        :type strain_concentration_tensor_vascular_pores: numpy.ndarray
+        :param vascular_pore_fraction: vascular pore volume fraction
+        :type vascular_pore_fraction: float
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+
+        :return: macroscopic stiffness tensor
+        :rtype: numpy.ndarray"""
         macroscopic_stiffness_tensor = ((vascular_pore_fraction / 100) * self.parameters.mechanics.stiffness_tensor_vascular_pores
                                         @ strain_concentration_tensor_vascular_pores +
                                         (bone_volume_fraction / 100) * self.parameters.mechanics.stiffness_tensor_bone_matrix
@@ -155,6 +300,14 @@ class Scheiner_Model(Pivonka_Model):
         return macroscopic_stiffness_tensor
 
     def calculate_strain_concentration_tensors(self, bone_volume_fraction):
+        """ Calculates the strain concentration tensors for the bone matrix and vascular pores depending on the hill
+        tensor of the cylindrical inclusion, stiffness tensors for both phases and the current bone volume fraction.
+        The calculation corresponds to Eq. (10) in the paper.
+
+        :param bone_volume_fraction: bone volume fraction
+        :type bone_volume_fraction: float
+        :return: strain concentration tensor for bone matrix, strain concentration tensor for vascular pores
+        :rtype: numpy.ndarray, numpy.ndarray"""
         hill_tensor_cylindrical_inclusion = self.calculate_hill_tensor_cylindrical_inclusion()
         strain_concentration = np.linalg.inv((bone_volume_fraction / 100 *
                                 np.linalg.inv(self.parameters.mechanics.unit_tensor_as_matrix +
@@ -171,6 +324,15 @@ class Scheiner_Model(Pivonka_Model):
         return strain_concentration_tensor_bone_matrix, strain_concentration_tensor_vascular_pores
 
     def calculate_macroscopic_stress_vector(self, t):
+        """ Calculates the macroscopic stress vector depending on the load case scenario. The stress tensor is chosen
+        depending on the time point (habitual loading phase or load case scenario). The tensor is the rewritten in vector
+        form.
+
+        :param t: time variable
+        :type t: float
+
+        :return: macroscopic stress vector
+        :rtype: numpy.ndarray"""
         if t <= self.load_case.start_time or t >= self.load_case.end_time:
             stress_matrix = self.parameters.mechanics.stress_tensor_normal_loading
         else:
@@ -180,6 +342,12 @@ class Scheiner_Model(Pivonka_Model):
         return stress_vector
     
     def calculate_hill_tensor_cylindrical_inclusion(self):
+        """ Calculates the fourth order Hill tensor for a cylindrical inclusion embedded in the bone matrix with a
+        certain stiffness. The tensor is calculated by numerical integration using the stiffness tensor of the bone
+        matrix (rewritten from matrix notation). The result is stored in the parameters object to avoid recalculation.
+
+        :return: Hill tensor for a cylindrical inclusion
+        :rtype: numpy.ndarray"""
         if self.parameters.mechanics.hill_tensor_cylindrical_inclusion is not None:
             return self.parameters.mechanics.hill_tensor_cylindrical_inclusion
         else:
@@ -265,6 +433,10 @@ class Scheiner_Model(Pivonka_Model):
             return Pcyl
         
     def stiffness_matrix_to_tensor(self):
+        """ Reshapes the stiffness matrix of the bone matrix into a 3x3x3x3 tensor.
+
+        :return: stiffness tensor of the bone matrix
+        :rtype: numpy.ndarray"""
         # Reshape cbm into a 3x3x3x3 tensor
         stiffness_matrix = self.parameters.mechanics.stiffness_tensor_bone_matrix
         stiffness_tensor = np.zeros((3, 3, 3, 3))
