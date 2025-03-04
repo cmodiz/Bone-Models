@@ -20,6 +20,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 # Citation
 If this project helps your research, please cite it as:
+
 @software{bone_models,
   author = {Corinna Modiz},
   title = {Bone Models},
