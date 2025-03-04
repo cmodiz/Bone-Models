@@ -74,12 +74,12 @@ for Reference_Load_Case in Reference_Load_Cases:
     solutions[disease_name]['old_activation']['calibration_type_all'] = {'t': solution.t, 'y': solution.y, 'bone_volume_fraction': bone_volume_fraction, 'PTH_activation': model.load_case.PTH_elevation * model.calculate_PTH_activation_OB(None)}
     old_activation.append(model.calculate_PTH_activation_OB(t=50))
 old_activation.insert(0, model.calculate_PTH_activation_OB(t=0))
-# utils.plots.plot_bone_volume_fractions(solutions)
+plot_bone_volume_fractions(solutions)
 
 
-plot_PTH_activation_for_all_disease_states(cellular_responsiveness_calibration_all, integrated_activity_calibration_all, cellular_responsiveness_calibration_healthy, integrated_activity_calibration_healthy, old_activation)
+#plot_PTH_activation_for_all_disease_states(cellular_responsiveness_calibration_all, integrated_activity_calibration_all, cellular_responsiveness_calibration_healthy, integrated_activity_calibration_healthy, old_activation)
 # utils.plots.plot_bone_volume_fractions(solutions, Disease_Load_Cases, model_type='cellular_responsiveness', calibration_type='calibration_type_only_for_healthy_state')
 # utils.plots.plot_bone_volume_fractions(solutions, Disease_Load_Cases, model_type='integrated_activity', calibration_type='calibration_type_only_for_healthy_state')
 
-plot_all_model_options(solutions, 'Healthy_to_Hyperparathyroidism', 'Reference_Healthy_to_Hyperparathyroidism')
-plot_all_model_options(solutions, 'Healthy_to_Glucocorticoid_Induced_Osteoporosis', 'Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis')
+# plot_all_model_options(solutions, 'Healthy_to_Hyperparathyroidism', 'Reference_Healthy_to_Hyperparathyroidism')
+# plot_all_model_options(solutions, 'Healthy_to_Glucocorticoid_Induced_Osteoporosis', 'Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis')

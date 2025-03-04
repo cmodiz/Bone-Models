@@ -2,6 +2,7 @@ from bone_models.models import Scheiner_Model
 from bone_models.load_cases.scheiner_load_cases import Scheiner_Load_Case
 import matplotlib.pyplot as plt
 
+
 tspan = [0, 3000]
 load_case = Scheiner_Load_Case()
 model = Scheiner_Model(load_case)
