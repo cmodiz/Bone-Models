@@ -23,6 +23,6 @@ If this project helps your research, please cite it as:
 @software{bone_models,
   author = {Corinna Modiz},
   title = {Bone Models},
-  url = {https://github.com/username/project},
+  url = {https://github.com/cmodiz/Bone-Models},
   year = {2025},
 }
