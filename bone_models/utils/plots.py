@@ -98,8 +98,8 @@ def plot_bone_volume_fractions(solutions):
     handles, labels = axs[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='lower center', bbox_to_anchor=(0.5, -0.1), ncol=6, fontsize=18)
     plt.tight_layout()
-    fig.savefig(r'C:\Users\n12050199\OneDrive - Queensland University of Technology\Bone Model Code\bone_volume_fractions_calibration_all.pdf', bbox_inches='tight')
     plt.show()
+
 
 def plot_all_model_options(solutions, Disease_Case, Reference_Case):
     mpl.rcParams['font.size'] = 18
