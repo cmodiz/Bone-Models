@@ -372,9 +372,9 @@ class bone_volume:
     :type bone_fraction: float"""
     def __init__(self):
         # -> k_form
-        self.formation_rate = 0.4
+        self.formation_rate = 40
         # -> k_res
-        self.resorption_rate = 2
+        self.resorption_rate = 200
         # -> alpha
         self.stored_TGFb_content = 1.0 # proportionality constant expressing the TGF-β content stored in bone volume
         self.vascular_pore_fraction = 5  # fraction of vascular pores in bone volume in percentage
