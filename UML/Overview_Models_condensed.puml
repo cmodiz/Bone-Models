@@ -1,0 +1,472 @@
+@startuml Overview_Models_condensed_2025-08-01
+/'
+date= 01.08.2025
+author= A.Karweger
+'/
+package Examples{
+    class Lemaire_Example
+    class  Martinez_Reina_Example
+    class Martonova_Example
+    class  Modiz_Example
+    class  Pivonka_Example
+    class  Scheiner_Example
+
+}
+Examples --> Utils : uses
+Examples --> Load_Cases : uses
+Examples --> Models : uses
+Models --> Parameters : uses
+newpage
+class Utils{ 
+    + plot_bone_volume_fraction(time: ? , bone_volume_fractions: ?, title: string): void
+    + plot_bone_volume_fractions(solutions): void
+    + plot_bone_cell_concentrations(solutions, Disease_Case, Reference_Case, calibration_type): void
+    + plot_all_model_options(solutions, Disease_Case, Reference_Case): void
+    + plot_PTH_activation_for_all_diseases_states(cellular_responsiveness_calibration_all, integrated_activity_calibration_all, cellular_responsiveness_calibration_healthy, integrated_activity_calibration_healthy, old_activation): void
+
+
+}
+
+newpage
+package Models{
+    abstract class Base_Model{
+        +__init__(self): void
+        + bone_cell_population_model(self, x: list, t: float): list
+        + calculate_steady_state(self): numpy.ndarray
+        + solve_bone_cell_population_model(self, tspan: numpy.ndarray): scipy.integrate._ivp.ivp.OdeResult
+        + calculate_TGFb_activation_OBu(self, OCa: float, t: float): float
+        + calculate_TGFb_repression_OBp(self, OCa: float, t: float): float
+        + calculate_TGFb_activation_OCa(self, OCa: float, t: float): float
+        + calculate_RANKL_activation_OCp(self, OBp: float, OBa: float, t: float): float
+        + calculate_external_injection_OBp(self, t: float): float
+        + calculate_external_injection_OBa(self, t: float): float
+        + calculate_external_injection_OCa(self, t: float): float
+        + calculate_bone_volume_fraction_change(self, solution: scipy.integrate._ivp.ivp.OdeResult, steady_state: numpy.ndarray, initial_bone_volume_fraction: float): list
+        + apply_mechanical_effects(self, OBp: float, OBa: float, OCa: float, t: float): float
+        + apply_medication_effects_OBp(self): float
+        + apply_medication_effects_OBa(self): float
+
+
+    }
+    class Lemaire_Model{
+        + __init__(self, load_case: object): void
+        + calculate_TGFb_activation_OBu(self, OCa: float, t: float): float
+        + calculate_TGFb_repression_OBp(self, OCa: float, t: float): float
+        + calculate_TGFb_activation_OCa(self, OCa: float, t: float): float
+        + calculate_RANKL_activation_OCp(self, OBp: float, OBa: float, t: float): float
+        + calculate_PTH_activation_OB(self, t: float): float
+        + calculate_PTH_concentration(self, t: float): float
+        + calculate_OPG_concentration(self, OBp: float, t: float): float
+        + calculate_external_injection_OBp(self, t: float): float
+        + calculate_external_injection_OBa(self, t: float): float
+        + calculate_external_injection_OCa(self, t: float): float
+        + calculate_external_injection_PTH(self, t: float): float
+        + calculate_external_injection_OPG(self, t: float): float
+        + calculate_external_injection_RANKL(self, t: float): float
+        + calculate_bone_volume_fraction_change(self, solution: scipy.integrate._ivp.ivp.OdeResult, steady_state: numpy.ndarray, initial_bone_volume_fraction: float): list
+       
+
+    }
+    class Martinez_Reina_Model{
+        + __init__(self, load_case: object): void
+        + solve_bone_cell_population_model(self, tspan: numpy.ndarray): list of arrays
+        + calculate_strain_energy_density(self, OBa: float, OCa: float, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): float
+        + calculate_compliance_matrix(self, OBa: float, OCa: float, bone_volume_fraction: float, t: float): numpy.ndarray
+        + calculate_youngs_modulus(self, OBa: float, OCa: float, bone_volume_fraction: float, t: float): float
+        + calculate_ash_fraction(self, OBa: float, OCa: float, bone_volume_fraction: float, t: float): float
+        + calculate_average_mineral_content(self,  OBa: float, OCa: float, bone_volume_fraction: float, t: float): float
+        + update_ageing_queue(self, OBa: float, OCa: float, bone_volume_fraction: float, t: float): void 'abstract
+        + initialise_ageing_queue(self, OBa: float, OCa: float, bone_volume_fraction: float, t: float): void 'abstract
+        + calculate_mineralisation_law(self, t: float): float
+        + calculate_RANKL_concentration(self, OBp: float, OBa: float, t: float): float
+        + calculate_denosumab_concentration(self, t: float): float
+        + solve_for_denosumab_concentration(self): void 'abstract
+        + pharmacokinetics_pharmocodynamics_denosumab(self, t: float, concentration: float): float
+        + calculate_external_injection_RANKL(self, t: float): float
+
+    }
+    class Martonova_Model{
+        + __init__(self, load_case: object): void
+        + calculate_drug_PTH_pulse(self, load_case: Martonova_Load_Cases): void 'abstract
+        + PK_PD_model(self, t: float, x: list): list
+        + solve_for_activity(self): list
+        + calculate_cellular_activity(self): list
+        + calculate_receptor_complex_concentrations(self): list
+        + receptor_ligand_model(self, t: float, x: list): list
+        + calculate_PTH_concentration(self, t: float): float
+        + calculate_PTH_concentration_from_basal(self, t: float, glandular_pulse: int): float
+        + calculate_PTH_concentration_from_basal_and_injected(self, t: float, glandular_pulse: int): float
+        + calculate_activity_constants(self, cellular_activity: list, time: list): list
+        + calculate_activity_constants_for_basal(self, basal_activity: float, integrated_activity_for_step_increase: float, cellular_activity: list, time: list): list
+        + calculate_activity_constants_for_basal_and_injection(self, basal_activity: float, integrated_activity_for_step_increase: float, cellular_activity: list, time: list): list
+        + calculate_integrated_activity(self, chosen_activity_pulse: list, chosen_activity_pulse_time: list, basal_activity: float): float
+        + calculate_cellular_responsiveness(self, integrated_activity: float, integrated_activity_for_step_increase: float, period: float): float
+        + calculate_basal_activity(self): float
+        + calculate_integrated_activity_for_step_increase(self, stimulus_concentration: float): float
+        + calculate_difference_in_receptor_fraction(self, stimulus_concentration: float): float
+        + calculate_adaptation_time(self, stimulus_concentration: float): float
+        + calculate_difference_in_weights(self, stimulus_concentration: float): float
+        + calculate_contribution_of_receptor_desensitation(self, stimulus_concentration: float): float
+        + calculate_contribution_of_receptor_resensitisation(self, stimulus_concentration: float): float
+        + alculate_desensitised_receptors_after_adaptation(self, stimulus_concentration: float): float
+        + calculate_weight_active_receptor(self, stimulus_concentration: float): float
+        + calculate_weight_desensitised_receptor(self, stimulus_concentration: float): float
+    }
+    class Modiz_Model{
+       +  __init__(self, load_case: Modiz_Load_Cases , model_type: string, calibration_type: string):
+        + calculate_PTH_activation_OB(self, t: float): float
+        + identify_calibration_parameters(): print 'abstract
+        + objective_function(parameter: float, lemaire_activation_PTH: list, martonova_activation_PTH: list): float
+        + calculate_elevation_parameter(disease: Load_Case): float
+        + identify_calibration_parameters_only_for_healthy_state(): print
+        + analyse_effect_of_different_pulse_characteristics(plot: bool): void 'abstract
+        
+
+
+    }
+    class Reference_Lemaire_Model{
+         + __init__(self, load_case: object): void
+         + calculate_PTH_concentration(self, t: float): float
+       
+
+    }
+    class Pivonka_Model{
+        + __init__(self, load_case: object): void
+        + calculate_TGFb_activation_OBu(self, OCa: float, t: float): float
+        + calculate_TGFb_repression_OBp(self, OCa: float, t: float): float
+        + calculate_TGFb_activation_OCa(self, OCa: float, t: float): float
+        + calculate_TGFb_concentration(self, OCa: float, t: float): float
+        + calculate_external_injection_TGFb(self, t: float): float
+        + calculate_PTH_activation_OB(self, t: float): float
+        + calculate_PTH_repression_OB(self, t: float): float
+        + calculate_OPG_concentration(self, OBp: float, OBa: float, t: float): float
+        + calculate_effective_carrying_capacity_RANKL(self, OBp: float, OBa: float, t: float): float
+        + calculate_RANKL_concentration(self, OBp: float, OBa: float, t: float): float
+        + calculate_RANKL_RANK_concentration(self, OBp: float, OBa: float, t: float): float
+        + calculate_RANKL_activation_OCp(self, OBp: float, OBa: float, t: float): float
+
+    }
+    class Scheiner_Model{
+        + __init__(self, load_case: object): void
+        +  bone_cell_population_model(self, x: list, t: float): list
+        + solve_bone_cell_population_model(self, tspan: numpy.ndarray): scipy.integrate._ivp.ivp.OdeResult
+        + calculate_TGFb_concentration(self, OCa: float, t: float): float
+        + calculate_RANKL_concentration(self, OBp: float, OBa: float, t: float): float
+        + apply_mechanical_effects(self, OBp: float, OBa: float, OCa: float, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): float
+        + calculate_strain_effect_on_OBp(self, OBa: float, OCa: float, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): float
+        + calculate_strain_energy_density(self, OBa: float, OCa: float, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): float
+        + calculate_microscopic_strain_tensor(self, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): numpy.ndarray
+        + calculate_macroscopic_strain_tensor(self, strain_concentration_tensor_bone_matrix: numpy.ndarray, strain_concentration_tensor_vascular_pores: numpy.ndarray, vascular_pore_fraction: float, bone_volume_fraction: float, t: float): numpy.ndarray
+        + calculate_macroscopic_stiffness_tensor(self, strain_concentration_tensor_bone_matrix: numpy.ndarray, strain_concentration_tensor_vascular_pores: numpy.ndarray, vascular_pore_fraction: float, bone_volume_fraction: float): numpy.ndarray
+        + calculate_strain_concentration_tensors(self, bone_volume_fraction: float): numpy.ndarray
+        + calculate_macroscopic_stress_vector(self, t: float): numpy.ndarray
+        + calculate_hill_tensor_cylindrical_inclusion(self): numpy.ndarray
+        + stiffness_matrix_to_tensor(self): numpy.ndarray
+        
+    }
+
+    Base_Model    <|-- Lemaire_Model : inherits from
+    Lemaire_Model <|--  Pivonka_Model : inherits from
+    Pivonka_Model <|--  Scheiner_Model : inherits from
+    Scheiner_Model <|-- Martinez_Reina_Model : inherits from
+    Lemaire_Model <|--  Modiz_Model : inherits from
+    Lemaire_Model <|-- Reference_Lemaire_Model: inherits from
+    Modiz_Model --> Martonova_Model : uses
+
+
+}
+newpage
+
+package Load_Cases{
+    class Lemaire_Load_Cases{
+        Lemaire_Load_Case_1
+        Lemaire_Load_Case_2
+        Lemaire_Load_Case_3
+        Lemaire_Load_Case_4
+        Lemaire_Load_Case_5
+        Lemaire_Load_Case_6
+        Lemaire_Load_Case_7
+        Lemaire_Load_Case_8
+        Lemaire_Load_Case_9
+    }
+    class Martinez_Reina_Load_Cases{
+        Martinez_Reina_Load_Cases
+
+    }
+    class Martonova_Load_Cases{
+        injected_PTH_pulse
+        Basal_PTH_pulse
+        Martonova_Healthy
+        Martonova_Hyperparathyroidism
+        Martonova_Osteoporosis
+        Martonova_Postmenopausal_Osteoporosis
+        Martonova_Hypercalcemia
+        Martonova_Hypocalcemia
+        Martonova_Glucocorticoid_Induced_Osteoporosis
+        Martonova_Hyperparathyroidism_With_Drug
+
+    }
+    class Modiz_Load_Cases{
+        Lemaire_Load_Case
+        Modiz_Healthy_to_Hyperparathyroidism
+        Modiz_Healthy_to_Osteoporosis
+        Modiz_Healthy_to_Postmenopausal_Osteoporosis
+        Modiz_Healthy_to_Hypercalcemia
+        Modiz_Healthy_to_Hypocalcemia
+        Modiz_Healthy_to_Glucocorticoid_Induced_Osteoporosis
+        Modiz_Reference_Healthy_to_Hyperparathyroidism
+        Modiz_Reference_Healthy_to_Osteoporosis
+        Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis
+        Modiz_Reference_Healthy_to_Hypercalcemia
+        Modiz_Reference_Healthy_to_Hypocalcemia
+        Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis
+
+    }
+    Modiz_Load_Cases --> Martonova_Load_Cases : uses
+    Modiz_Load_Cases --> Lemaire_Load_Cases :uses
+    class Pivonka_Load_Cases{
+        Pivonka_Load_Case
+    }
+    class Scheiner_Load_Cases{
+        Scheiner_Load_Case
+    }
+
+}
+newpage
+
+package Parameters{
+    class differentiation_rate{
+        + __init__(self): void
+    }
+    class apoptosis_rate{
+        + __init__(self): void
+    }
+    class proliferation_rate{}
+    class activation_coefficient{
+        + __init__(self): void
+    }
+    class repression_coefficient{
+        + __init__(self): void
+    }
+    class external_dosage{
+          + __init__(self): void
+    }
+    class degradation_rate{
+        + __init__(self): void
+    }
+    class concentration{
+        + __init__(self): void
+    }
+    class binding_constant{
+        + __init__(self): void
+    }
+    class unbinding_constant{
+        + __init__(self): void
+    }
+    class production_rate{
+        + __init__(self): void
+    }
+    class correction_factor{  
+        + __init__(self): void 
+    }
+    class bone_volume{
+         + __init__(self): void
+    }
+    class mechanics{
+         + __init__(self): void
+    }
+    class calibration{
+         + __init__(self): void
+    }
+    class mineralisation {
+         + __init__(self): void
+    }
+    class denosumab{
+         + __init__(self): void
+    }
+    class PMO{
+         + __init__(self): void
+    }
+    class kinematics{
+         + __init__(self): void
+    }
+    class activity{
+         + __init__(self): void
+    }
+    class basal_PTH_pulse{
+         + __init__(self): void
+    }
+    class injected_PTH_pulse{
+         + __init__(self): void
+    }
+    class pharmacokinetics{
+         + __init__(self): void
+    }
+    class Calibration_Parameters{
+         + __init__(self): void
+    }
+    class Calibration_Parameters_Only_For_Healty_State{
+         + __init__(self): void
+    }
+
+
+
+    class Base_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + external_dosage ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + production_rate ()
+        + correction_factor ()
+        + bone_volume ()
+
+    }
+    class Lemaire_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + correction_factor ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + unbinding_constant ()
+        + production_rate ()
+        + bone_volume ()
+
+    }
+    class Lerebours_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + production_rate ()
+        + mechanics ()
+        + proliferation_rate ()
+        + bone_volume ()
+        + calibration ()
+
+    }   
+    class Martinez_Reina_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + production_rate ()
+        + mechanics ()
+        + mineralisation ()
+        + proliferation_rate ()
+        + bone_volume ()
+        + denosumab ()
+        + PMO ()
+    }
+    class Martonova_Parameters{
+        + __init__(self): void
+        + kinematics ()
+        + activity ()
+        + basal_PTH_pulse ()
+        + injected_PTH_pulse ()
+        + pharmacokinetics ()
+    }
+    class Modiz_Parameters{
+        + __init__(self): void
+        + Calibration_Parameters ()
+        + Calibration_Parameters_Only_For_Healty_State ()
+    }
+    class Pivonka_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + correction_factor ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + unbinding_constant ()
+        + production_rate ()
+        + bone_volume ()
+
+    }
+    class Scheiner_Parameters{
+        + __init__(self): void
+        + differentiation_rate ()
+        + apoptosis_rate ()
+        + activation_coefficient ()
+        + repression_coefficient ()
+        + degradation_rate ()
+        + concentration ()
+        + binding_constant ()
+        + production_rate ()
+        + mechanics ()
+        + proliferation_rate ()
+        + bone_volume ()
+    }
+
+
+
+
+    Base_Parameters --> differentiation_rate : uses
+    Base_Parameters --> apoptosis_rate
+    Base_Parameters --> activation_coefficient
+    Base_Parameters --> repression_coefficient
+    Base_Parameters --> external_dosage
+    Base_Parameters --> degradation_rate
+    Base_Parameters --> concentration
+    Base_Parameters --> binding_constant
+    Base_Parameters --> production_rate
+    Base_Parameters --> correction_factor
+    Base_Parameters --> bone_volume
+
+    Lerebours_Parameters --> Base_Parameters : uses
+    Lerebours_Parameters --> mechanics 
+    Lerebours_Parameters --> proliferation_rate 
+    Lerebours_Parameters --> calibration 
+
+    Martinez_Reina_Parameters --> Base_Parameters : uses
+    Martinez_Reina_Parameters --> mechanics
+    Martinez_Reina_Parameters --> mineralisation
+    Martinez_Reina_Parameters --> proliferation_rate
+    Martinez_Reina_Parameters --> denosumab
+    Martinez_Reina_Parameters --> PMO
+
+    Martonova_Parameters --> kinematics : uses
+    Martonova_Parameters --> activity 
+    Martonova_Parameters --> basal_PTH_pulse
+    Martonova_Parameters --> injected_PTH_pulse
+    Martonova_Parameters --> pharmacokinetics
+
+    Lemaire_Parameters <|-- Modiz_Parameters : inherits from
+    Modiz_Parameters   --> Calibration_Parameters : uses
+    Modiz_Parameters   --> Calibration_Parameters_Only_For_Healty_State
+
+    Lemaire_Parameters --> Base_Parameters : uses
+    Lemaire_Parameters --> unbinding_constant
+
+
+    Pivonka_Parameters --> Base_Parameters : uses
+    Pivonka_Parameters --> unbinding_constant
+
+
+    Scheiner_Parameters --> Base_Parameters : uses
+    Scheiner_Parameters --> mechanics
+    Scheiner_Parameters --> proliferation_rate
+
+
+}
+
+@enduml
