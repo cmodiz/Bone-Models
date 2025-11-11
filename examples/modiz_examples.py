@@ -9,14 +9,14 @@ from bone_models.utils.plots import *
 import pandas as pd
 import numpy as np
 
-analyse_effect_of_different_pulse_characteristics(plot=True)
+# analyse_effect_of_different_pulse_characteristics(plot=True)
 
 run_calibration = False
 if run_calibration:
     identify_calibration_parameters()
     identify_calibration_parameters_only_for_healthy_state()
 
-tspan = [0, 100]
+tspan = [0, 400]
 Disease_Load_Cases = [Modiz_Healthy_to_Hyperparathyroidism, Modiz_Healthy_to_Osteoporosis, Modiz_Healthy_to_Postmenopausal_Osteoporosis, Modiz_Healthy_to_Hypercalcemia, Modiz_Healthy_to_Hypocalcemia, Modiz_Healthy_to_Glucocorticoid_Induced_Osteoporosis]
 Reference_Load_Cases = [Modiz_Reference_Healthy_to_Hyperparathyroidism, Modiz_Reference_Healthy_to_Osteoporosis, Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis, Modiz_Reference_Healthy_to_Hypercalcemia, Modiz_Reference_Healthy_to_Hypocalcemia, Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis]
 solutions = {}
