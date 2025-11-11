@@ -8,9 +8,9 @@ version = "0.1.0"
 description = "A library for bone models including bone cell population, mineralization, and failure simulation models."
 authors = [{ name = "Corinna Modiz", email = "corinna.modiz@hdr.qut.edu.au" }]
 dependencies = [
-    "numpy==1.26.4",
-    "scipy==1.13.0",
-    "matplotlib==3.8.4"
+    "numpy",
+    "scipy",
+    "matplotlib"
 ]
 license = { text = "MIT" }
 readme = "README.md"
