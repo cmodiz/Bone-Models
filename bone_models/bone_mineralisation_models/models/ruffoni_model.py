@@ -527,7 +527,6 @@ class Ruffoni_Model:
         :return: Tuple of numpy arrays containing calcium values and corresponding inverse mineralization law values.
         :rtype: tuple of np.ndarray
         :raises ValueError: If the initial bone volume is less than or equal to zero."""
-        # Initialize inverse mineralization law from mineralization velocity
         calcium_values = self.mesh.cellCenters[0].value
         initial_bone_volume = self.calculate_bone_volume()
 

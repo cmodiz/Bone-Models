@@ -6,3 +6,4 @@ Code/
 **/__pycache__/
 docs/build/
 env/
+*.pdf
