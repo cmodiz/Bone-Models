@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from ..parameters.base_parameters import Base_Parameters
+from bone_models.bone_cell_population_models.parameters.base_parameters import Base_Parameters
 
 
 class Base_Model:

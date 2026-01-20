@@ -1,5 +1,5 @@
-from bone_models.models import Pivonka_Model
-from bone_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_1
+from bone_models.bone_cell_population_models.models import Pivonka_Model
+from bone_models.bone_cell_population_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_1
 import matplotlib.pyplot as plt
 
 tspan = [0, 140]

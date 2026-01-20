@@ -5,9 +5,7 @@ Bone Models
 .. toctree::
    :maxdepth: 2
 
-   bone_models.load_cases
-   bone_models.models
-   bone_models.parameters
-   bone_models.examples
-   bone_models.utils
+   bone_models.bone_cell_population_models
+   bone_models.bone_mineralisation_models
+   bone_models.bone_spatial_models
 

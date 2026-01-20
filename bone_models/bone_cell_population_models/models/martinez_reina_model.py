@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
-from ..parameters.martinez_reina_parameters import Martinez_Reina_Parameters
-from .scheiner_model import Scheiner_Model
+from bone_models.bone_cell_population_models.parameters.martinez_reina_parameters import Martinez_Reina_Parameters
+from bone_models.bone_cell_population_models.models.scheiner_model import Scheiner_Model
 
 
 class Martinez_Reina_Model(Scheiner_Model):

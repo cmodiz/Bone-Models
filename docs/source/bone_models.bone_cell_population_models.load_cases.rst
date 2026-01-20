@@ -12,7 +12,7 @@ This module contains the load cases for the bone cell population model by Lemair
 The load cases are used to define disease conditions phenomenologically using external injections of respective
 concentrations to either increase or decrease these concentrations.
 
-.. automodule:: bone_models.load_cases.lemaire_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.lemaire_load_cases
    :members:
    :undoc-members:
    :show-inheritance:
@@ -25,7 +25,7 @@ This module contains the load cases for the two-state receptor model by Martonov
 The load cases are used to define disease conditions based on changed pulsatile characteristics with or without drug
 administration.
 
-.. automodule:: bone_models.load_cases.martonova_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.martonova_load_cases
    :members:
    :undoc-members:
    :show-inheritance:
@@ -40,7 +40,7 @@ activity constants. For the bone cell population model by Lemaire et al., (2004)
 define disease states phenomenologically. In conclusion, the load cases contain both Lemaire and Martonova load cases.
 
 
-.. automodule:: bone_models.load_cases.modiz_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.modiz_load_cases
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,7 +53,7 @@ This module contains the load cases for the bone cell population model by Pivonk
 The load cases are used to define disease conditions phenomenologically using external injections of respective
 concentrations to either increase or decrease these concentrations.
 
-.. automodule:: bone_models.load_cases.pivonka_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.pivonka_load_cases
    :members:
    :undoc-members:
    :show-inheritance:
@@ -67,7 +67,7 @@ This module contains the load cases for the bone cell population model by Schein
 The load cases are used to define disuse or overuse conditions during a certain time interval.
 The load cases from Lemaire et al. or Pivonka et al., can also be included.
 
-.. automodule:: bone_models.load_cases.scheiner_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.scheiner_load_cases
    :members:
    :undoc-members:
    :show-inheritance:
@@ -80,7 +80,7 @@ This module contains the load cases for the bone cell population model by Martin
 The load cases are used to define disuse or overuse conditions, PMO and denosumab treatment during certain time intervals.
 The load cases from Lemaire et al. or Pivonka et al., can also be included.
 
-.. automodule:: bone_models.load_cases.martinez_reina_load_cases
+.. automodule:: bone_models.bone_cell_population_models.load_cases.martinez_reina_load_cases
    :members:
    :undoc-members:
    :show-inheritance:

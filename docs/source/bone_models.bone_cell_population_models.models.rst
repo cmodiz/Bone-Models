@@ -27,7 +27,7 @@ It includes a bone cell population model for trabecular bone with mechanical loa
 Base Model
 --------------------------------------
 
-.. automodule:: bone_models.models.base_model
+.. automodule:: bone_models.bone_cell_population_models.models.base_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -36,7 +36,7 @@ Base Model
 Lemaire Model
 -----------------------------------------
 
-.. automodule:: bone_models.models.lemaire_model
+.. automodule:: bone_models.bone_cell_population_models.models.lemaire_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -45,7 +45,7 @@ Lemaire Model
 Martonova Model
 -------------------------------------------
 
-.. automodule:: bone_models.models.martonova_model
+.. automodule:: bone_models.bone_cell_population_models.models.martonova_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -54,7 +54,7 @@ Martonova Model
 Modiz Model
 ---------------------------------------
 
-.. automodule:: bone_models.models.modiz_model
+.. automodule:: bone_models.bone_cell_population_models.models.modiz_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -63,7 +63,7 @@ Modiz Model
 Pivonka Model
 -----------------------------------------
 
-.. automodule:: bone_models.models.pivonka_model
+.. automodule:: bone_models.bone_cell_population_models.models.pivonka_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -72,7 +72,7 @@ Pivonka Model
 Scheiner Model
 ------------------------------------------
 
-.. automodule:: bone_models.models.scheiner_model
+.. automodule:: bone_models.bone_cell_population_models.models.scheiner_model
    :members:
    :undoc-members:
    :show-inheritance:
@@ -81,7 +81,7 @@ Scheiner Model
 Martinez-Reina Model
 ------------------------------------------
 
-.. automodule:: bone_models.models.martinez_reina_model
+.. automodule:: bone_models.bone_cell_population_models.models.martinez_reina_model
    :members:
    :undoc-members:
    :show-inheritance:

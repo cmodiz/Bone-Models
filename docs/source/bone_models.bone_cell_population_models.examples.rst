@@ -1,4 +1,4 @@
-.. _bone_models.examples:
+.. _bone_models.bone_cell_population_models.examples:
 Examples
 ========
 
@@ -13,9 +13,9 @@ Lemaire Model Example
 
         import matplotlib.pyplot as plt
         # import the Lemaire model
-        from bone_models.models import Lemaire_Model
+        from bone_models.bone_cell_population_models.models import Lemaire_Model
         # import the load case - in this case Lemaire_Load_Case_5 that defines a PTH injection scenario
-        from bone_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
+        from bone_models.bone_cell_population_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
 
         # Define the time span for the simulation
         tspan = [0, 140]
@@ -55,9 +55,9 @@ Pivonka Model Example
 
     import matplotlib.pyplot as plt
     # import the Pivonka model
-    from bone_models.models import Pivonka_Model
+    from bone_models.bone_cell_population_models.models import Pivonka_Model
     # import the load case - in this case Pivonka_Load_Case_1 that defines determines a PTH injection
-    from bone_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_1
+    from bone_models.bone_cell_population_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_1
 
     # Define the time span for the simulation
     tspan = [0, 1000]
@@ -94,9 +94,9 @@ Scheiner Model Example
 
 .. code-block:: python
 
-        from bone_models.models import Scheiner_Model
-        from bone_models.load_cases.scheiner_load_cases import Scheiner_Load_Case
-        import matplotlib.pyplot as plt
+        from bone_models.bone_cell_population_models.models import Scheiner_Model
+        from bone_models.bone_cell_population_models.load_cases.scheiner_load_cases import Scheiner_Load_Case
+        import matplotlib.bone_cell_population_models.pyplot as plt
 
         # Define the time span for the simulation
         tspan = [0, 3000]
@@ -146,8 +146,8 @@ Martinez-Reina Model Example
 
 .. code-block:: python
 
-        from bone_models.models import Martinez_Reina_Model
-        from bone_models.load_cases.martinez_reina_load_cases import Martinez_Reina_Load_Case
+        from bone_models.bone_cell_population_models.models import Martinez_Reina_Model
+        from bone_models.bone_cell_population_models.load_cases.martinez_reina_load_cases import Martinez_Reina_Load_Case
         import matplotlib.pyplot as plt
 
         # Define the time span for the simulation
@@ -188,9 +188,9 @@ Martonova Model Example
 
     import matplotlib.pyplot as plt
     # import the Martonova model
-    from bone_models.models import Martonova_Model
+    from bone_models.bone_cell_population_models.models import Martonova_Model
     # import the load case - in this case Martonova_Hyperparathyroidism that defines a hyperparathyroidism scenario
-    from bone_models.load_cases import Martonova_Hyperparathyroidism
+    from bone_models.bone_cell_population_models.load_cases import Martonova_Hyperparathyroidism
 
     # Initialize the load case - in this case the load case determines hyperparathyroidism pulse characteristics according to
     # Martonova et al. (2023)
@@ -224,9 +224,9 @@ Modiz Model Example
 
     import matplotlib.pyplot as plt
     # import the Pivonka model
-    from bone_models.models import Modiz_Model
+    from bone_models.bone_cell_population_models.models import Modiz_Model
     # import the load case - in this case Modiz_Healthy_to_Hyperparathyroidism that defines a healthy to hyperparathyroidism scenario
-    from bone_models.load_cases.modiz_load_cases import Modiz_Healthy_to_Hyperparathyroidism
+    from bone_models.bone_cell_population_models.load_cases.modiz_load_cases import Modiz_Healthy_to_Hyperparathyroidism
 
     # Define the time span for the simulation
     tspan = [0, 140]

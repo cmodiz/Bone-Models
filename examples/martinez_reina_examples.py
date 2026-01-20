@@ -1,5 +1,5 @@
-from bone_models.models import Martinez_Reina_Model
-from bone_models.load_cases.martinez_reina_load_cases import Martinez_Reina_Load_Case
+from bone_models.bone_cell_population_models.models import Martinez_Reina_Model
+from bone_models.bone_cell_population_models.load_cases.martinez_reina_load_cases import Martinez_Reina_Load_Case
 import matplotlib.pyplot as plt
 import numpy as np
 

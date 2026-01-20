@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
 
-from .lemaire_model import Lemaire_Model
-from .martonova_model import Martonova_Model
-from ..load_cases.martonova_load_cases import *
-from ..parameters.modiz_parameters import Modiz_Parameters
+from bone_models.bone_cell_population_models.models.lemaire_model import Lemaire_Model
+from bone_models.bone_cell_population_models.models.martonova_model import Martonova_Model
+from bone_models.bone_cell_population_models.load_cases.martonova_load_cases import *
+from bone_models.bone_cell_population_models.parameters.modiz_parameters import Modiz_Parameters
 import matplotlib as mpl
 
 
