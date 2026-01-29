@@ -17,12 +17,23 @@ This documentation is continuously updated as new models and features are integr
    :maxdepth: 2
    :caption: Contents:
 
-   bone_models
+   bone_models.bone_cell_population_models
+   bone_models.bone_mineralisation_models
+   bone_models.bone_spatial_models
 
 What's included?
 --------------
 
-This repository includes multiple computational models, each extending previous work to incorporate additional biological mechanisms:
+This repository includes multiple computational models, each extending previous work to incorporate additional biological mechanisms.
+The repository includes three categories of models according to their focus and operating scale:
+
+1. **Bone Cell Population Models**: These models simulate the dynamics of bone cell populations, including osteoblasts and osteoclasts, under various conditions.
+
+2. **Bone Mineralisation Models**: These models focus on the mineralization process of bone tissue, capturing the kinetics of mineral deposition and resorption.
+
+3. **Bone Spatial Models**: These models incorporate spatial aspects of bone remodeling in 2D and 3D, allowing for the study of bone architecture and its changes over time.
+
+Bone Cell Population Models include:
 
 - **Base Model** (:ref:`base_model`): A general framework for bone cell population dynamics.
 - **Lemaire Model** (:ref:`lemaire_model`): Implements the model by Lemaire et al. (2004), describing fundamental osteoblast-osteoclast interactions.
@@ -57,14 +68,14 @@ The models can be imported and instantiated with a specific load case as shown b
 .. code-block:: python
 
     # Import models
-    from bone_models.models import Lemaire_Model, Pivonka_Model
+    from bone_models.bone_cell_population_models.models import Lemaire_Model, Pivonka_Model
 
     # Optional: if needed, parameters can be imported via the following
-    from bone_models.parameters.lemaire_parameters import Lemaire_Parameters
+    from bone_models.bone_cell_population_models.parameters.lemaire_parameters import Lemaire_Parameters
 
     # Import load cases (for some models there is more than one load case available)
-    from bone_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
-    from bone_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_2
+    from bone_models.bone_cell_population_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
+    from bone_models.bone_cell_population_models.load_cases.pivonka_load_cases import Pivonka_Load_Case_2
 
     # Initialize a model instance with a load case
     lemaire_model = Lemaire_Model(Lemaire_Load_Case_3)
@@ -83,7 +94,7 @@ All bone cell population models are solved using the `solve_bone_cell_population
     pivonka_solution = pivonka_model.solve_bone_cell_population_model(tspan)
 
 After solving, the model contains the simulation results, including the evolution of cell populations over time.
-More detailed examples, including plots and analysis of the simulation results, can be found on the :ref:`bone_models.examples` page.
+More detailed examples, including plots and analysis of the simulation results, can be found on the pages :ref:`bone_models.bone_cell_population_models.examples`, :ref:`bone_models.bone_mineralisation_models.examples` or :ref:`bone_models.bone_spatial_models.examples` page.
 
 
 

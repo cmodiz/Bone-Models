@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from ..parameters.lemaire_parameters import Lemaire_Parameters
-from .base_model import Base_Model
+from bone_models.bone_cell_population_models.parameters.lemaire_parameters import Lemaire_Parameters
+from bone_models.bone_cell_population_models.models.base_model import Base_Model
 
 
 class Lemaire_Model(Base_Model):

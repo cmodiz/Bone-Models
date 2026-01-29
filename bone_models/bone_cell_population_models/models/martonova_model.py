@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..parameters.martonova_parameters import Martonova_Parameters
+from bone_models.bone_cell_population_models.parameters.martonova_parameters import Martonova_Parameters
 from scipy.integrate import solve_ivp
 
 

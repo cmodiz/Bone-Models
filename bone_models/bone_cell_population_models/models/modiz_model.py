@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
 
-from .lemaire_model import Lemaire_Model
-from .martonova_model import Martonova_Model
-from ..load_cases.martonova_load_cases import *
-from ..parameters.modiz_parameters import Modiz_Parameters
+from bone_models.bone_cell_population_models.models.lemaire_model import Lemaire_Model
+from bone_models.bone_cell_population_models.models.martonova_model import Martonova_Model
+from bone_models.bone_cell_population_models.load_cases.martonova_load_cases import *
+from bone_models.bone_cell_population_models.parameters.modiz_parameters import Modiz_Parameters
 import matplotlib as mpl
 
 
@@ -163,18 +163,35 @@ def identify_calibration_parameters():
         martonova_cellular_responsiveness.append(cellular_responsiveness)
 
     initial_guess = 0.1
+    lemaire_activation_PTH_array = np.array(lemaire_activation_PTH_list)
+    martonova_integrated_activity_array = np.array(martonova_integrated_activity)
+    martonova_cellular_responsiveness_array = np.array(martonova_cellular_responsiveness)
     # Perform optimization for cellular responsiveness
     result = minimize(objective_function, initial_guess,
                       args=(lemaire_activation_PTH_list, martonova_cellular_responsiveness,))
     calibration_parameter_cellular_responsiveness = result.x[0]
+    # Calculate relRMSE
+    rmse = (1 / len(lemaire_activation_PTH_array) * np.sum((lemaire_activation_PTH_array - calibration_parameter_cellular_responsiveness * martonova_cellular_responsiveness_array)**2))**(1/2)
+    rel_rmse = rmse/ (np.max(lemaire_activation_PTH_list)-np.min(lemaire_activation_PTH_list))
     print(result.message)
+    print(result)
     print("Calibration parameter for cellular responsiveness:", calibration_parameter_cellular_responsiveness)
+    print("Absolute squared error for cellular responsiveness:", np.abs(result.fun))
+    print("RMSE for cellular responsiveness:", rmse)
+    print("Relative RMSE for cellular responsiveness:", rel_rmse)
 
     result = minimize(objective_function, initial_guess,
                       args=(lemaire_activation_PTH_list, martonova_integrated_activity,))
     calibration_parameter_integrated_activity = result.x[0]
+    # Calculate relRMSE
+    rmse = (1 / len(lemaire_activation_PTH_array) * np.sum((lemaire_activation_PTH_array - calibration_parameter_integrated_activity * martonova_integrated_activity_array)**2))**(1/2)
+    rel_rmse = rmse / (np.max(lemaire_activation_PTH_list)-np.min(lemaire_activation_PTH_list))
     print(result.message)
+    print(result)
     print("Calibration parameter for integrated activity:", calibration_parameter_integrated_activity)
+    print("Absolute squared error for integrated activity:", np.abs(result.fun))
+    print("RMSE for integrated activity:", rmse)
+    print("Relative RMSE for integrated activity:", rel_rmse)
     pass
 
 
@@ -191,7 +208,7 @@ def objective_function(parameter, lemaire_activation_PTH, martonova_activation_P
 
     :return: error
     :rtype: float """
-    error = np.sum((lemaire_activation_PTH - parameter * martonova_activation_PTH) ** 2)
+    error = np.sum((lemaire_activation_PTH - parameter * martonova_activation_PTH)**2)
     return error
 
 

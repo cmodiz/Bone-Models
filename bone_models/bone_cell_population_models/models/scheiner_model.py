@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.integrate import solve_ivp
-from ..parameters.scheiner_parameters import Scheiner_Parameters
-from .pivonka_model import Pivonka_Model
+from bone_models.bone_cell_population_models.parameters.scheiner_parameters import Scheiner_Parameters
+from bone_models.bone_cell_population_models.models.pivonka_model import Pivonka_Model
 
 
 class Scheiner_Model(Pivonka_Model):

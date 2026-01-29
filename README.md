@@ -39,10 +39,13 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 If you use this project in your research, please cite it as follows:
 ```bibtex
 @software{bone_models,
-  author = {Corinna Modiz},
+  author = {Modiz, Corinna},
   title = {Bone Models},
-  url = {https://github.com/cmodiz/Bone-Models},
+  version = {1.0},
   year = {2025},
+  publisher = {Queensland University of Technology},
+  url = {https://github.com/cmodiz/Bone-Models},
+  doi = {10.25912/RDF_1742263438470}
 }
 ```
 

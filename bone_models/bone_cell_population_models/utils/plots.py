@@ -74,7 +74,7 @@ def plot_bone_volume_fractions(solutions):
     titles = [r'$k_R \cdot \alpha_R$', r'$k_T \cdot \alpha_T$', r'$\pi_{PTH}$']
     colors = ['#59a89c', '#0b81a2', '#7E4794', '#e25759', 'grey', '#9d2c00']
     labels = ['HPT', 'OP', 'PMO', 'HyperC', 'HypoC', 'GIO']
-    linestyles = ['solid', 'dashed', 'dashdot', 'dotted', (0, (3, 1, 1, 1)), (0, (5, 10))]
+    linestyles = ['dashdot', 'dotted', (0, (3, 1, 1, 1)), (0, (5, 10)), 'solid', 'dashed']
 
     for i, model_type in enumerate(model_types):
         for j, (disease_name, data) in enumerate(solutions.items()):
@@ -97,7 +97,8 @@ def plot_bone_volume_fractions(solutions):
     # Create a shared legend
     handles, labels = axs[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='lower center', bbox_to_anchor=(0.5, -0.1), ncol=6, fontsize=18)
-    plt.tight_layout()
+    fig.savefig('bone_volume_fractions.pdf', bbox_inches='tight')
+    # plt.tight_layout()
     plt.show()
 
 

@@ -15,7 +15,7 @@ class Lemaire_Load_Case:
         # -> I_L
         self.RANKL_injection = 0
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Healthy_to_Hyperparathyroidism:
@@ -121,7 +121,7 @@ class Modiz_Reference_Healthy_to_Hyperparathyroidism:
         self.RANKL_injection = 0
         self.PTH_elevation = 3.8782894736842097
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Reference_Healthy_to_Osteoporosis:
@@ -143,7 +143,7 @@ class Modiz_Reference_Healthy_to_Osteoporosis:
         self.RANKL_injection = 0
         self.PTH_elevation = 0.8252796052631578
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis:
@@ -165,7 +165,7 @@ class Modiz_Reference_Healthy_to_Postmenopausal_Osteoporosis:
         self.RANKL_injection = 0
         self.PTH_elevation = 0.9
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Reference_Healthy_to_Hypercalcemia:
@@ -187,7 +187,7 @@ class Modiz_Reference_Healthy_to_Hypercalcemia:
         self.RANKL_injection = 0
         self.PTH_elevation = 0.19098684210526315
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Reference_Healthy_to_Hypocalcemia:
@@ -209,7 +209,7 @@ class Modiz_Reference_Healthy_to_Hypocalcemia:
         self.RANKL_injection = 0
         self.PTH_elevation = 7.3500657894736845
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 
 class Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
@@ -231,6 +231,6 @@ class Modiz_Reference_Healthy_to_Glucocorticoid_Induced_Osteoporosis:
         self.RANKL_injection = 0
         self.PTH_elevation = 1.0565131578947367
         self.start_time = 20
-        self.end_time = 80
+        self.end_time = 385
 
 

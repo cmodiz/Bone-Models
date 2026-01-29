@@ -1,5 +1,5 @@
-from bone_models.models import Scheiner_Model
-from bone_models.load_cases.scheiner_load_cases import Scheiner_Load_Case
+from bone_models.bone_cell_population_models.models import Scheiner_Model
+from bone_models.bone_cell_population_models.load_cases.scheiner_load_cases import Scheiner_Load_Case
 import matplotlib.pyplot as plt
 
 

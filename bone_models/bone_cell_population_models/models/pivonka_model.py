@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.optimize import root
 from scipy.integrate import solve_ivp
-from ..parameters.pivonka_parameters import Pivonka_Parameters
-from .lemaire_model import Lemaire_Model
+from bone_models.bone_cell_population_models.parameters.pivonka_parameters import Pivonka_Parameters
+from bone_models.bone_cell_population_models.models.lemaire_model import Lemaire_Model
 
 
 class Pivonka_Model(Lemaire_Model):

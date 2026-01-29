@@ -1,5 +1,5 @@
-from bone_models.models import Martonova_Model
-from bone_models.load_cases import Martonova_Healthy, Martonova_Hyperparathyroidism_With_Drug
+from bone_models.bone_cell_population_models.models import Martonova_Model
+from bone_models.bone_cell_population_models.load_cases import Martonova_Healthy, Martonova_Hyperparathyroidism_With_Drug
 import matplotlib.pyplot as plt
 
 load_case = Martonova_Healthy()

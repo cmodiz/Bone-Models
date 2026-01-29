@@ -1,5 +1,5 @@
-from bone_models.models import Lemaire_Model
-from bone_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
+from bone_models.bone_cell_population_models.models import Lemaire_Model
+from bone_models.bone_cell_population_models.load_cases.lemaire_load_cases import Lemaire_Load_Case_3
 import matplotlib.pyplot as plt
 
 load_case = Lemaire_Load_Case_3()
