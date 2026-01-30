@@ -22,7 +22,7 @@ This documentation is continuously updated as new models and features are integr
    bone_models.bone_spatial_models
 
 What's included?
---------------
+----------------
 
 This repository includes multiple computational models, each extending previous work to incorporate additional biological mechanisms.
 The repository includes three categories of models according to their focus and operating scale:

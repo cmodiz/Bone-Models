@@ -1,1 +1,7 @@
 sphinx-rtd-theme
+numpy
+matplotlib
+pandas
+scipy
+fipy
+logging

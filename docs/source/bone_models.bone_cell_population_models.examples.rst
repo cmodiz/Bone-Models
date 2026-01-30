@@ -1,4 +1,5 @@
 .. _bone_models.bone_cell_population_models.examples:
+
 Examples
 ========
 
@@ -316,6 +317,7 @@ This will generate graphs showing the cellular activity, vascular fraction and b
    :alt: Example output of Lerebours Model
    :align: center
    :scale: 40%
+
 .. image:: _static/lerebours_volume_fractions.png
    :alt: Example output of Lerebours Model
    :align: center
