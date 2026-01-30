@@ -4,7 +4,7 @@ import numpy as np
 class Lerebours_Load_Case:
     def __init__(self):
         self.start_time = 50
-        self.end_time = 2050
+        self.end_time = 150
         self.stress_tensor = np.array([[0, 0, 0], [0, 0, 0], [0, 0, -25]]) * 10 ** -3   # [GPa]
         self.OBp_injection = 0
         self.OBa_injection = 0
