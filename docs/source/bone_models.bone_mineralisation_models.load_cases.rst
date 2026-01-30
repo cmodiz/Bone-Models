@@ -5,6 +5,7 @@ This module contains the load cases used for the bone mineralisation models. The
 or different loading conditions for a certain time interval.
 
 .. _ruffoni_load_cases:
+
 Ruffoni Load Cases
 ----------------------------------------------------
 

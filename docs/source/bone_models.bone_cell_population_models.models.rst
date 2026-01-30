@@ -22,8 +22,12 @@ The :ref:`martonova_model` calculates cellular activity constants using pulsatil
 The :ref:`martinez_reina_model` contains the bone cell population model based on the work of Martinez-Reina et al. (2019) and is a submodule of the Scheiner Model.
 It includes a bone cell population model for trabecular bone with mechanical loading, mineralisation, postmenopausal osteoporosis, and denosumab treatment.
 
+The :ref:`lerebours_model` contains the bone cell population model based on the work of Lerebours et al. (2015) and is a submodule of the Scheiner Model.
+It includes a bone cell population model with cell concentrations depending on the bone volume fraction and surface availability.
+It also includes a mechanical feedback mechanism based on microscopic strain energy density and bone site.
 
 .. _base_model:
+
 Base Model
 --------------------------------------
 
@@ -33,6 +37,7 @@ Base Model
    :show-inheritance:
 
 .. _lemaire_model:
+
 Lemaire Model
 -----------------------------------------
 
@@ -42,6 +47,7 @@ Lemaire Model
    :show-inheritance:
 
 .. _martonova_model:
+
 Martonova Model
 -------------------------------------------
 
@@ -51,6 +57,7 @@ Martonova Model
    :show-inheritance:
 
 .. _modiz_model:
+
 Modiz Model
 ---------------------------------------
 
@@ -60,6 +67,7 @@ Modiz Model
    :show-inheritance:
 
 .. _pivonka_model:
+
 Pivonka Model
 -----------------------------------------
 
@@ -69,6 +77,7 @@ Pivonka Model
    :show-inheritance:
 
 .. _scheiner_model:
+
 Scheiner Model
 ------------------------------------------
 
@@ -78,10 +87,21 @@ Scheiner Model
    :show-inheritance:
 
 .. _martinez_reina_model:
+
 Martinez-Reina Model
 ------------------------------------------
 
 .. automodule:: bone_models.bone_cell_population_models.models.martinez_reina_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. _lerebours_model:
+
+Lerebours Model
+------------------------------------------
+
+.. automodule:: bone_models.bone_cell_population_models.models.lerebours_model
    :members:
    :undoc-members:
    :show-inheritance:

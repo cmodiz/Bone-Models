@@ -42,6 +42,7 @@ Bone Cell Population Models include:
 - **Martinez-Reina Model** (:ref:`martinez_reina_model`): Expands the Scheiner Model to account for trabecular bone disuse, overuse, PMO and denosumab treatment scenarios (Martinez-Reina et al., 2019).
 - **Martonova Model** (:ref:`martonova_model`): Computes cellular activity constants based on pulsatile PTH (Martonova et al., 2023).
 - **Modiz Model** (:ref:`modiz_model`): Introduces receptor dynamics and pulsatile PTH effects (Modiz et al., 2025), building upon the Lemaire Model and the Martonova Model.
+- **Lerebours Model** (:ref:`lerebours_model`): Integrates bone volume fraction and mechanical feedback into the Scheiner Model (Lerebours et al., 2015).
 
 Each model is accompanied by a set of **load cases** that define specific disease states or disuse/ overuse scenarios by altering the
 model parameters. The model **parameters** are named in a consistent manner across all models, allowing for easy comparison and calibration.

@@ -30,6 +30,7 @@ You can see minor changes due to numerical effects.
    :alt: Example BMDD evolution over time of Ruffoni model initialized with a reference BMDD
    :align: center
    :scale: 40%
+
 .. image:: _static/ruffoni_model_BMDD_start_minlaw.png
    :alt: Example mineralization law derived from reference BMDD
    :align: center
@@ -57,6 +58,7 @@ You can see minor changes due to numerical effects.
    :alt: Example BMDD evolution over time of Ruffoni model initialized with a reference mineralization law
    :align: center
    :scale: 40%
+
 .. image:: _static/ruffoni_model_minlaw_start_minlaw.png
    :alt: Reference mineralization law
    :align: center

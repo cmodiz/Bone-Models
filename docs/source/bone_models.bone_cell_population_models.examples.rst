@@ -267,3 +267,56 @@ This will generate graphs showing the bone cell dynamics and the bone volume fra
 .. image:: _static/modiz_model_results.png
    :alt: Example output of Modiz Model
    :align: center
+
+Lerebours Model Example
+----------------------------------------------------
+
+.. code-block:: python
+
+    from bone_models.bone_cell_population_models.models.lerebours_model import Lerebours_Model
+    from bone_models.bone_cell_population_models.load_cases.lerebours_load_cases import Lerebours_Load_Case
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # define the time span for the simulation
+    tspan = [0, 200]
+    # initialise the load case (underloading scenario from day 50 to day 150)
+    load_case = Lerebours_Load_Case()
+    # define porosity between 0 and 1
+    porosity = 0.05
+    # initialise the model instance
+    model = Lerebours_Model(load_case, porosity)
+    # solve the model for the given porosity and time span
+    solution = model.solve_bone_cell_population_model(tspan, porosity)
+    # time solution contains OBp, OBa, OCp, OCa, vascular porosity, bone volume fraction
+
+    # 1. Bone Cell Population Dynamics
+    plt.figure(figsize=(10, 6))
+    plt.plot(solution.t, solution.y[0], label='OBp')
+    plt.plot(solution.t, solution.y[1], label='OBa')
+    plt.plot(solution.t, solution.y[3], label='OCa')
+    plt.xlabel('Time [days]')
+    plt.ylabel('Cell Concentrations [pM]')
+    plt.title(f'Bone Cell Population Dynamics (Porosity={porosity})')
+    # 2. Vascular Porosity and Bone Volume Fraction
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+    ax1.plot(solution.t, solution.y[4], label='Vascular Porosity', color='tab:blue')
+    ax1.set_xlabel('Time [days]')
+    ax1.set_ylabel('Vascular Porosity', color='tab:blue')
+    ax1.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    ax2 = ax1.twinx()
+    ax2.plot(solution.t, solution.y[5], label='Bone Volume Fraction', color='tab:orange')
+    ax2.set_ylabel('Bone Volume Fraction', color='tab:orange')
+    ax2.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    plt.title(f'Vascular and Bone Volume Fractions (Porosity={porosity})')
+
+This will generate graphs showing the cellular activity, vascular fraction and bone volume fraction over time.
+
+.. image:: _static/lerebours_cells.png
+   :alt: Example output of Lerebours Model
+   :align: center
+   :scale: 40%
+.. image:: _static/lerebours_volume_fractions.png
+   :alt: Example output of Lerebours Model
+   :align: center
+   :scale: 40%
