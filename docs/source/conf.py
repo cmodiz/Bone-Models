@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../bone_models'))
+sys.path.insert(0, os.path.abspath('../../'))
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -19,7 +19,7 @@ release = '1.0.0'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.viewcode']
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.mathjax', "sphinx.ext.intersphinx", "sphinx.ext.extlinks"]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', "sphinx.ext.viewcode", 'sphinx.ext.napoleon', 'sphinx.ext.mathjax', "sphinx.ext.intersphinx", "sphinx.ext.extlinks"]
 extlinks = {
     'doi': ('https://doi.org/%s', 'DOI: %s')
 }

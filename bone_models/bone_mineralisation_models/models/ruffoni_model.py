@@ -16,10 +16,10 @@ log.addHandler(console)
 
 class Ruffoni_Model:
     r"""
-    Implements the Ruffoni et al. (2007) model for Bone Mineralization Density Distribution (BMDD)
-    using FiPy's Finite Volume Method for robust PDE solving.
+    Implements the Ruffoni et al. (2007) model for Bone Mineralization Density Distribution (BMDD) using FiPy's Finite Volume Method for robust PDE solving.
 
     .. note::
+
        **Source Publication**:
        Ruffoni D., Fratzl P., Roschger P., Klaushofer K., Weinkamer R. (2007).
        *The bone mineralization density distribution as a fingerprint of the mineralization process.*

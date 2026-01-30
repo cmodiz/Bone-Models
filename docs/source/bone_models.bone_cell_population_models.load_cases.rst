@@ -5,6 +5,7 @@ This module contains the load cases used in the bone models. The load cases are 
 or different loading conditions for a certain time interval.
 
 .. _lemaire_load_cases:
+
 Lemaire Load Cases
 ----------------------------------------------------
 
@@ -18,6 +19,7 @@ concentrations to either increase or decrease these concentrations.
    :show-inheritance:
 
 .. _martonova_load_cases:
+
 Martonova Load Cases
 ------------------------------------------------------
 
@@ -31,6 +33,7 @@ administration.
    :show-inheritance:
 
 .. _modiz_load_cases:
+
 Modiz Load Cases
 --------------------------------------------------
 
@@ -46,6 +49,7 @@ define disease states phenomenologically. In conclusion, the load cases contain 
    :show-inheritance:
 
 .. _pivonka_load_cases:
+
 Pivonka Load Cases
 ----------------------------------------------------
 
@@ -60,6 +64,7 @@ concentrations to either increase or decrease these concentrations.
 
 
 .. _scheiner_load_cases:
+
 Scheiner Load Cases
 ----------------------------------------------------
 
@@ -73,6 +78,7 @@ The load cases from Lemaire et al. or Pivonka et al., can also be included.
    :show-inheritance:
 
 .. _martinez_reina_load_cases:
+
 Martinez-Reina Load Cases
 ----------------------------------------------------
 
