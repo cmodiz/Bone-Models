@@ -109,8 +109,7 @@ class Ruffoni_Model:
             raise ValueError("Invalid start parameter. Use 'BMDD' or 'mineralization law'.")
 
     def solve_for_BMDD(self, save_interval=0.1):
-        """
-        Solve the time evolution of the Bone Mineralization Density Distribution (BMDD)
+        """ Solve the time evolution of the Bone Mineralization Density Distribution (BMDD)
         using FiPy's Finite Volume Method (FVM).
 
         The model is solved iteratively in time, updating velocity, resorption, and formation
@@ -119,7 +118,7 @@ class Ruffoni_Model:
 
         *Boundary conditions:*
         - Left boundary (low calcium): formation flux, given by the formed bone volume divided by
-          the mineralization velocity at zero calcium.
+        the mineralization velocity at zero calcium.
         - Right boundary (high calcium): absorbing boundary (no-flux condition).
 
         The PDE is solved using FiPy’s ``sweep`` method with adaptive time-stepping controlled by
@@ -261,8 +260,7 @@ class Ruffoni_Model:
         pass
 
     def initialize_BMDD_from_mineralization_law(self, plot=False):
-        r"""
-        Initialize the Bone Mineralization Density Distribution (BMDD) from a prescribed
+        r""" Initialize the Bone Mineralization Density Distribution (BMDD) from a prescribed
         mineralization law. This method is called when the model is initialized with
         ``start='mineralization law'``.
 
@@ -285,12 +283,12 @@ class Ruffoni_Model:
 
         **Details:**
         - The BMDD is initialized as:
-          :math:`\rho(C) = \frac{f(0)}{v_m(C)} \exp\left(-\int_{C_{min}}^{C} \frac{r(C')}{v_m(C')} \, dC'\right)`
-          where:
+        :math:`\rho(C) = \frac{f(0)}{v_m(C)} \exp\left(-\int_{C_{min}}^{C} \frac{r(C')}{v_m(C')} \, dC'\right)`
+        where:
 
-          - :math:`f(0)` is the formed bone volume at steady state,
-          - :math:`r(C)` is the resorption rate,
-          - :math:`v_m(C)` is the mineralization velocity.
+        - :math:`f(0)` is the formed bone volume at steady state,
+        - :math:`r(C)` is the resorption rate,
+        - :math:`v_m(C)` is the mineralization velocity.
 
         - The integral is evaluated numerically using adaptive quadrature.
         - The smoothed BMDD is interpolated with a monotone cubic spline
@@ -364,12 +362,12 @@ class Ruffoni_Model:
 
         **Details:**
         - The reference BMDD is computed as:
-          :math:`\rho(C) = A \cdot \text{SkewNorm}(C; a, \mu, \sigma)`
-          where:
+        :math:`\rho(C) = A \cdot \text{SkewNorm}(C; a, \mu, \sigma)`
+        where:
 
-          - :math:`a` is the skewness parameter (negative for left-skew, positive for right-skew),
-          - :math:`\mu` is the peak calcium content (from Roschger reference data),
-          - :math:`\sigma` is the mean standard deviation of lower and upper percentiles.
+        - :math:`a` is the skewness parameter (negative for left-skew, positive for right-skew),
+        - :math:`\mu` is the peak calcium content (from Roschger reference data),
+        - :math:`\sigma` is the mean standard deviation of lower and upper percentiles.
 
         - The resulting distribution is normalized such that its integral equals 1 and
           scaled by a constant factor (25) to match the reference BMDD peak.
