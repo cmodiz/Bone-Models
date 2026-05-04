@@ -6,6 +6,7 @@ Bone Cell Population Models
    :maxdepth: 2
 
    bone_models.bone_cell_population_models.models
+   bone_models.bone_cell_population_models.models.legacy
    bone_models.bone_cell_population_models.parameters
    bone_models.bone_cell_population_models.load_cases
    bone_models.bone_cell_population_models.utils
