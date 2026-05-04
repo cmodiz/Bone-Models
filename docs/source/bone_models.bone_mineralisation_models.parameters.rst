@@ -17,3 +17,15 @@ In each parameter class, the parameter names are matched with the corresponding 
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. _mineralisation_modiz_parameters:
+
+Modiz Parameters
+-----------------------------------------------
+This module contains the parameters for the bone mineralisation model of Modiz et al.
+In each parameter class, the parameter names are matched with the corresponding model nomenclature and units.
+
+.. automodule:: bone_models.bone_mineralisation_models.parameters.modiz_parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:
