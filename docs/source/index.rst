@@ -41,8 +41,16 @@ Bone Cell Population Models include:
 - **Scheiner Model** (:ref:`scheiner_model`): Further expands the Pivonka Model to include mechanical loading effects (Scheiner et al., 2013).
 - **Martinez-Reina Model** (:ref:`martinez_reina_model`): Expands the Scheiner Model to account for trabecular bone disuse, overuse, PMO and denosumab treatment scenarios (Martinez-Reina et al., 2019).
 - **Martonova Model** (:ref:`martonova_model`): Computes cellular activity constants based on pulsatile PTH (Martonova et al., 2023).
-- **Modiz Model** (:ref:`modiz_model`): Introduces receptor dynamics and pulsatile PTH effects (Modiz et al., 2025), building upon the Lemaire Model and the Martonova Model.
-- **Lerebours Model** (:ref:`lerebours_model`): Integrates bone volume fraction and mechanical feedback into the Scheiner Model (Lerebours et al., 2015).
+- **Modiz Model** (:ref:`cell_modiz_model`): Introduces receptor dynamics and pulsatile PTH effects (Modiz et al., 2025), building upon the Lemaire Model and the Martonova Model.
+- **Lerebours Model** (:ref:`cell_lerebours_model`): Integrates bone volume fraction and mechanical feedback into the Scheiner Model (Lerebours et al., 2015).
+
+Bone Mineralisation Models include:
+
+- **Ruffoni Model** (:ref:`ruffoni_model`): Implements the model by Ruffoni et al. (2008,2009) describing Bone Mineral Density Distribution (BMDD) using a PDE.
+- **Modiz Model** (:ref:`mineralisation_modiz_model`): Implements the model by Modiz et al. (2026), analysing mineralisation kinetics depending on porosity.
+
+Bone_Spatial Models include:
+- **Lerebours Spatial Model** (:ref:`spatial_lerebours_model`): A spatial extension of the Lerebours Cell Population Model to simulate bone remodeling and loading on a 2D femoral cross section.
 
 Each model is accompanied by a set of **load cases** that define specific disease states or disuse/ overuse scenarios by altering the
 model parameters. The model **parameters** are named in a consistent manner across all models, allowing for easy comparison and calibration.
@@ -93,6 +101,7 @@ All bone cell population models are solved using the `solve_bone_cell_population
     # Solve the model
     lemaire_solution = lemaire_model.solve_bone_cell_population_model(tspan)
     pivonka_solution = pivonka_model.solve_bone_cell_population_model(tspan)
+
 
 After solving, the model contains the simulation results, including the evolution of cell populations over time.
 More detailed examples, including plots and analysis of the simulation results, can be found on the pages :ref:`bone_models.bone_cell_population_models.examples`, :ref:`bone_models.bone_mineralisation_models.examples` or :ref:`bone_models.bone_spatial_models.examples` page.
