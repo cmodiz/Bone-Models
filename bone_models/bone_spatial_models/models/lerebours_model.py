@@ -14,12 +14,13 @@ class Lerebours_Model:
     macroscopic mechanical loading with local Bone Cell Population Models (BCPM).
 
     .. note::
-       **Source Publication**:
-       Lerebours, C., Buenzli, P. R., Scheiner, S., & Pivonka, P. (2016).
-       *A multiscale mechanobiological model of bone remodeling predicts
-       site-specific bone loss in the femur during osteoporosis and mechanical disuse.*
-       Biomechanics and Modeling in Mechanobiology, 15(1), 43-67.
-       :doi:`10.1007/s10237-015-0705-x`
+        **Source Publication**:
+        Lerebours, C., Buenzli, P. R., Scheiner, S., & Pivonka, P. (2016).
+        *A multiscale mechanobiological model of bone remodeling predicts
+        site-specific bone loss in the femur during osteoporosis and mechanical disuse.*
+        Biomechanics and Modeling in Mechanobiology, 15(1), 43-67.
+        :doi:`10.1007/s10237-015-0705-x`
+       
     """
     def __init__(self, load_case, duration_of_simulation=3):
         """
