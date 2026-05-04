@@ -13,7 +13,7 @@ The :ref:`scheiner_model` contains the bone cell population model based on the w
 It adds the effect of mechanical loading on the bone cell population model using a homogenisation framework to calculate
 microscopic strain energy density from macroscopic stress tensors.
 
-The :ref:`modiz_model` contains the bone cell population model based on the work of Modiz et al. (2025) and is a submodule of the Lemaire Model.
+The :ref:`cell_modiz_model` contains the bone cell population model based on the work of Modiz et al. (2025) and is a submodule of the Lemaire Model.
 It changes the activation of osteoblasts by parathyroid hormone (PTH) to include details about pulse characteristics and two states of the receptor.
 The extension is based on the :ref:`martonova_model`.
 
@@ -22,7 +22,7 @@ The :ref:`martonova_model` calculates cellular activity constants using pulsatil
 The :ref:`martinez_reina_model` contains the bone cell population model based on the work of Martinez-Reina et al. (2019) and is a submodule of the Scheiner Model.
 It includes a bone cell population model for trabecular bone with mechanical loading, mineralisation, postmenopausal osteoporosis, and denosumab treatment.
 
-The :ref:`lerebours_model` contains the bone cell population model based on the work of Lerebours et al. (2015) and is a submodule of the Scheiner Model.
+The :ref:`cell_lerebours_model` contains the bone cell population model based on the work of Lerebours et al. (2015) and is a submodule of the Scheiner Model.
 It includes a bone cell population model with cell concentrations depending on the bone volume fraction and surface availability.
 It also includes a mechanical feedback mechanism based on microscopic strain energy density and bone site.
 
@@ -56,7 +56,7 @@ Martonova Model
    :undoc-members:
    :show-inheritance:
 
-.. _modiz_model:
+.. _cell_modiz_model:
 
 Modiz Model
 ---------------------------------------
@@ -96,7 +96,7 @@ Martinez-Reina Model
    :undoc-members:
    :show-inheritance:
 
-.. _lerebours_model:
+.. _cell_lerebours_model:
 
 Lerebours Model
 ------------------------------------------

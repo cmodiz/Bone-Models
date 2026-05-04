@@ -43,7 +43,7 @@ In each parameter class, the parameter names are matched with the corresponding 
    :undoc-members:
    :show-inheritance:
 
-.. _modiz_parameters:
+.. _cell_modiz_parameters:
 
 Modiz Parameters
 ------------------------------------------------
@@ -91,7 +91,7 @@ In each parameter class, the parameter names are matched with the corresponding 
    :undoc-members:
    :show-inheritance:
 
-.. _lerebours_parameters:
+.. _cell_lerebours_parameters:
 
 Lerebours Parameters
 ---------------------------------------------------

@@ -32,7 +32,7 @@ administration.
    :undoc-members:
    :show-inheritance:
 
-.. _modiz_load_cases:
+.. _cell_modiz_load_cases:
 
 Modiz Load Cases
 --------------------------------------------------
