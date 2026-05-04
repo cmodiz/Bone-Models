@@ -20,7 +20,7 @@ class Lerebours_Model:
         site-specific bone loss in the femur during osteoporosis and mechanical disuse.*
         Biomechanics and Modeling in Mechanobiology, 15(1), 43-67.
         :doi:`10.1007/s10237-015-0705-x`
-       
+
     """
     def __init__(self, load_case, duration_of_simulation=3):
         """
