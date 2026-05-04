@@ -8,4 +8,4 @@ from .martinez_reina_parameters import Martinez_Reina_Parameters
 from .lerebours_parameters import Lerebours_Parameters
 from . import legacy
 
-__all__ = ['Base_Parameters', 'Lemaire_Parameters', 'Pivonka_Parameters', 'Modiz_Parameters', 'Martonova_Parameters', 'Scheiner_Parameters', 'Martinez_Reina_Parametersbone_mb', 'Lerebours_Parameters', 'legacy']
+__all__ = ['Base_Parameters', 'Lemaire_Parameters', 'Pivonka_Parameters', 'Modiz_Parameters', 'Martonova_Parameters', 'Scheiner_Parameters', 'Martinez_Reina_Parameters', 'Lerebours_Parameters', 'legacy']
