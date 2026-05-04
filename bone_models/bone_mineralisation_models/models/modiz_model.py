@@ -74,29 +74,29 @@ class Modiz_Model(Martinez_Reina_Model):
 
     def update_ageing_queue(self, OBa, OCa, bone_volume_fraction):
         """
-            Update the bone ageing queue for a single time step.
-            This method shifts the queue applies resorption and formation rates. The update follows these steps:
+        Update the bone ageing queue for a single time step.
+        This method shifts the queue applies resorption and formation rates. The update follows these steps:
 
-            1. **Shift & Formation**: All bone patches age by one day; new bone
-               (formed fraction) is added to the start of the queue.
-            2. **Resorption**: Existing bone volume is reduced across the queue
-               based on the active osteoclast (OCa) concentration.
-            3. **Hypothesis Handling**:
-                - If ``hypothesis 2.1``: Resorption rate is biased by age.
-                - If ``hypothesis 2.2``: Resorption rate is scaled with the bone volume fraction.
-                - Otherwise: Resorption follows standard lag-time rules.
-            4. **Mass Balance**: The final queue element acts as a residual to ensure
-               the total sum matches the current ``bone_volume_fraction``.
+        1. **Shift & Formation**: All bone patches age by one day; new bone
+           (formed fraction) is added to the start of the queue.
+        2. **Resorption**: Existing bone volume is reduced across the queue
+           based on the active osteoclast (OCa) concentration.
+        3. **Hypothesis Handling**:
+            - If ``hypothesis 2.1``: Resorption rate is biased by age.
+            - If ``hypothesis 2.2``: Resorption rate is scaled with the bone volume fraction.
+            - Otherwise: Resorption follows standard lag-time rules.
+        4. **Mass Balance**: The final queue element acts as a residual to ensure
+           the total sum matches the current ``bone_volume_fraction``.
 
-            :param OBa: Active osteoblast cell concentration.
-            :type OBa: float
-            :param OCa: Active osteoclast cell concentration.
-            :type OCa: float
-            :param bone_volume_fraction: Current fraction of bone volume (0.0 to 1.0).
-            :type bone_volume_fraction: float
+        :param OBa: Active osteoblast cell concentration.
+        :type OBa: float
+        :param OCa: Active osteoclast cell concentration.
+        :type OCa: float
+        :param bone_volume_fraction: Current fraction of bone volume (0.0 to 1.0).
+        :type bone_volume_fraction: float
 
-            :notes: This method modifies ``self.ageing_queue`` in-place.
-            """
+        :notes: This method modifies ``self.ageing_queue`` in-place.
+        """
         resorbed_bone_fraction = OCa * self.parameters.bone_volume.resorption_rate / 100
         formed_bone_fraction = OBa * self.parameters.bone_volume.formation_rate / 100
         if self.hypothesis == 2.2:
@@ -283,7 +283,7 @@ class Modiz_Model(Martinez_Reina_Model):
         specific_surface_values = self.lerebours_model.specific_surface(bone_volume_fraction)
         turnover_values = fitted_scaling_parameter * specific_surface_values
 
-        fig, ax1 = plt.subplots(figsize=figsize_single)
+        fig, ax1 = plt.subplots()
         line1, = ax1.plot(bone_volume_fraction, specific_surface_values, label=r'$S_\lambda$', linestyle='dashed',
                           # custom dash
                           color='#4a4a4aff', zorder=3, linewidth=1.7, alpha=0.6)
