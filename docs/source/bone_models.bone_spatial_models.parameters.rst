@@ -6,7 +6,7 @@ governing its behavior, interaction dynamics, and biological processes.
 For the bone spatial models, the parameters are named consistently across models to facilitate comparison and understanding.
 In each parameter file, the parameter names are matched with the corresponding model nomenclature and units.
 
-.. _lerebours_parameters:
+.. _spatial_lerebours_parameters:
 
 Lerebours Parameters
 -----------------------------------------------

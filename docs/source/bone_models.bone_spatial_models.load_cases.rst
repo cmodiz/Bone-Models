@@ -4,7 +4,7 @@ Load Cases
 This module contains the load cases used for the bone spatial models. The load cases are used to implement e.g. disease states
 or different loading conditions for a certain time interval.
 
-.. _lerebours_load_cases:
+.. _spatial_lerebours_load_cases:
 
 Lerebours Load Cases
 ----------------------------------------------------
