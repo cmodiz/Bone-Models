@@ -1,6 +1,7 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
+# Reliably point to the root regardless of where Sphinx executes from
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -26,3 +27,5 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 autoclass_content = "both"
+
+autodoc_mock_imports = ["numpy", "scipy", "pandas", "matplotlib", "fipy"]
