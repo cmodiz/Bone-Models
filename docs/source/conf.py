@@ -15,7 +15,7 @@ copyright = '2025, Corinna Modiz'
 author = 'Corinna Modiz'
 release = '1.0.0'
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "shibuya"
 html_static_path = ["_static"]
 
 # -- General configuration ---------------------------------------------------
@@ -26,9 +26,5 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', "sphinx.ext.viewcode"
 extlinks = {
     'doi': ('https://doi.org/%s', 'DOI: %s')
 }
-templates_path = ['_templates']
-exclude_patterns = []
-
-autoclass_content = "both"
 
 autodoc_mock_imports = ["numpy", "scipy", "pandas", "matplotlib", "fipy"]
