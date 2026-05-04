@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 import scipy as sc
-from ..parameters.lerebours_parameters import Lerebours_Parameters
-from .scheiner_model import Scheiner_Model
+from bone_models.bone_cell_population_models.parameters.lerebours_parameters import Lerebours_Parameters
+from bone_models.bone_cell_population_models.models.scheiner_model import Scheiner_Model
 
 
 class Lerebours_Model(Scheiner_Model):
